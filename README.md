@@ -1,37 +1,42 @@
-# Agrio (agrio)
-With our APIs, you can access data on weather patterns, pest and disease predictions, and more to build a more accurate crop advisory tool.
+# FrankieOne (frankieone)
+FrankieOne is a cutting-edge payment platform that offers fast, secure, and seamless transactions for businesses of all sizes. With a focus on innovation and customer service, FrankieOne provides a range of payment solutions, including card payments, online payments, and mobile payments. By leveraging the latest technology and industry-best practices, FrankieOne ensures that businesses can easily accept payments from customers around the world. Additionally, FrankieOne offers comprehensive fraud detection and prevention tools to help businesses protect themselves against fraudulent activity. Overall, FrankieOne is dedicated to simplifying the payment process and empowering businesses to grow and succeed in an increasingly digital world.
 
-**URL:** [Visit APIs.json URL](https://example.com/apis/agriculture-api-agrio.yml)
+**URL:** [Visit APIs.json URL](https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/apis.yml)
 
 ## Scope
 
+- **Type:** Index 
+- **Position:** Consumer 
+- **Access:** 3rd-Party 
 
 ## Tags:
 
- - Agriculture
+ - Payments, Cards
 
 ## Timestamps
 
-- **Created:** 2024-07-11 
-- **Modified:** 2024-11-10 
+- **Created:** 2025-02-08 
+- **Modified:** 2025-04-07 
 
 ## APIs
 
-### Agrio
-With our APIs, you can access data on weather patterns, pest and disease predictions, and more to build a more accurate crop advisory tool.  
+### FrankieOne
+FrankieOne is a cutting-edge payment platform that offers fast, secure, and seamless transactions for businesses of all sizes. With a focus on innovation and customer service, FrankieOne provides a range of payment solutions, including card payments, online payments, and mobile payments. By leveraging the latest technology and industry-best practices, FrankieOne ensures that businesses can easily accept payments from customers around the world. Additionally, FrankieOne offers comprehensive fraud detection and prevention tools to help businesses protect themselves against fraudulent activity. Overall, FrankieOne is dedicated to simplifying the payment process and empowering businesses to grow and succeed in an increasingly digital world.
 
-**Human URL:** [https://agrio.app/Agriculture-API/](https://agrio.app/Agriculture-API/)
+**Human URL:** [ https://docs.frankieone.com/v1.14.1/docs/welcome-to-frankie]( https://docs.frankieone.com/v1.14.1/docs/welcome-to-frankie)
 
 
+#### Tags:
+
+ - Payments, Cards
 
 #### Properties
 
-- [Documentation](https://agrio.app/Agriculture-API/)
-- [OpenAPI](openapi/agrio-openapi-original.yml)
+- [Documentation]( https://docs.frankieone.com/v1.14.1/docs/welcome-to-frankie)
 
 ## Maintainers
 
-**FN:** API Evangelist
+**FN:** Kin Lane
 
 **Email:** info@apievangelist.com
 
