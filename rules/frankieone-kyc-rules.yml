@@ -1,0 +1,73 @@
+aid: frankieone:kyc-rules
+name: FrankieOne KYC V2 API Operational Rules
+description: >-
+  Operational rules and constraints for using the FrankieOne KYC V2 API,
+  covering authentication, required headers, environment selection, and
+  workflow handling.
+modified: '2026-04-28'
+rules:
+  - id: api-key-required
+    title: API Key Required
+    description: >-
+      All requests must include the api_key apiKey credential issued by
+      FrankieOne. Keep keys server-side; do not expose them in client code.
+    severity: required
+  - id: customer-id-header
+    title: X-Frankie-CustomerID Header
+    description: >-
+      Every request requires the X-Frankie-CustomerID header identifying the
+      customer account. Requests without it will be rejected.
+    severity: required
+  - id: child-id-multitenant
+    title: Multi-Tenant CustomerChildID
+    description: >-
+      Use X-Frankie-CustomerChildID when operating against child accounts in a
+      multi-tenant configuration.
+    severity: recommended
+  - id: username-attribution
+    title: Audit Attribution Username
+    description: >-
+      Pass X-Frankie-Username when an action should be attributed to a known
+      operator in the audit log.
+    severity: recommended
+  - id: environments
+    title: UAT vs Production
+    description: >-
+      Use https://api.uat.frankie.one for testing and https://api.frankie.one
+      for production. Do not mix environments or share credentials between
+      them.
+    severity: required
+  - id: background-flag
+    title: Background Execution Flag
+    description: >-
+      X-Frankie-Background can be set on supported execute and delete
+      endpoints to run the operation asynchronously; poll request status to
+      retrieve the outcome.
+    severity: recommended
+  - id: workflow-naming
+    title: Workflow and Service Profile Naming
+    description: >-
+      Workflow execution endpoints require explicit workflowName and
+      serviceName path parameters that match definitions configured for the
+      customer account.
+    severity: required
+  - id: pii-handling
+    title: PII Handling and Consent
+    description: >-
+      Individuals submitted to the KYC API contain regulated personal data;
+      collect appropriate consent before submission and patch consent records
+      via the consents endpoint.
+    severity: required
+  - id: result-invalidation
+    title: Result Invalidation
+    description: >-
+      Use the mkyc invalidate endpoint to mark prior verification results as
+      invalid rather than deleting individuals to preserve audit history.
+    severity: recommended
+  - id: rate-limits
+    title: Rate Limits and Backoff
+    description: >-
+      Implement exponential backoff on HTTP 429 responses. Plan-specific
+      throughput limits apply; consult FrankieOne support for production
+      capacity planning.
+    severity: required

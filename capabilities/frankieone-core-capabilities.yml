@@ -1,0 +1,47 @@
+aid: frankieone:core-capabilities
+name: FrankieOne Core V2 API Capabilities
+description: >-
+  Capability map for the FrankieOne Core V2 API covering platform-level
+  operations including audit, workflow discovery, background request status,
+  and matchlist management.
+modified: '2026-04-28'
+capabilities:
+  - id: audit
+    name: Audit
+    description: >-
+      Read audit entries describing actions taken across the FrankieOne
+      platform for compliance and oversight.
+    operations:
+      - GET /v2/audit
+  - id: workflow-discovery
+    name: Workflow Discovery
+    description: >-
+      Retrieve workflow definitions available for execution against
+      individuals.
+    operations:
+      - GET /v2/workflows
+  - id: service-profile-search
+    name: Service Profile Search
+    description: >-
+      Search the service profiles configured for the customer account.
+    operations:
+      - GET /v2/search/serviceprofiles
+  - id: matchlists
+    name: Matchlist Management
+    description: >-
+      Create and manage customer matchlists, including adding and removing
+      entries and associating entities with matchlist entries.
+    operations:
+      - GET /v2/matchlists
+      - GET /v2/search/matchlists
+      - GET /v2/matchlists/{matchlistName}/entries
+      - GET /v2/matchlists/{matchlistName}/entries/{entryId}
+      - POST /v2/matchlists/{matchlistName}/entries/addEntity
+      - POST /v2/matchlists/{matchlistName}/entries/removeEntity
+  - id: background-requests
+    name: Background Request Status
+    description: >-
+      Inspect status of long-running background requests initiated via
+      execute or delete endpoints with the X-Frankie-Background flag.
+    operations:
+      - GET /v2/requests/{requestId}

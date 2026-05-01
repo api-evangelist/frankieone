@@ -1,0 +1,38 @@
+aid: frankieone:core-rules
+name: FrankieOne Core V2 API Operational Rules
+description: >-
+  Operational rules and constraints for using the FrankieOne Core V2 API
+  covering audit, matchlists, and platform discovery operations.
+modified: '2026-04-28'
+rules:
+  - id: api-key-required
+    title: API Key Required
+    description: >-
+      Core V2 endpoints require the api_key apiKey credential alongside the
+      customer identification headers used by the broader platform.
+    severity: required
+  - id: customer-id-header
+    title: X-Frankie-CustomerID Header
+    description: >-
+      The X-Frankie-CustomerID header is required on all Core V2 calls.
+    severity: required
+  - id: matchlist-naming
+    title: Matchlist Naming Constraints
+    description: >-
+      Matchlist names are scoped to the customer account; ensure new
+      matchlist names do not collide with existing entries before creating
+      them.
+    severity: required
+  - id: audit-pagination
+    title: Audit Pagination
+    description: >-
+      Use the audit endpoint pagination parameters and time-window filters
+      to bound large audit queries; do not request unbounded result sets.
+    severity: recommended
+  - id: background-status
+    title: Background Request Polling
+    description: >-
+      When using the X-Frankie-Background flag on KYC operations, poll the
+      Core V2 request status endpoint with reasonable intervals to retrieve
+      the final result.
+    severity: recommended
