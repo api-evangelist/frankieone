@@ -1,0 +1,70 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Core V2 API — Individual Workflows
+  description: 'Core V2 API — Individual Workflows. 1 operations. Lead operation: Get a list of executable workflows. Self-contained
+    Naftiko capability covering one Frankieone business surface.'
+  tags:
+  - Frankieone
+  - Individual Workflows
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    FRANKIEONE_API_KEY: FRANKIEONE_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: core-v2-individual-workflows
+    baseUri: https://api.uat.frankie.one
+    description: Core V2 API — Individual Workflows business capability. Self-contained, no shared references.
+    resources:
+    - name: v2-workflows
+      path: /v2/workflows
+      operations:
+      - name: getworkflows
+        method: GET
+        description: Get a list of executable workflows
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: bearer
+      token: '{{env.FRANKIEONE_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: core-v2-individual-workflows-rest
+    port: 8080
+    description: REST adapter for Core V2 API — Individual Workflows. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/v2/workflows
+      name: v2-workflows
+      description: REST surface for v2-workflows.
+      operations:
+      - method: GET
+        name: getworkflows
+        description: Get a list of executable workflows
+        call: core-v2-individual-workflows.getworkflows
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: core-v2-individual-workflows-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Core V2 API — Individual Workflows. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: get-list-executable-workflows
+      description: Get a list of executable workflows
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: core-v2-individual-workflows.getworkflows
+      outputParameters:
+      - type: object
+        mapping: $.

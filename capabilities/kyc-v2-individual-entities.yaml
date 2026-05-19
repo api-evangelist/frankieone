@@ -1,0 +1,172 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: KYC V2 API — Individual Entities
+  description: 'KYC V2 API — Individual Entities. 4 operations. Lead operation: Create an individual entity. Self-contained
+    Naftiko capability covering one Frankieone business surface.'
+  tags:
+  - Frankieone
+  - Individual Entities
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    FRANKIEONE_API_KEY: FRANKIEONE_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: kyc-v2-individual-entities
+    baseUri: https://api.uat.frankie.one
+    description: KYC V2 API — Individual Entities business capability. Self-contained, no shared references.
+    resources:
+    - name: v2-individuals
+      path: /v2/individuals
+      operations:
+      - name: createindividuals
+        method: POST
+        description: Create an individual entity
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v2-individuals-entityId
+      path: /v2/individuals/{entityId}
+      operations:
+      - name: updateindividual
+        method: PATCH
+        description: Update an individual entity
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+      - name: getindividual
+        method: GET
+        description: Get an individual entity
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: deleteindividual
+        method: DELETE
+        description: Delete an individual entity
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: bearer
+      token: '{{env.FRANKIEONE_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: kyc-v2-individual-entities-rest
+    port: 8080
+    description: REST adapter for KYC V2 API — Individual Entities. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/v2/individuals
+      name: v2-individuals
+      description: REST surface for v2-individuals.
+      operations:
+      - method: POST
+        name: createindividuals
+        description: Create an individual entity
+        call: kyc-v2-individual-entities.createindividuals
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v2/individuals/{entityid}
+      name: v2-individuals-entityid
+      description: REST surface for v2-individuals-entityId.
+      operations:
+      - method: PATCH
+        name: updateindividual
+        description: Update an individual entity
+        call: kyc-v2-individual-entities.updateindividual
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: GET
+        name: getindividual
+        description: Get an individual entity
+        call: kyc-v2-individual-entities.getindividual
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: deleteindividual
+        description: Delete an individual entity
+        call: kyc-v2-individual-entities.deleteindividual
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: kyc-v2-individual-entities-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for KYC V2 API — Individual Entities. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: create-individual-entity
+      description: Create an individual entity
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: kyc-v2-individual-entities.createindividuals
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: update-individual-entity
+      description: Update an individual entity
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: kyc-v2-individual-entities.updateindividual
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-individual-entity
+      description: Get an individual entity
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: kyc-v2-individual-entities.getindividual
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: delete-individual-entity
+      description: Delete an individual entity
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: kyc-v2-individual-entities.deleteindividual
+      outputParameters:
+      - type: object
+        mapping: $.

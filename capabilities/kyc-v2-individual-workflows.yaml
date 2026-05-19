@@ -1,0 +1,253 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: KYC V2 API — Individual Workflows
+  description: 'KYC V2 API — Individual Workflows. 6 operations. Lead operation: Create an individual and execute a workflow
+    for the given service profile. Self-contained Naftiko capability covering one Frankieone business surface.'
+  tags:
+  - Frankieone
+  - Individual Workflows
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    FRANKIEONE_API_KEY: FRANKIEONE_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: kyc-v2-individual-workflows
+    baseUri: https://api.uat.frankie.one
+    description: KYC V2 API — Individual Workflows business capability. Self-contained, no shared references.
+    resources:
+    - name: v2-individuals-new-serviceprofiles-serviceName-workflows-workflowName-execute
+      path: /v2/individuals/new/serviceprofiles/{serviceName}/workflows/{workflowName}/execute
+      operations:
+      - name: createandexecuteworkflow
+        method: POST
+        description: Create an individual and execute a workflow for the given service profile
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v2-individuals-entityId-serviceprofiles-serviceName-workflows-workflowName-execu
+      path: /v2/individuals/{entityId}/serviceprofiles/{serviceName}/workflows/{workflowName}/execute
+      operations:
+      - name: executeworkflow
+        method: POST
+        description: Execute a workflow for the given service profile
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v2-individuals-entityId-serviceprofiles-serviceName-workflows-workflowName-execu
+      path: /v2/individuals/{entityId}/serviceprofiles/{serviceName}/workflows/{workflowName}/executions
+      operations:
+      - name: getresults
+        method: GET
+        description: Get a list of executions and their results
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: v2-individuals-entityId-serviceprofiles-serviceName-workflows-workflowName-execu
+      path: /v2/individuals/{entityId}/serviceprofiles/{serviceName}/workflows/{workflowName}/executions/{workflowExecutionId}
+      operations:
+      - name: getworkflowexecutionresult
+        method: GET
+        description: Get the result of a specific execution by its executionId.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: overrideworkflowexecutionresult
+        method: PATCH
+        description: Override the status of a specific workflow execution.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    - name: v2-workflows
+      path: /v2/workflows
+      operations:
+      - name: getworkflows
+        method: GET
+        description: Get a list of executable workflows
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: bearer
+      token: '{{env.FRANKIEONE_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: kyc-v2-individual-workflows-rest
+    port: 8080
+    description: REST adapter for KYC V2 API — Individual Workflows. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/v2/individuals/new/serviceprofiles/{servicename}/workflows/{workflowname}/execute
+      name: v2-individuals-new-serviceprofiles-servicename-workflows-workflowname-execute
+      description: REST surface for v2-individuals-new-serviceprofiles-serviceName-workflows-workflowName-execute.
+      operations:
+      - method: POST
+        name: createandexecuteworkflow
+        description: Create an individual and execute a workflow for the given service profile
+        call: kyc-v2-individual-workflows.createandexecuteworkflow
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v2/individuals/{entityid}/serviceprofiles/{servicename}/workflows/{workflowname}/execute
+      name: v2-individuals-entityid-serviceprofiles-servicename-workflows-workflowname-execu
+      description: REST surface for v2-individuals-entityId-serviceprofiles-serviceName-workflows-workflowName-execu.
+      operations:
+      - method: POST
+        name: executeworkflow
+        description: Execute a workflow for the given service profile
+        call: kyc-v2-individual-workflows.executeworkflow
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v2/individuals/{entityid}/serviceprofiles/{servicename}/workflows/{workflowname}/executions
+      name: v2-individuals-entityid-serviceprofiles-servicename-workflows-workflowname-execu
+      description: REST surface for v2-individuals-entityId-serviceprofiles-serviceName-workflows-workflowName-execu.
+      operations:
+      - method: GET
+        name: getresults
+        description: Get a list of executions and their results
+        call: kyc-v2-individual-workflows.getresults
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v2/individuals/{entityid}/serviceprofiles/{servicename}/workflows/{workflowname}/executions/{workflowexecutionid}
+      name: v2-individuals-entityid-serviceprofiles-servicename-workflows-workflowname-execu
+      description: REST surface for v2-individuals-entityId-serviceprofiles-serviceName-workflows-workflowName-execu.
+      operations:
+      - method: GET
+        name: getworkflowexecutionresult
+        description: Get the result of a specific execution by its executionId.
+        call: kyc-v2-individual-workflows.getworkflowexecutionresult
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PATCH
+        name: overrideworkflowexecutionresult
+        description: Override the status of a specific workflow execution.
+        call: kyc-v2-individual-workflows.overrideworkflowexecutionresult
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v2/workflows
+      name: v2-workflows
+      description: REST surface for v2-workflows.
+      operations:
+      - method: GET
+        name: getworkflows
+        description: Get a list of executable workflows
+        call: kyc-v2-individual-workflows.getworkflows
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: kyc-v2-individual-workflows-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for KYC V2 API — Individual Workflows. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: create-individual-and-execute-workflow
+      description: Create an individual and execute a workflow for the given service profile
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: kyc-v2-individual-workflows.createandexecuteworkflow
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: execute-workflow-given-service-profile
+      description: Execute a workflow for the given service profile
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: kyc-v2-individual-workflows.executeworkflow
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-list-executions-and-their
+      description: Get a list of executions and their results
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: kyc-v2-individual-workflows.getresults
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-result-specific-execution-its
+      description: Get the result of a specific execution by its executionId.
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: kyc-v2-individual-workflows.getworkflowexecutionresult
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: override-status-specific-workflow-execution
+      description: Override the status of a specific workflow execution.
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: kyc-v2-individual-workflows.overrideworkflowexecutionresult
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-list-executable-workflows
+      description: Get a list of executable workflows
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: kyc-v2-individual-workflows.getworkflows
+      outputParameters:
+      - type: object
+        mapping: $.

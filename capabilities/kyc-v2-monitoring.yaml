@@ -1,0 +1,80 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: KYC V2 API — Monitoring
+  description: 'KYC V2 API — Monitoring. 1 operations. Lead operation: Turn on/off monitoring for a given entity. Self-contained
+    Naftiko capability covering one Frankieone business surface.'
+  tags:
+  - Frankieone
+  - Monitoring
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    FRANKIEONE_API_KEY: FRANKIEONE_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: kyc-v2-monitoring
+    baseUri: https://api.uat.frankie.one
+    description: KYC V2 API — Monitoring business capability. Self-contained, no shared references.
+    resources:
+    - name: v2-individuals-entityId-monitor
+      path: /v2/individuals/{entityId}/monitor
+      operations:
+      - name: patchmonitoring
+        method: PATCH
+        description: Turn on/off monitoring for a given entity
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: false
+    authentication:
+      type: bearer
+      token: '{{env.FRANKIEONE_API_KEY}}'
+  exposes:
+  - type: rest
+    namespace: kyc-v2-monitoring-rest
+    port: 8080
+    description: REST adapter for KYC V2 API — Monitoring. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/v2/individuals/{entityid}/monitor
+      name: v2-individuals-entityid-monitor
+      description: REST surface for v2-individuals-entityId-monitor.
+      operations:
+      - method: PATCH
+        name: patchmonitoring
+        description: Turn on/off monitoring for a given entity
+        call: kyc-v2-monitoring.patchmonitoring
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: kyc-v2-monitoring-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for KYC V2 API — Monitoring. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: turn-off-monitoring-given-entity
+      description: Turn on/off monitoring for a given entity
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: kyc-v2-monitoring.patchmonitoring
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
