@@ -9,96 +9,98 @@ created: '2025-02-08'
 modified: '2026-05-19'
 position: Consumer
 tags:
-- Identity Verification
-- KYC
-- KYB
-- AML
-- Fraud
-- Compliance
+  - Identity Verification
+  - KYC
+  - KYB
+  - AML
+  - Fraud
+  - Compliance
 url: https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/apis.yml
 specificationVersion: '0.19'
 apis:
-- aid: frankieone:kyc-v2
-  name: FrankieOne KYC V2 API
-  description: KYC V2 API for managing individuals, profiles, workflows, results, and documents. Supports identity verification,
-    AML screening, IDV, fraud checks, duplicate detection, matchlist matching, and ongoing monitoring.
-  humanURL: https://docs.frankieone.com/v1.14.1/docs/welcome-to-frankie
-  baseURL: https://api.frankie.one
-  tags:
-  - Identity Verification
-  - KYC
-  - AML
-  - IDV
-  - Documents
-  - Workflows
-  properties:
-  - type: Documentation
-    url: https://docs.frankieone.com/v1.14.1/docs/welcome-to-frankie
-  - type: OpenAPI
-    url: https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/openapi/kyc-v2-openapi.json
-  - type: Capabilities
-    url: https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/capabilities/frankieone-kyc-capabilities.yml
-  - type: Rules
-    url: https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/rules/frankieone-kyc-rules.yml
-  - type: NaftikoCapability
-    url: capabilities/kyc-v2-hostedurl.yaml
-  - type: NaftikoCapability
-    url: capabilities/kyc-v2-idv.yaml
-  - type: NaftikoCapability
-    url: capabilities/kyc-v2-individual-documents.yaml
-  - type: NaftikoCapability
-    url: capabilities/kyc-v2-individual-entities.yaml
-  - type: NaftikoCapability
-    url: capabilities/kyc-v2-individual-entity-elements.yaml
-  - type: NaftikoCapability
-    url: capabilities/kyc-v2-individual-profiles.yaml
-  - type: NaftikoCapability
-    url: capabilities/kyc-v2-individual-results.yaml
-  - type: NaftikoCapability
-    url: capabilities/kyc-v2-individual-risks.yaml
-  - type: NaftikoCapability
-    url: capabilities/kyc-v2-individual-workflows.yaml
-  - type: NaftikoCapability
-    url: capabilities/kyc-v2-monitoring.yaml
-  - type: NaftikoCapability
-    url: capabilities/kyc-v2-search.yaml
-- aid: frankieone:core-v2
-  name: FrankieOne Core V2 API
-  description: Core V2 API for platform-level operations including audit retrieval, workflow discovery, background request
-    status, and matchlist management.
-  humanURL: https://docs.frankieone.com/
-  baseURL: https://api.frankie.one
-  tags:
-  - Audit
-  - Workflows
-  - Matchlists
-  - Compliance
-  properties:
+  - aid: frankieone:kyc-v2
+    name: FrankieOne KYC V2 API
+    description: KYC V2 API for managing individuals, profiles, workflows, results, and documents. Supports identity verification,
+      AML screening, IDV, fraud checks, duplicate detection, matchlist matching, and ongoing monitoring.
+    humanURL: https://docs.frankieone.com/v1.14.1/docs/welcome-to-frankie
+    baseURL: https://api.frankie.one
+    tags:
+    - Identity Verification
+    - KYC
+    - AML
+    - IDV
+    - Documents
+    - Workflows
+    properties:
+    - type: Documentation
+      url: https://docs.frankieone.com/v1.14.1/docs/welcome-to-frankie
+    - type: OpenAPI
+      url: https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/openapi/kyc-v2-openapi.json
+    - type: Capabilities
+      url: https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/capabilities/frankieone-kyc-capabilities.yml
+    - type: Rules
+      url: https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/rules/frankieone-kyc-rules.yml
+    - type: NaftikoCapability
+      url: capabilities/kyc-v2-hostedurl.yaml
+    - type: NaftikoCapability
+      url: capabilities/kyc-v2-idv.yaml
+    - type: NaftikoCapability
+      url: capabilities/kyc-v2-individual-documents.yaml
+    - type: NaftikoCapability
+      url: capabilities/kyc-v2-individual-entities.yaml
+    - type: NaftikoCapability
+      url: capabilities/kyc-v2-individual-entity-elements.yaml
+    - type: NaftikoCapability
+      url: capabilities/kyc-v2-individual-profiles.yaml
+    - type: NaftikoCapability
+      url: capabilities/kyc-v2-individual-results.yaml
+    - type: NaftikoCapability
+      url: capabilities/kyc-v2-individual-risks.yaml
+    - type: NaftikoCapability
+      url: capabilities/kyc-v2-individual-workflows.yaml
+    - type: NaftikoCapability
+      url: capabilities/kyc-v2-monitoring.yaml
+    - type: NaftikoCapability
+      url: capabilities/kyc-v2-search.yaml
+  - aid: frankieone:core-v2
+    name: FrankieOne Core V2 API
+    description: Core V2 API for platform-level operations including audit retrieval, workflow discovery, background request
+      status, and matchlist management.
+    humanURL: https://docs.frankieone.com/
+    baseURL: https://api.frankie.one
+    tags:
+    - Audit
+    - Workflows
+    - Matchlists
+    - Compliance
+    properties:
+    - type: Documentation
+      url: https://docs.frankieone.com/
+    - type: OpenAPI
+      url: https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/openapi/core-v2-openapi.yml
+    - type: Capabilities
+      url: https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/capabilities/frankieone-core-capabilities.yml
+    - type: Rules
+      url: https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/rules/frankieone-core-rules.yml
+    - type: NaftikoCapability
+      url: capabilities/core-v2-audit.yaml
+    - type: NaftikoCapability
+      url: capabilities/core-v2-individual-workflows.yaml
+    - type: NaftikoCapability
+      url: capabilities/core-v2-matchlists.yaml
+    - type: NaftikoCapability
+      url: capabilities/core-v2-search.yaml
+common:
+  - type: GitHubOrganization
+    url: https://github.com/FrankieFinancial
+  - type: LinkedIn
+    url: https://www.linkedin.com/company/frankieone
+  - type: Website
+    url: https://www.frankieone.com/
   - type: Documentation
     url: https://docs.frankieone.com/
-  - type: OpenAPI
-    url: https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/openapi/core-v2-openapi.yml
-  - type: Capabilities
-    url: https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/capabilities/frankieone-core-capabilities.yml
-  - type: Rules
-    url: https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/rules/frankieone-core-rules.yml
-  - type: NaftikoCapability
-    url: capabilities/core-v2-audit.yaml
-  - type: NaftikoCapability
-    url: capabilities/core-v2-individual-workflows.yaml
-  - type: NaftikoCapability
-    url: capabilities/core-v2-matchlists.yaml
-  - type: NaftikoCapability
-    url: capabilities/core-v2-search.yaml
-common:
-- type: LinkedIn
-  url: https://www.linkedin.com/company/frankieone
-- type: Website
-  url: https://www.frankieone.com/
-- type: Documentation
-  url: https://docs.frankieone.com/
-- type: SignUp
-  url: https://www.frankieone.com/contact-us
+  - type: SignUp
+    url: https://www.frankieone.com/contact-us
 maintainers:
-- FN: Kin Lane
-  email: kin@apievangelist.com
+  - FN: Kin Lane
+    email: kin@apievangelist.com
