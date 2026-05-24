@@ -101,6 +101,8 @@ common:
     url: https://docs.frankieone.com/
   - type: SignUp
     url: https://www.frankieone.com/contact-us
+  - type: LLMsTxt
+    url: https://docs.frankieone.com/llms.txt
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com
