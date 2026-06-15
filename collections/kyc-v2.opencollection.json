@@ -1,0 +1,2510 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "KYC V2 API",
+    "version": "2.0.1"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "api_key",
+      "value": "{{api_key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Individual Entities",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create an individual entity",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.uat.frankie.one/v2/individuals",
+            "headers": [
+              {
+                "name": "api_key",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerChildID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Channel",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "level",
+                "value": "",
+                "type": "query",
+                "description": "Determines what level of detail to return in the response\n - id: Return just an id\n - meta: Return all metadata only, no links or base64 data\n - base64: Return all metadata and data in base64 format"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "api_key",
+              "value": "{{api_key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Creates an Individual entity object which can be used to store data about an individual. You can optionally include documents, attachments, references etc. to the entity.\nInformation stored in an entity object can be used to verify the individual against external data sources for the purposes of eKYC, or in other verifications supported by FrankieOne."
+        },
+        {
+          "info": {
+            "name": "Get an individual entity",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.uat.frankie.one/v2/individuals/:entityId",
+            "headers": [
+              {
+                "name": "api_key",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerChildID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Channel",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "entityId",
+                "value": "",
+                "type": "path",
+                "description": "Unique FrankieOne identifier for an entity"
+              },
+              {
+                "name": "level",
+                "value": "",
+                "type": "query",
+                "description": "Determines what level of detail to return in the response\n - meta: Return all metadata only, no links or base64 data\n - base64: Return all metadata and images as base64"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "api_key",
+              "value": "{{api_key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Retrieve all the information of the Individual Entity with the matching entity ID."
+        },
+        {
+          "info": {
+            "name": "Update an individual entity",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.uat.frankie.one/v2/individuals/:entityId",
+            "headers": [
+              {
+                "name": "api_key",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerChildID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Channel",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "entityId",
+                "value": "",
+                "type": "path",
+                "description": "Unique FrankieOne identifier for an entity"
+              },
+              {
+                "name": "level",
+                "value": "",
+                "type": "query",
+                "description": "Determines what level of detail to return in the response\n - meta: Return all metadata only, no links or base64 data\n - base64: Return all metadata and images as base64"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "api_key",
+              "value": "{{api_key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Update any of the information of the Individual Entity with the matching entity ID."
+        },
+        {
+          "info": {
+            "name": "Delete an individual entity",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.uat.frankie.one/v2/individuals/:entityId",
+            "headers": [
+              {
+                "name": "api_key",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerChildID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Channel",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Background",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "entityId",
+                "value": "",
+                "type": "path",
+                "description": "Unique FrankieOne identifier for an entity"
+              },
+              {
+                "name": "level",
+                "value": "",
+                "type": "query",
+                "description": "Determines what level of detail to return in the response\n - meta: Return all metadata only, no links or base64 data\n - base64: Return all metadata and images as base64"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "api_key",
+              "value": "{{api_key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Delete Individual Entity with the matching entity ID."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Individual Workflows",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get a list of executable workflows",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.uat.frankie.one/v2/workflows",
+            "headers": [
+              {
+                "name": "api_key",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerChildID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Channel",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "serviceName",
+                "value": "",
+                "type": "query",
+                "description": "The unique name of the service profile"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Query parameter to include additional fields of fetch workflow"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "api_key",
+              "value": "{{api_key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get a list of workflows that can be executed"
+        },
+        {
+          "info": {
+            "name": "Create an individual and execute a workflow for the given service profile",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.uat.frankie.one/v2/individuals/new/serviceprofiles/:serviceName/workflows/:workflowName/execute",
+            "headers": [
+              {
+                "name": "X-Frankie-CustomerID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerChildID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Channel",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Background",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "serviceName",
+                "value": "",
+                "type": "path",
+                "description": "The unique name of the service profile"
+              },
+              {
+                "name": "workflowName",
+                "value": "",
+                "type": "path",
+                "description": "The unique name of the workflow"
+              },
+              {
+                "name": "level",
+                "value": "",
+                "type": "query",
+                "description": "Determines what level of detail to return in the response\n - id: Return just an id\n - meta: Return all metadata only, no links or base64 data\n - base64: Return all metadata and data in base64 format"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "api_key",
+              "value": "{{api_key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Create an individual and execute a workflow for the given service profile"
+        },
+        {
+          "info": {
+            "name": "Execute a workflow for the given service profile",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.uat.frankie.one/v2/individuals/:entityId/serviceprofiles/:serviceName/workflows/:workflowName/execute",
+            "headers": [
+              {
+                "name": "X-Frankie-CustomerID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerChildID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Channel",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Background",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "entityId",
+                "value": "",
+                "type": "path",
+                "description": "Unique FrankieOne identifier for an entity"
+              },
+              {
+                "name": "serviceName",
+                "value": "",
+                "type": "path",
+                "description": "The unique name of the service profile"
+              },
+              {
+                "name": "workflowName",
+                "value": "",
+                "type": "path",
+                "description": "The unique name of the workflow"
+              },
+              {
+                "name": "level",
+                "value": "",
+                "type": "query",
+                "description": "Determines what level of detail to return in the response\n - id: Return just an id\n - meta: Return all metadata only, no links or base64 data\n - base64: Return all metadata and data in base64 format"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "api_key",
+              "value": "{{api_key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Execute a workflow for the given service profile."
+        },
+        {
+          "info": {
+            "name": "Get a list of executions and their results",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.uat.frankie.one/v2/individuals/:entityId/serviceprofiles/:serviceName/workflows/:workflowName/executions",
+            "headers": [
+              {
+                "name": "api_key",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerChildID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Channel",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "entityId",
+                "value": "",
+                "type": "path",
+                "description": "Unique FrankieOne identifier for an entity"
+              },
+              {
+                "name": "serviceName",
+                "value": "",
+                "type": "path",
+                "description": "The unique name of the service profile"
+              },
+              {
+                "name": "workflowName",
+                "value": "",
+                "type": "path",
+                "description": "The unique name of the workflow"
+              },
+              {
+                "name": "limit",
+                "value": "20",
+                "type": "query",
+                "description": "Limit the number of items that will be returned as part of the request"
+              },
+              {
+                "name": "page",
+                "value": "2",
+                "type": "query",
+                "description": "The page number that you want to retrieve for the list query"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Order of the sort fields will be sorted upon"
+              },
+              {
+                "name": "sortFields",
+                "value": "",
+                "type": "query",
+                "description": "List of fields that the Process Results will be filtered with\nAvailable values : createdAt, updatedAt"
+              },
+              {
+                "name": "workflowResults",
+                "value": "",
+                "type": "query",
+                "description": "list of workflow execution result values to filter results on"
+              },
+              {
+                "name": "workflowExecutionStates",
+                "value": "",
+                "type": "query",
+                "description": "List of workflow execution state values to filter with"
+              },
+              {
+                "name": "startedAtBefore",
+                "value": "2024-02-29T02:15:04Z",
+                "type": "query",
+                "description": "Filter on the startedAt field, results returned are based on being before the value (inclusive)"
+              },
+              {
+                "name": "startedAtAfter",
+                "value": "2024-02-29T02:15:04Z",
+                "type": "query",
+                "description": "Filter on the startedAt field, results returned are based on being before the value (inclusive)"
+              },
+              {
+                "name": "endedAtAfter",
+                "value": "2024-02-29T02:15:04Z",
+                "type": "query",
+                "description": "Filter on the endedAt field, results returned are based on being before the value (inclusive)"
+              },
+              {
+                "name": "endedAtBefore",
+                "value": "2024-02-29T02:15:04Z",
+                "type": "query",
+                "description": "Filter on the endedAt field, results returned are based on being before the value (inclusive)"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "api_key",
+              "value": "{{api_key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get a list of entity results. Always sorted in reverse chrono order"
+        },
+        {
+          "info": {
+            "name": "Get the result of a specific execution by its executionId.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.uat.frankie.one/v2/individuals/:entityId/serviceprofiles/:serviceName/workflows/:workflowName/executions/:workflowExecutionId",
+            "headers": [
+              {
+                "name": "api_key",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerChildID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Channel",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "entityId",
+                "value": "",
+                "type": "path",
+                "description": "Unique FrankieOne identifier for an entity"
+              },
+              {
+                "name": "serviceName",
+                "value": "",
+                "type": "path",
+                "description": "The unique name of the service profile"
+              },
+              {
+                "name": "workflowName",
+                "value": "",
+                "type": "path",
+                "description": "The unique name of the workflow"
+              },
+              {
+                "name": "workflowExecutionId",
+                "value": "",
+                "type": "path",
+                "description": "Unique workflow execution identifier"
+              },
+              {
+                "name": "level",
+                "value": "",
+                "type": "query",
+                "description": "Determines what level of detail to return in the response\n - meta: Return all metadata only, no links or base64 data\n - base64: Return all metadata and images as base64"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "api_key",
+              "value": "{{api_key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get the result of a specific execution by its executionId."
+        },
+        {
+          "info": {
+            "name": "Override the status of a specific workflow execution.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.uat.frankie.one/v2/individuals/:entityId/serviceprofiles/:serviceName/workflows/:workflowName/executions/:workflowExecutionId",
+            "headers": [
+              {
+                "name": "api_key",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerChildID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Channel",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "entityId",
+                "value": "",
+                "type": "path",
+                "description": "Unique FrankieOne identifier for an entity"
+              },
+              {
+                "name": "serviceName",
+                "value": "",
+                "type": "path",
+                "description": "The unique name of the service profile"
+              },
+              {
+                "name": "workflowName",
+                "value": "",
+                "type": "path",
+                "description": "The unique name of the workflow"
+              },
+              {
+                "name": "workflowExecutionId",
+                "value": "",
+                "type": "path",
+                "description": "Unique workflow execution identifier"
+              },
+              {
+                "name": "level",
+                "value": "",
+                "type": "query",
+                "description": "Determines what level of detail to return in the response\n - meta: Return all metadata only, no links or base64 data\n - base64: Return all metadata and images as base64"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "api_key",
+              "value": "{{api_key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Override the result of a specific workflow execution by its id."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Individual Profiles",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get a service profile for a given individual entity.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.uat.frankie.one/v2/individuals/:entityId/serviceprofiles/:serviceName",
+            "headers": [
+              {
+                "name": "api_key",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerChildID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Channel",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "entityId",
+                "value": "",
+                "type": "path",
+                "description": "Unique FrankieOne identifier for an entity"
+              },
+              {
+                "name": "serviceName",
+                "value": "",
+                "type": "path",
+                "description": "The unique name of the service profile"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "api_key",
+              "value": "{{api_key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get a profile for a given individual entity."
+        },
+        {
+          "info": {
+            "name": "Update a profile for a given individual entity.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.uat.frankie.one/v2/individuals/:entityId/serviceprofiles/:serviceName",
+            "headers": [
+              {
+                "name": "api_key",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerChildID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Channel",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "entityId",
+                "value": "",
+                "type": "path",
+                "description": "Unique FrankieOne identifier for an entity"
+              },
+              {
+                "name": "serviceName",
+                "value": "",
+                "type": "path",
+                "description": "The unique name of the service profile"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "api_key",
+              "value": "{{api_key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Update a profile for a given individual entity."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Individual Results",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Approve Manual KYC for an individual",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.uat.frankie.one/v2/individuals/:entityId/results/mkyc",
+            "headers": [
+              {
+                "name": "api_key",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerChildID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Channel",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "entityId",
+                "value": "",
+                "type": "path",
+                "description": "Unique FrankieOne identifier for an entity"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "api_key",
+              "value": "{{api_key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Approve manual KYC (mKYC) for an individual as to allow them to pass all KYC workflow steps without performing eKYC. To ensure there is enough evidence for the mKYC process to be valid, the individual will need to have documents that match at least one of the following combinations:\n\n1 Primary Photographic ID e.g. \n  - \"DRIVERS_LICENSE\": Driver's license.\n  - \"PASSPORT\": Passport\n\n2 Primary Non-Photographic IDs e.g.\n  - \"BIRTH_CERT\": Birth certificate\n  - \"CITIZENSHIP\": Citizenship certificate\n\n"
+        },
+        {
+          "info": {
+            "name": "Invalidate any Manual KYC evidences of an individual",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.uat.frankie.one/v2/individuals/:entityId/results/mkyc/invalidate",
+            "headers": [
+              {
+                "name": "api_key",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerChildID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Channel",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "entityId",
+                "value": "",
+                "type": "path",
+                "description": "Unique FrankieOne identifier for an entity"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "api_key",
+              "value": "{{api_key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Invalidate any Manual KYC evidences of an individual. This will force the entity to be verified by eKYC processes when KYC verification is next run. Only invalidate mKYC evidences if manual KYC evidences had previously been supplied for this entity."
+        },
+        {
+          "info": {
+            "name": "Update the status of AML process results",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.uat.frankie.one/v2/individuals/:entityId/results/aml",
+            "headers": [
+              {
+                "name": "api_key",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerChildID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Channel",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "entityId",
+                "value": "",
+                "type": "path",
+                "description": "Unique FrankieOne identifier for an entity"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "api_key",
+              "value": "{{api_key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Update the status of a set of AML process results."
+        },
+        {
+          "info": {
+            "name": "Update the status of IDV process results",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.uat.frankie.one/v2/individuals/:entityId/results/idv",
+            "headers": [
+              {
+                "name": "api_key",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerChildID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Channel",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "entityId",
+                "value": "",
+                "type": "path",
+                "description": "Unique FrankieOne identifier for an entity"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "api_key",
+              "value": "{{api_key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Update the status of a set of IDV process results."
+        },
+        {
+          "info": {
+            "name": "Update the status of Matchlist process results",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.uat.frankie.one/v2/individuals/:entityId/results/matchlist",
+            "headers": [
+              {
+                "name": "api_key",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerChildID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Channel",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "entityId",
+                "value": "",
+                "type": "path",
+                "description": "Unique FrankieOne identifier for an entity"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "api_key",
+              "value": "{{api_key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Update the status of a set of Matchlist process results."
+        },
+        {
+          "info": {
+            "name": "Update the status of Duplicate process results",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.uat.frankie.one/v2/individuals/:entityId/results/duplicate",
+            "headers": [
+              {
+                "name": "api_key",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerChildID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Channel",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "entityId",
+                "value": "",
+                "type": "path",
+                "description": "Unique FrankieOne identifier for an entity"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "api_key",
+              "value": "{{api_key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Update the status of a set of Duplicate process results.\nThe request body supports batch processing of duplicate results with the following components:\n- processResults: Array of UUID strings identifying specific duplicate Process Results to update - manualStatus: The resolution status for the duplicates, which can be one of:\n  * FALSE_POSITIVE: When the flagged entities are determined to be different individuals (both records should be kept)\n  * TRUE_POSITIVE_ACCEPT: Keep the current entity as "
+        },
+        {
+          "info": {
+            "name": "Update the status of Fraud process results",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.uat.frankie.one/v2/individuals/:entityId/results/fraud",
+            "headers": [
+              {
+                "name": "api_key",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerChildID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Channel",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "entityId",
+                "value": "",
+                "type": "path",
+                "description": "Unique FrankieOne identifier for an entity"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "api_key",
+              "value": "{{api_key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Update the status of a set of Fraud process results.\nThe request body supports batch processing of fraud results with the following components:\n- processResults: Array of UUID strings identifying specific fraud Process Results to update - manualStatus: The resolution status for the fraud, which can be one of:\n  * FALSE_POSITIVE: When the result is determined to be false positive.\n  * TRUE_POSITIVE: When the result is determined to be true positive.\n  * UNKNOWN: When the result is still being eva"
+        },
+        {
+          "info": {
+            "name": "Get a list of process results",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.uat.frankie.one/v2/individuals/:entityId/results",
+            "headers": [
+              {
+                "name": "api_key",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerChildID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Channel",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "entityId",
+                "value": "",
+                "type": "path",
+                "description": "Unique FrankieOne identifier for an entity"
+              },
+              {
+                "name": "profileName",
+                "value": "",
+                "type": "query",
+                "description": "The unique name of the service profile"
+              },
+              {
+                "name": "createdAtBefore",
+                "value": "2024-02-29T02:15:04Z",
+                "type": "query",
+                "description": "Filter on the createdAt field, results returned are based on being before the value (inclusively)"
+              },
+              {
+                "name": "createdAtAfter",
+                "value": "2024-02-29T02:15:04Z",
+                "type": "query",
+                "description": "Filter on the createdAt field, results returned are based on being after the value (inclusively)"
+              },
+              {
+                "name": "updatedAtBefore",
+                "value": "2024-02-29T02:15:04Z",
+                "type": "query",
+                "description": "Filter on the updatedAt field, results returned are based on being before the value (inclusively)"
+              },
+              {
+                "name": "updatedAtAfter",
+                "value": "2024-02-29T02:15:04Z",
+                "type": "query",
+                "description": "Filter on the updatedAt field, results returned are based on being before the value (inclusively)"
+              },
+              {
+                "name": "stepNames",
+                "value": "",
+                "type": "query",
+                "description": "List of steps to include, separated by a comma."
+              },
+              {
+                "name": "stepTypes",
+                "value": "",
+                "type": "query",
+                "description": "A list of stepTypes the Process Result is associated with"
+              },
+              {
+                "name": "objectTypes",
+                "value": "",
+                "type": "query",
+                "description": "List of objectTypes to filter upon"
+              },
+              {
+                "name": "classes",
+                "value": "",
+                "type": "query",
+                "description": "List of classes to filter results with Available values : KYC, ID, IDV, AML, FRAUDLIST, FRAUDCHECK, DEVICE, MOBILE, EMAIL, LOOKUP, CREATE, UPDATE, DELETE, MANUAL, ORGANIZATION_PROFILE, ORGANIZATION_OWNERSHIP"
+              },
+              {
+                "name": "systemStatuses",
+                "value": "",
+                "type": "query",
+                "description": "List of systemStatus values to filter results with\nAvailable values : VALID, EXPIRED, STALE, MARKED_INVALID, MARKED_IGNORE"
+              },
+              {
+                "name": "manualStatuses",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "states",
+                "value": "",
+                "type": "query",
+                "description": "List of state values to filter results with\nAvailable values : IN_PROGRESS, COMPLETED, TIMEOUT, ERROR"
+              },
+              {
+                "name": "results",
+                "value": "",
+                "type": "query",
+                "description": "List of result value that the Process Result will be filtered with\nAvailable values : MATCH, PARTIAL_MATCH, INVALID_MATCH, NO_MATCH, CLEAR, HIT, BAD_DATA, CREATED, UPDATED, DELETED, FAIL"
+              },
+              {
+                "name": "sortFields",
+                "value": "",
+                "type": "query",
+                "description": "List of fields that the Process Results will be filtered with\nAvailable values : createdAt, updatedAt"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Order of the sort fields will be sorted upon"
+              },
+              {
+                "name": "page",
+                "value": "2",
+                "type": "query",
+                "description": "The page number that you want to retrieve for the list query"
+              },
+              {
+                "name": "limit",
+                "value": "20",
+                "type": "query",
+                "description": "Limit the number of items that will be returned as part of the request"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "api_key",
+              "value": "{{api_key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get a list of process results for a given individual entity"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Individual Entity Elements",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Delete a name",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.uat.frankie.one/v2/individuals/:entityId/names/:nameId",
+            "headers": [
+              {
+                "name": "api_key",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerChildID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Channel",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "entityId",
+                "value": "",
+                "type": "path",
+                "description": "Unique FrankieOne identifier for an entity"
+              },
+              {
+                "name": "nameId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "api_key",
+              "value": "{{api_key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Delete an individual's name or alternateName with the given id."
+        },
+        {
+          "info": {
+            "name": "Delete a date of birth",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.uat.frankie.one/v2/individuals/:entityId/datesOfBirth/:dateOfBirthId",
+            "headers": [
+              {
+                "name": "api_key",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerChildID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Channel",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "entityId",
+                "value": "",
+                "type": "path",
+                "description": "Unique FrankieOne identifier for an entity"
+              },
+              {
+                "name": "dateOfBirthId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "api_key",
+              "value": "{{api_key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Delete an individual's date of birth with the given id."
+        },
+        {
+          "info": {
+            "name": "Delete an address",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.uat.frankie.one/v2/individuals/:entityId/addresses/:addressId",
+            "headers": [
+              {
+                "name": "api_key",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerChildID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Channel",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "entityId",
+                "value": "",
+                "type": "path",
+                "description": "Unique FrankieOne identifier for an entity"
+              },
+              {
+                "name": "addressId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier for an address"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "api_key",
+              "value": "{{api_key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Delete an individual's address with the given Id."
+        },
+        {
+          "info": {
+            "name": "Delete an email address",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.uat.frankie.one/v2/individuals/:entityId/emailaddresses/:emailAddressId",
+            "headers": [
+              {
+                "name": "api_key",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerChildID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Channel",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "entityId",
+                "value": "",
+                "type": "path",
+                "description": "Unique FrankieOne identifier for an entity"
+              },
+              {
+                "name": "emailAddressId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "api_key",
+              "value": "{{api_key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Delete an individual's email address with the given id."
+        },
+        {
+          "info": {
+            "name": "Delete phone number",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.uat.frankie.one/v2/individuals/:entityId/phonenumbers/:phoneNumberId",
+            "headers": [
+              {
+                "name": "api_key",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerChildID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Channel",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "entityId",
+                "value": "",
+                "type": "path",
+                "description": "Unique FrankieOne identifier for an entity"
+              },
+              {
+                "name": "phoneNumberId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "api_key",
+              "value": "{{api_key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Delete an individual's phone number with the given id."
+        },
+        {
+          "info": {
+            "name": "Withdraw a previously provided consent",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.uat.frankie.one/v2/individuals/:entityId/consents/:consentType",
+            "headers": [
+              {
+                "name": "api_key",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerChildID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Channel",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "entityId",
+                "value": "",
+                "type": "path",
+                "description": "Unique FrankieOne identifier for an entity"
+              },
+              {
+                "name": "consentType",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "api_key",
+              "value": "{{api_key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Withdraw an individual's consent of a specific type."
+        },
+        {
+          "info": {
+            "name": "Get a list of external references",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.uat.frankie.one/v2/individuals/:entityId/externalreferences",
+            "headers": [
+              {
+                "name": "api_key",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerChildID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Channel",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "entityId",
+                "value": "",
+                "type": "path",
+                "description": "Unique FrankieOne identifier for an entity"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "api_key",
+              "value": "{{api_key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get a list of an individual's external references."
+        },
+        {
+          "info": {
+            "name": "Delete an external reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.uat.frankie.one/v2/individuals/:entityId/externalreferences/:referenceId",
+            "headers": [
+              {
+                "name": "api_key",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerChildID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Channel",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "entityId",
+                "value": "",
+                "type": "path",
+                "description": "Unique FrankieOne identifier for an entity"
+              },
+              {
+                "name": "referenceId",
+                "value": "",
+                "type": "path",
+                "description": "Unique external reference identifier"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "api_key",
+              "value": "{{api_key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Delete an individual's external reference with the given id."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Search",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Search for individual profiles",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.uat.frankie.one/v2/search/serviceprofiles",
+            "headers": [
+              {
+                "name": "api_key",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerChildID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Channel",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "sortFields",
+                "value": "",
+                "type": "query",
+                "description": "List of fields that the Process Results will be filtered with\nAvailable values : createdAt, updatedAt"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Order of the sort fields will be sorted upon"
+              },
+              {
+                "name": "page",
+                "value": "2",
+                "type": "query",
+                "description": "The page number that you want to retrieve for the list query"
+              },
+              {
+                "name": "limit",
+                "value": "20",
+                "type": "query",
+                "description": "Limit the number of items that will be returned as part of the request"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "api_key",
+              "value": "{{api_key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Search for Individuals that match the provided search parameters.  Search parameters are supplied in the form of an entity object, similar to how you would create an individual."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Individual Documents",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get all documents for an entity",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.uat.frankie.one/v2/individuals/:entityId/documents",
+            "headers": [
+              {
+                "name": "api_key",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerChildID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Channel",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "entityId",
+                "value": "",
+                "type": "path",
+                "description": "Unique FrankieOne identifier for an entity"
+              },
+              {
+                "name": "level",
+                "value": "",
+                "type": "query",
+                "description": "Determines what level of detail to return in the response\n - id: Return just an id\n - meta: Return all metadata only, no links or base64 data\n - base64: Return all metadata and data in base64 format"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "api_key",
+              "value": "{{api_key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get all documents for an entity."
+        },
+        {
+          "info": {
+            "name": "Create a new document for an individual.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.uat.frankie.one/v2/individuals/:entityId/documents",
+            "headers": [
+              {
+                "name": "api_key",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerChildID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Channel",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "entityId",
+                "value": "",
+                "type": "path",
+                "description": "Unique FrankieOne identifier for an entity"
+              },
+              {
+                "name": "level",
+                "value": "",
+                "type": "query",
+                "description": "Determines what level of detail to return in the response\n - id: Return just an id\n - meta: Return all metadata only, no links or base64 data\n - base64: Return all metadata and data in base64 format"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "api_key",
+              "value": "{{api_key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Add a new document to an entity."
+        },
+        {
+          "info": {
+            "name": "Get a single document by it's id.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.uat.frankie.one/v2/individuals/:entityId/documents/:documentId",
+            "headers": [
+              {
+                "name": "api_key",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerChildID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Channel",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "entityId",
+                "value": "",
+                "type": "path",
+                "description": "Unique FrankieOne identifier for an entity"
+              },
+              {
+                "name": "documentId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier for a document"
+              },
+              {
+                "name": "level",
+                "value": "",
+                "type": "query",
+                "description": "Determines what level of detail to return in the response\n - meta: Return all metadata only, no links or base64 data\n - base64: Return all metadata and images as base64"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "api_key",
+              "value": "{{api_key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get a single document by it's id."
+        },
+        {
+          "info": {
+            "name": "Update a single document by it's id.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.uat.frankie.one/v2/individuals/:entityId/documents/:documentId",
+            "headers": [
+              {
+                "name": "api_key",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerChildID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Channel",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "entityId",
+                "value": "",
+                "type": "path",
+                "description": "Unique FrankieOne identifier for an entity"
+              },
+              {
+                "name": "documentId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier for a document"
+              },
+              {
+                "name": "level",
+                "value": "",
+                "type": "query",
+                "description": "Determines what level of detail to return in the response\n - meta: Return all metadata only, no links or base64 data\n - base64: Return all metadata and images as base64"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "api_key",
+              "value": "{{api_key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Update document by id."
+        },
+        {
+          "info": {
+            "name": "Delete a document",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.uat.frankie.one/v2/individuals/:entityId/documents/:documentId",
+            "headers": [
+              {
+                "name": "api_key",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerChildID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Channel",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "entityId",
+                "value": "",
+                "type": "path",
+                "description": "Unique FrankieOne identifier for an entity"
+              },
+              {
+                "name": "documentId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier for a document"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "api_key",
+              "value": "{{api_key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Delete a single document and all of it's attachments."
+        },
+        {
+          "info": {
+            "name": "Delete an attachment",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.uat.frankie.one/v2/individuals/:entityId/documents/:documentId/attachments/:attachmentId",
+            "headers": [
+              {
+                "name": "api_key",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerChildID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Channel",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "entityId",
+                "value": "",
+                "type": "path",
+                "description": "Unique FrankieOne identifier for an entity"
+              },
+              {
+                "name": "documentId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier for a document"
+              },
+              {
+                "name": "attachmentId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "api_key",
+              "value": "{{api_key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Delete an attachment from a given document."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Individual Risks",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Update an individual entity's risk level for a service profile.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.uat.frankie.one/v2/individuals/:entityId/serviceprofiles/:serviceName/risk",
+            "headers": [
+              {
+                "name": "api_key",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerChildID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Channel",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "entityId",
+                "value": "",
+                "type": "path",
+                "description": "Unique FrankieOne identifier for an entity"
+              },
+              {
+                "name": "serviceName",
+                "value": "",
+                "type": "path",
+                "description": "The unique name of the service profile"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "api_key",
+              "value": "{{api_key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "This endpoint allows you to override the calculated risk level for the last completed workflow of an individual entity's service profile.\n\nNote:\n- This operation will not trigger a new workflow but will be used in the next workflow execution unless risk factors change or results are invalidated.\n- To execute the workflow, use the endpoint `POST /v2/individuals/{entityId}/serviceprofiles/{serviceName}/workflows/{workflowName}/execute`."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Monitoring",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Turn on/off monitoring for a given entity",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.uat.frankie.one/v2/individuals/:entityId/monitor",
+            "headers": [
+              {
+                "name": "api_key",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerChildID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Channel",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "entityId",
+                "value": "",
+                "type": "path",
+                "description": "Unique FrankieOne identifier for an entity"
+              },
+              {
+                "name": "enabled",
+                "value": "",
+                "type": "query",
+                "description": "Enable or disable monitoring for the given entity. Set to true to turn monitoring on or set to false to turn monitoring off."
+              },
+              {
+                "name": "monitoringTypes",
+                "value": "",
+                "type": "query",
+                "description": "The type of ongoing monitoring to be enabled/disable for the given entity. Exclude this parameter to set the monitoring status for all types."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "api_key",
+              "value": "{{api_key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Toggle monitoring on or off for for a given entity e.g. AML monitoring. Use this endpoint to either:\n- Enable monitoring - System will start monitoring the entity for potential changes.\n- Disable monitoring - System will no longer monitor the entity for new potential matches and will no longer send alerts.\n\nThe endpoint will effectively manage the monitoring status of the entity.\nHaving monitoring status of a type enabled means that the entity is being monitored for that type.\nIf the entity has "
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "IDV",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Queries the IDV provider for a token to be used with their sdk. This allows a provider SDK to be instantiated, this is to be called before starting the IDV or OCR process.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.uat.frankie.one/v2/individuals/:entityId/actions/idv/token",
+            "headers": [
+              {
+                "name": "api_key",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerChildID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Channel",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "entityId",
+                "value": "",
+                "type": "path",
+                "description": "Unique FrankieOne identifier for an entity"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "api_key",
+              "value": "{{api_key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get an IDV Token for the given individual."
+        },
+        {
+          "info": {
+            "name": "Submit an identity document photo for ocr processing. Results will be in the form of an identity document with populated with ocr results.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.uat.frankie.one/v2/individuals/:entityId/actions/idv/ocr",
+            "headers": [
+              {
+                "name": "api_key",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerChildID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Channel",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "entityId",
+                "value": "",
+                "type": "path",
+                "description": "Unique FrankieOne identifier for an entity"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "api_key",
+              "value": "{{api_key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Submit an identity document photo for ocr processing. Results will be in the form of an identity document with populated with ocr results if successful. Status will be COMPLETE_OCR if OCR was successful and no further images are required. The image can be uploaded or captured via a vendor SDK after calling get IDV token, or can be submitted directly as a fileData."
+        },
+        {
+          "info": {
+            "name": "At the end of the IDV data capture process with all photos and videos captured, signal to IDV provider that check is ready to analyse and check.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.uat.frankie.one/v2/individuals/:entityId/actions/idv/process",
+            "headers": [
+              {
+                "name": "api_key",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerChildID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Channel",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "entityId",
+                "value": "",
+                "type": "path",
+                "description": "Unique FrankieOne identifier for an entity"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "api_key",
+              "value": "{{api_key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "At the end of the IDV data capture process with all photos and videos captured, signal to IDV provider\n    that check is ready to analyse and check. If this call is successful, an entity\nis populated with with any details supplied if it doesn't not already have a name."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "HostedURL",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Provide hosted url for a hosted version of onesdk.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.uat.frankie.one/v2/individuals/hostedurl",
+            "headers": [
+              {
+                "name": "api_key",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerChildID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Channel",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "api_key",
+              "value": "{{api_key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Hosted OneSDK URL Generation, used to request a hosted OneSDK URL with entity specific token for a customer to use a hosted OneSDK session to do an action. Examples of actions that may be done is to complete their onboarding process or to re-attempt IDV checks.  If sendSMS is true and a phone number is supplied, an SMS will be sent to the phone number with the generated URL."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

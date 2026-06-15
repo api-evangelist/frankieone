@@ -1,0 +1,753 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Core V2 API",
+    "version": "2.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "api_key",
+      "value": "{{api_key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Audit",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List audit events",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.uat.frankie.one/v2/audit",
+            "headers": [
+              {
+                "name": "api_key",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerChildID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Channel",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "entityId",
+                "value": "",
+                "type": "query",
+                "description": "Entity ID"
+              },
+              {
+                "name": "workflowNames",
+                "value": "KYC Onboarding,Transaction Monitoring",
+                "type": "query",
+                "description": "List of Workflow Names to filter the audit events upon"
+              },
+              {
+                "name": "workflowRiskLevels",
+                "value": "LOW,HIGH",
+                "type": "query",
+                "description": "List of workflow risk levels to filter the audit events upon"
+              },
+              {
+                "name": "sources",
+                "value": "user@username.com,FrankieOne System,Experian Connector",
+                "type": "query",
+                "description": "List of Sources that the audit events will be filtered upon"
+              },
+              {
+                "name": "requestId",
+                "value": "",
+                "type": "query",
+                "description": "Request Identifier to filter the audit events upon"
+              },
+              {
+                "name": "afterTimestamp",
+                "value": "",
+                "type": "query",
+                "description": "Filter the Audit Events after the given filter based on the Event 'timestamp' value"
+              },
+              {
+                "name": "beforeTimestamp",
+                "value": "",
+                "type": "query",
+                "description": "Filter the Audit Events before the given filter based on the Event 'timestamp' value"
+              },
+              {
+                "name": "channels",
+                "value": "",
+                "type": "query",
+                "description": "List of Channels to filter the audit events upon"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Order of the sort fields will be sorted upon"
+              },
+              {
+                "name": "sortFields",
+                "value": "timestamp",
+                "type": "query",
+                "description": "The list of sort fields that will be used in the query, the order of the sort fields will determine the order in which the items are sorted"
+              },
+              {
+                "name": "page",
+                "value": "2",
+                "type": "query",
+                "description": "The page number that you want to retrieve for the list query"
+              },
+              {
+                "name": "limit",
+                "value": "20",
+                "type": "query",
+                "description": "Limit the number of items that will be returned as part of the request"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "api_key",
+              "value": "{{api_key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "List all audit events with filtering."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Individual Workflows",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get a list of executable workflows",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.uat.frankie.one/v2/workflows",
+            "headers": [
+              {
+                "name": "api_key",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerChildID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Channel",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "serviceName",
+                "value": "",
+                "type": "query",
+                "description": "The unique name of the service profile"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Query parameter to include additional fields of fetch workflow"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "api_key",
+              "value": "{{api_key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get a list of workflows that can be executed"
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Search",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Search for profiles",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.uat.frankie.one/v2/search/serviceprofiles",
+            "headers": [
+              {
+                "name": "api_key",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerChildID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Channel",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "sortFields",
+                "value": "",
+                "type": "query",
+                "description": "List of fields that the Process Results will be filtered with\nAvailable values : createdAt, updatedAt"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Order of the sort fields will be sorted upon"
+              },
+              {
+                "name": "page",
+                "value": "2",
+                "type": "query",
+                "description": "The page number that you want to retrieve for the list query"
+              },
+              {
+                "name": "limit",
+                "value": "20",
+                "type": "query",
+                "description": "Limit the number of items that will be returned as part of the request"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "api_key",
+              "value": "{{api_key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Search for Individuals and Organizations that match the provided search parameters.  Search parameters are supplied in the form of an entity object."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Matchlists",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Search for matchlist entries",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.uat.frankie.one/v2/search/matchlists",
+            "headers": [
+              {
+                "name": "X-Frankie-CustomerID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerChildID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-RequestID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Channel",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "limit",
+                "value": "20",
+                "type": "query",
+                "description": "Limit the number of items that will be returned as part of the request"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Retrieve all matching entries for the search criteria."
+        },
+        {
+          "info": {
+            "name": "Retrieve a list of matchlist details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.uat.frankie.one/v2/matchlists",
+            "headers": [
+              {
+                "name": "api_key",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerChildID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Channel",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Background",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "states",
+                "value": "",
+                "type": "query",
+                "description": "If set, the response will include only entries with the specified states. By default, only `ACTIVE` entries are returned. Possible values are: `ACTIVE`, and `ARCHIVED`. Multiple values can be provided as a comma-separated list. For example, `ACTIVE,ARCHIVED`. If the value is not one of the possible values, it will be ignored. If the value is not provided, only `ACTIVE` entries are returned."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "api_key",
+              "value": "{{api_key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Retrieve a list of matchlists that new entries can be added or removed."
+        },
+        {
+          "info": {
+            "name": "Get a list of matchlist entries",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.uat.frankie.one/v2/matchlists/:matchlistName/entries",
+            "headers": [
+              {
+                "name": "api_key",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerChildID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Channel",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "matchlistName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the matchlist."
+              },
+              {
+                "name": "states",
+                "value": "",
+                "type": "query",
+                "description": "If set, the response will include only entries with the specified states. By default, only `ACTIVE` entries are returned. Possible values are: `ACTIVE`, `EXPIRED`, and `DELETED`. Multiple values can be provided as a comma-separated list. For example, `DELETED,EXPIRED`."
+              },
+              {
+                "name": "batchName",
+                "value": "",
+                "type": "query",
+                "description": "If set, the response will include only entries from the specified batch. By default, all entries will be returned."
+              },
+              {
+                "name": "reference",
+                "value": "",
+                "type": "query",
+                "description": "If set, the response will include only entries with the specified reference. By default, all entries will be returned."
+              },
+              {
+                "name": "entityId",
+                "value": "",
+                "type": "query",
+                "description": "If set, the response will include only entries created with the specified entityId. By default, all entries will be returned."
+              },
+              {
+                "name": "entryId",
+                "value": "",
+                "type": "query",
+                "description": "If set, the response will include only the entry with the specified id. By default, all entries will be returned."
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Order of the sort fields will be sorted upon"
+              },
+              {
+                "name": "sortFields",
+                "value": "state",
+                "type": "query",
+                "description": "The list of sort fields that will be used in the query.  The order of the sort fields will determine the order in which the items are sorted. If state is added the sort order will always be `ACTIVE`, `EXPIRED`, `DELETED`."
+              },
+              {
+                "name": "page",
+                "value": "2",
+                "type": "query",
+                "description": "The page number that you want to retrieve for the list query"
+              },
+              {
+                "name": "limit",
+                "value": "20",
+                "type": "query",
+                "description": "Limit the number of items that will be returned as part of the request"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "api_key",
+              "value": "{{api_key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "The query parameter `entityId` can be used to filter the entries by entity ID. The entity UUID must be in lower case.\nThe query parameter `reference` can be used to filter the entries by reference.\nThe query parameter `batchName` can be used to filter the entries by batch name.\nThe query parameter `states` can be used to filter the entries by state. If set, the response will include only entries with the specified states. By default only `ACTIVE` entries are returned if the matchlist is `ACTIVE`"
+        },
+        {
+          "info": {
+            "name": "Create one or more entries in a matchlist",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.uat.frankie.one/v2/matchlists/:matchlistName/entries",
+            "headers": [
+              {
+                "name": "api_key",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerChildID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Channel",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "matchlistName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the matchlist."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "api_key",
+              "value": "{{api_key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Create a new entry in an existing matchlist.\nEntries must have at least one attribute and those attributes must be of valid types. Attribute values must have at least one non-whitespace character in their values.\nOptionally a batch name can be provided in the request, which will be applied to all given entries. The batch name should reflect the source of the entry list, for example blocklist.csv. The entries can later be retrieved by batch name.\nOptionally a reference can be provided for each en"
+        },
+        {
+          "info": {
+            "name": "Retrieve a matchlist entry",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.uat.frankie.one/v2/matchlists/:matchlistName/entries/:entryId",
+            "headers": [
+              {
+                "name": "api_key",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerChildID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Channel",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Background",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "matchlistName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the matchlist."
+              },
+              {
+                "name": "entryId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the matchlist entry."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "api_key",
+              "value": "{{api_key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Retrieve a single matchlist entry using an entryId."
+        },
+        {
+          "info": {
+            "name": "Modify a matchlist entry",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.uat.frankie.one/v2/matchlists/:matchlistName/entries/:entryId",
+            "headers": [
+              {
+                "name": "api_key",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerChildID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Channel",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Background",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "matchlistName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the matchlist."
+              },
+              {
+                "name": "entryId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the matchlist entry."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "api_key",
+              "value": "{{api_key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "This can be used in updating a matchlist entry's non-attribute fields such as `reference`, `state`, `reason`.\n\nThis endpoint can also be used to \"delete\" an entry by changing its state to `DELETED` and capturing comments.\n\nNOTE: Updating `attributes` field of a matchlist entry is not allowed. An entry could be used in existing matches, and modifying attributes directly could lead to inconsistencies. \nAs a workaround, retrieve the entry details, then create a new entry with the original and updat"
+        },
+        {
+          "info": {
+            "name": "Add an individual entity to a matchlist",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.uat.frankie.one/v2/matchlists/:matchlistName/entries/addEntity",
+            "headers": [
+              {
+                "name": "api_key",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerChildID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Channel",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Background",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "matchlistName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the matchlist."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "api_key",
+              "value": "{{api_key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Creates an individual entity and its attributes as a new entry in an existing matchlist."
+        },
+        {
+          "info": {
+            "name": "Remove an individual entity matchlist",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.uat.frankie.one/v2/matchlists/:matchlistName/entries/removeEntity",
+            "headers": [
+              {
+                "name": "api_key",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerChildID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Channel",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Background",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "matchlistName",
+                "value": "",
+                "type": "path",
+                "description": "The name of the matchlist."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "api_key",
+              "value": "{{api_key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Remove a matchlist entry's state using an entity ID. This automatically sets the state of the entry to `DELETED` .\n- **Important**: Deletion cannot be undone.\n- Delete a matchlist entry using the `entityId` associated with the entry.\n- Deleted entries will not be used for screening.\n- However, deleted entries can still be retrieved:\n  - By `entityId`, using the multi-entry `GET` (list) API, by specifying an `includeStates` filter that includes `DELETED`."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
