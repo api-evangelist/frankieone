@@ -74,9 +74,9 @@ common:
     url: https://www.frankieone.com/
   - type: Documentation
     url: https://docs.frankieone.com/
-  - type: SignUp
+  - type: Signup
     url: https://www.frankieone.com/contact-us
-  - type: LLMsTxt
+  - type: LlmsText
     url: https://docs.frankieone.com/llms.txt
 maintainers:
   - FN: Kin Lane
