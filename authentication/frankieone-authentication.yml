@@ -1,0 +1,24 @@
+generated: '2026-07-11'
+method: derived
+source: openapi/core-v2-openapi.yml, openapi/kyc-v2-openapi.json
+summary:
+  types:
+  - apiKey
+  - http
+  api_key_in:
+  - header
+schemes:
+- name: Api-Key
+  type: apiKey
+  in: header
+  parameter: api_key
+  sources:
+  - openapi/core-v2-openapi.yml
+  - openapi/kyc-v2-openapi.json
+- name: jwt
+  type: http
+  scheme: bearer
+  bearerFormat: JWT
+  sources:
+  - openapi/core-v2-openapi.yml
+  - openapi/kyc-v2-openapi.json

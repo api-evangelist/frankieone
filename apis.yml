@@ -66,6 +66,12 @@ apis:
       - type: Rules
         url: https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/rules/frankieone-core-rules.yml
 common:
+  - type: TrustCenter
+    url: security/frankieone-trust-center.yml
+  - type: DomainSecurity
+    url: security/frankieone-domain-security.yml
+  - type: Authentication
+    url: authentication/frankieone-authentication.yml
   - type: GitHubOrganization
     url: https://github.com/FrankieFinancial
   - type: LinkedIn
@@ -78,6 +84,8 @@ common:
     url: https://www.frankieone.com/contact-us
   - type: LlmsText
     url: https://docs.frankieone.com/llms.txt
+  - url: https://frankieone.com/frankieone-blog/rss.xml
+    type: Blog
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com
