@@ -66,6 +66,8 @@ apis:
       - type: Rules
         url: https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/rules/frankieone-core-rules.yml
 common:
+  - type: AgenticAccess
+    url: agentic-access/frankieone-agentic-access.yml
   - type: TrustCenter
     url: security/frankieone-trust-center.yml
   - type: DomainSecurity
