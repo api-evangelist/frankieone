@@ -1,0 +1,345 @@
+openapi: 3.0.3
+info:
+  title: Core V2 Audit Monitoring API
+  version: 2.0.0
+  description: This is the APIs for V2 Core. It allows you to do common operations, such as read audit entries or get workflow lists.
+  contact:
+    name: FrankieOne
+    url: https://www.frankieone.com/
+    email: help@frankieone.com
+servers:
+- url: https://api.uat.frankie.one
+security:
+- Api-Key: []
+tags:
+- name: Monitoring
+  description: Turn on/off ongoing monitoring for an individual entity
+paths:
+  /v2/individuals/{entityId}/monitor:
+    parameters:
+    - $ref: '#/components/parameters/entityId'
+    patch:
+      summary: Turn on/off monitoring for a given entity
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/entity_patch_monitoring_response'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Invalid EntityId:
+                  value:
+                    errorCode: API-0400,
+                    errorMsg: 'Multiple Errors: See Issues list'
+                    details:
+                    - issue: 'entityId in path must be of type uuid: "test"'
+                      issueLocation: VALIDATE-entityId
+                    requestId: 01HM5XJ7VASZ3EJMB1VQGTBFJ4
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Invalid authentication:
+                  value:
+                    errorCode: AUTH-0002,
+                    errorMsg: Unauthorized
+                    details:
+                    - issue: Invalid Authentication provided. Access denied.
+                      issueLocation: request
+                    requestId: 00000000S6MNG7624K2TDXT1E3
+                No Api-Key:
+                  value:
+                    errorCode: AUTH-0401
+                    errorMsg: Unauthorized
+                    details:
+                    - issue: No api key provided. Access denied.
+                      issueLocation: request
+                    requestId: 00000001S6MNG7624K2TDXT1E3
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                comment:
+                  $ref: '#/components/schemas/Comment'
+      operationId: patchMonitoring
+      description: "Toggle monitoring on or off for for a given entity e.g. AML monitoring. Use this endpoint to either:\n- Enable monitoring - System will start monitoring the entity for potential changes.\n- Disable monitoring - System will no longer monitor the entity for new potential matches and will no longer send alerts.\n\nThe endpoint will effectively manage the monitoring status of the entity.\nHaving monitoring status of a type enabled means that the entity is being monitored for that type.\nIf the entity has several services under the entity, the endpoint will manage the subscription status of the entity for each service for the types requested.\nRequest:\nThe request object contains the `entityId` and list of `monitoring` that are about to toggle.\nAlso, the request body contains comment to be added to audit logs\nResponse:\nThe response object contains the `requestId` and the `subscriptions` that associated with the entity.\nThe subscriptions object contains the type of monitoring and the details of the subscriptions.\nThe details of the subscriptions includes:\n  - service name\n  - service profile ID\n  - status of the subscription\n  - the workflows that will be executed by the type for the service profile."
+      parameters:
+      - $ref: '#/components/parameters/Api-Key'
+      - $ref: '#/components/parameters/X-Frankie-CustomerID'
+      - $ref: '#/components/parameters/X-Frankie-CustomerChildID'
+      - $ref: '#/components/parameters/X-Frankie-Channel'
+      - $ref: '#/components/parameters/toggle-monitoring'
+      - $ref: '#/components/parameters/monitoring-types'
+      tags:
+      - Monitoring
+      security:
+      - Api-Key: []
+      - jwt:
+        - kyc:api
+components:
+  schemas:
+    Error-Base:
+      type: object
+      properties:
+        errorCode:
+          type: string
+        errorMsg:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/Issue'
+    entity_patch_monitoring_response:
+      type: object
+      properties:
+        requestId:
+          $ref: '#/components/schemas/Request-ID'
+        monitoring:
+          $ref: '#/components/schemas/entity_patch_monitoring_subscriptions_response'
+    Subscription-Type:
+      type: string
+      description: Specifies the type of service profile subscription. This value determines the category of the service profile subscription.
+      enum:
+      - AML
+      - ACTIVITY
+    Error:
+      type: object
+      x-examples:
+        '400':
+          requestId: 0123456789ABCDEFGHIJKLMNOP
+          errorCode: API-0400
+          errorMsg: Parsing credentials from "<invalid>" failed, because invalid.
+          httpStatusCode: 400
+        '401':
+          requestId: 0123456789ABCDEFGHIJKLMNOP
+          errorCode: API-0401
+          errorMsg: Unauthenticated due to invalid credentials.
+          httpStatusCode: 401
+        '409':
+          requestId: 0123456789ABCDEFGHIJKLMNOP
+          errorCode: API-0409
+          errorMsg: Conflict.
+          httpStatusCode: 409
+      allOf:
+      - $ref: '#/components/schemas/Error-Base'
+      - type: object
+        properties:
+          requestId:
+            $ref: '#/components/schemas/Request-ID'
+    entity_patch_monitoring_subscriptions_aml_response:
+      type: object
+      description: The subscription details for AML monitoring
+      properties:
+        subscriptions:
+          type: array
+          description: The list of AML monitoring subscriptions
+          items:
+            $ref: '#/components/schemas/entity_patch_monitoring_subscriptions_details_response'
+        providers:
+          type: array
+          description: The providers that will be affected by the subscription
+          items:
+            type: string
+            description: The provider name
+        status:
+          $ref: '#/components/schemas/Subscription-Status'
+    Issue:
+      type: object
+      properties:
+        issue:
+          type: string
+          description: Description of the issue.
+        issueLocation:
+          type: string
+          description: The location or context where the issue was identified.
+        issueType:
+          type: string
+          description: The type or category of the issue.
+    Comment:
+      type: object
+      properties:
+        commentId:
+          type: string
+          description: Unique identifier for the comment.
+          example: 55fc5d54-46f7-49c8-bf78-e07ec79cd6e7
+          readOnly: true
+        text:
+          type: string
+          description: The text content of the comment.
+          example: Update after speaking to customer over the phone directly.
+    Monitoring-Type:
+      type: string
+      description: The type of workflow subscription. This determines which types are subscribing to a workflow.
+      allOf:
+      - $ref: '#/components/schemas/Subscription-Type'
+    Workflow-LifecyclePhaseEnum:
+      type: string
+      description: "Specifies the lifecycle phase of the customer in which this workflow is executed:\n  - ONBOARDING: Workflow is in the onboarding stage.\n  - MONITORING: Workflow is in the monitoring stage.\n  - OTHER: Workflow is in another stage.\n"
+      enum:
+      - ONBOARDING
+      - MONITORING
+      - OTHER
+      default: OTHER
+    Request-ID:
+      type: string
+      example: 01HN9XHZN6MGXM9JXG50K59Q85
+      description: The unique request identifier for the API call made.
+    Subscription-Status:
+      type: string
+      description: "Indicates the current status of the subscription.\n\n  - `ENABLED`: The subscription is active and operational.\n  - `DISABLED`: The subscription is inactive and not operational."
+      enum:
+      - ENABLED
+      - DISABLED
+    entity_patch_monitoring_subscriptions_response:
+      type: object
+      properties:
+        AML:
+          $ref: '#/components/schemas/entity_patch_monitoring_subscriptions_aml_response'
+    entity_patch_monitoring_subscriptions_details_response:
+      type: object
+      description: The subscription details for monitoring, this object is returned per monitoring type
+      properties:
+        serviceName:
+          type: string
+          description: The name of service associated the service profile
+        serviceProfileId:
+          type: string
+          description: The ID of the service profile
+        status:
+          $ref: '#/components/schemas/Subscription-Status'
+        enabledAt:
+          type: string
+          format: date-time
+          description: The date and time when the subscription was last enabled
+        enabledRequestId:
+          type: string
+          description: The request id when the subscription was last enabled
+        enabledBy:
+          type: string
+          description: The username of last user who enabled the subscription
+        disabledAt:
+          type: string
+          format: date-time
+          description: The date and time when the subscription was last disabled
+        disabledRequestId:
+          type: string
+          description: The request id when the subscription was last disabled
+        disabledBy:
+          type: string
+          description: The username of last user who disabled the subscription
+        workflows:
+          type: array
+          description: The workflows that will be executed by the type for the service profile
+          items:
+            type: object
+            properties:
+              workflowName:
+                type: string
+                description: Name of the workflow.
+              workflowId:
+                type: string
+                description: Unique ID of the workflow.
+              lifecyclePhase:
+                $ref: '#/components/schemas/Workflow-LifecyclePhaseEnum'
+  parameters:
+    monitoring-types:
+      in: query
+      name: monitoringTypes
+      style: form
+      explode: false
+      schema:
+        type: array
+        items:
+          $ref: '#/components/schemas/Monitoring-Type'
+      description: The type of ongoing monitoring to be enabled/disable for the given entity. Exclude this parameter to set the monitoring status for all types.
+    toggle-monitoring:
+      in: query
+      name: enabled
+      schema:
+        type: boolean
+      description: Enable or disable monitoring for the given entity. Set to true to turn monitoring on or set to false to turn monitoring off.
+      required: true
+    entityId:
+      name: entityId
+      in: path
+      schema:
+        type: string
+      description: Unique FrankieOne identifier for an entity
+      required: true
+    X-Frankie-CustomerChildID:
+      name: X-Frankie-CustomerChildID
+      in: header
+      required: false
+      schema:
+        type: string
+        example: 87654321-4321-4321-4321-210987654321
+      description: Your Customer Child ID provided by FrankieOne
+    Api-Key:
+      name: api_key
+      in: header
+      schema:
+        type: string
+        example: 245c765b124a098d09ef8765....
+      description: Your API key provided by FrankieOne
+      required: true
+    X-Frankie-CustomerID:
+      name: X-Frankie-CustomerID
+      in: header
+      required: true
+      schema:
+        type: string
+        example: 12345678-1234-1234-1234-123456789012
+      description: Your Customer ID provided by FrankieOne
+    X-Frankie-Channel:
+      name: X-Frankie-Channel
+      in: header
+      required: false
+      schema:
+        type: string
+      description: 'Open string that can be used to define the "channel" the request comes in from. It can potentially be used in routing and risk calculations upon request. Default values that can be used are:  api portal smartui Any alphanumeric string is supported though. Anything over 64 characters will be truncated.'
+  securitySchemes:
+    Api-Key:
+      type: apiKey
+      in: header
+      name: api_key
+      description: ''
+    jwt:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

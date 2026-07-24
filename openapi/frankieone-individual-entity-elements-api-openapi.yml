@@ -1,0 +1,1008 @@
+openapi: 3.0.3
+info:
+  title: Core V2 Audit Individual Entity Elements API
+  version: 2.0.0
+  description: This is the APIs for V2 Core. It allows you to do common operations, such as read audit entries or get workflow lists.
+  contact:
+    name: FrankieOne
+    url: https://www.frankieone.com/
+    email: help@frankieone.com
+servers:
+- url: https://api.uat.frankie.one
+security:
+- Api-Key: []
+tags:
+- name: Individual Entity Elements
+  description: Manage individual entity record elements
+paths:
+  /v2/individuals/{entityId}/names/{nameId}:
+    parameters:
+    - $ref: '#/components/parameters/entityId'
+    - $ref: '#/components/parameters/nameId'
+    delete:
+      summary: Delete a name
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  requestId:
+                    $ref: '#/components/schemas/Request-ID'
+                  entityId:
+                    $ref: '#/components/schemas/Entity-ID'
+                  nameId:
+                    type: string
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Invalid EntityId:
+                  value:
+                    errorCode: API-0400,
+                    errorMsg: 'Multiple Errors: See Issues list'
+                    details:
+                    - issue: 'entityId in path must be of type uuid: "test"'
+                      issueLocation: VALIDATE-entityId
+                    requestId: 01HM5XJ7VASZ3EJMB1VQGTBFJ4
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Invalid authentication:
+                  value:
+                    errorCode: AUTH-0002,
+                    errorMsg: Unauthorized
+                    details:
+                    - issue: Invalid Authentication provided. Access denied.
+                      issueLocation: request
+                    requestId: 00000000S6MNG7624K2TDXT1E3
+                No Api-Key:
+                  value:
+                    errorCode: AUTH-0401
+                    errorMsg: Unauthorized
+                    details:
+                    - issue: No api key provided. Access denied.
+                      issueLocation: request
+                    requestId: 00000001S6MNG7624K2TDXT1E3
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      operationId: deleteName
+      description: Delete an individual's name or alternateName with the given id.
+      parameters:
+      - $ref: '#/components/parameters/Api-Key'
+      - $ref: '#/components/parameters/X-Frankie-CustomerID'
+      - $ref: '#/components/parameters/X-Frankie-CustomerChildID'
+      - $ref: '#/components/parameters/X-Frankie-Channel'
+      - $ref: '#/components/parameters/X-Frankie-Username'
+      tags:
+      - Individual Entity Elements
+      security:
+      - Api-Key: []
+      - jwt:
+        - kyc:api
+  /v2/individuals/{entityId}/datesOfBirth/{dateOfBirthId}:
+    parameters:
+    - $ref: '#/components/parameters/entityId'
+    - $ref: '#/components/parameters/dateOfBirthId'
+    delete:
+      summary: Delete a date of birth
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  requestId:
+                    $ref: '#/components/schemas/Request-ID'
+                  entityId:
+                    $ref: '#/components/schemas/Entity-ID'
+                  dateOfBirthId:
+                    type: string
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Invalid EntityId:
+                  value:
+                    errorCode: API-0400,
+                    errorMsg: 'Multiple Errors: See Issues list'
+                    details:
+                    - issue: 'entityId in path must be of type uuid: "test"'
+                      issueLocation: VALIDATE-entityId
+                    requestId: 01HM5XJ7VASZ3EJMB1VQGTBFJ4
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Invalid authentication:
+                  value:
+                    errorCode: AUTH-0002,
+                    errorMsg: Unauthorized
+                    details:
+                    - issue: Invalid Authentication provided. Access denied.
+                      issueLocation: request
+                    requestId: 00000000S6MNG7624K2TDXT1E3
+                No Api-Key:
+                  value:
+                    errorCode: AUTH-0401
+                    errorMsg: Unauthorized
+                    details:
+                    - issue: No api key provided. Access denied.
+                      issueLocation: request
+                    requestId: 00000001S6MNG7624K2TDXT1E3
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      operationId: deleteDob
+      description: Delete an individual's date of birth with the given id.
+      parameters:
+      - $ref: '#/components/parameters/Api-Key'
+      - $ref: '#/components/parameters/X-Frankie-CustomerID'
+      - $ref: '#/components/parameters/X-Frankie-CustomerChildID'
+      - $ref: '#/components/parameters/X-Frankie-Channel'
+      - $ref: '#/components/parameters/X-Frankie-Username'
+      tags:
+      - Individual Entity Elements
+      security:
+      - Api-Key: []
+      - jwt:
+        - kyc:api
+  /v2/individuals/{entityId}/addresses/{addressId}:
+    parameters:
+    - $ref: '#/components/parameters/entityId'
+    - $ref: '#/components/parameters/addressId'
+    delete:
+      summary: Delete an address
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  requestId:
+                    $ref: '#/components/schemas/Request-ID'
+                  entityId:
+                    $ref: '#/components/schemas/Entity-ID'
+                  addressId:
+                    type: string
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Invalid EntityId:
+                  value:
+                    errorCode: API-0400,
+                    errorMsg: 'Multiple Errors: See Issues list'
+                    details:
+                    - issue: 'entityId in path must be of type uuid: "test"'
+                      issueLocation: VALIDATE-entityId
+                    requestId: 01HM5XJ7VASZ3EJMB1VQGTBFJ4
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Invalid authentication:
+                  value:
+                    errorCode: AUTH-0002,
+                    errorMsg: Unauthorized
+                    details:
+                    - issue: Invalid Authentication provided. Access denied.
+                      issueLocation: request
+                    requestId: 00000000S6MNG7624K2TDXT1E3
+                No Api-Key:
+                  value:
+                    errorCode: AUTH-0401
+                    errorMsg: Unauthorized
+                    details:
+                    - issue: No api key provided. Access denied.
+                      issueLocation: request
+                    requestId: 00000001S6MNG7624K2TDXT1E3
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      operationId: deleteAddress
+      description: Delete an individual's address with the given Id.
+      parameters:
+      - $ref: '#/components/parameters/Api-Key'
+      - $ref: '#/components/parameters/X-Frankie-CustomerID'
+      - $ref: '#/components/parameters/X-Frankie-CustomerChildID'
+      - $ref: '#/components/parameters/X-Frankie-Channel'
+      - $ref: '#/components/parameters/X-Frankie-Username'
+      tags:
+      - Individual Entity Elements
+      security:
+      - Api-Key: []
+      - jwt:
+        - kyc:api
+  /v2/individuals/{entityId}/emailaddresses/{emailAddressId}:
+    parameters:
+    - $ref: '#/components/parameters/entityId'
+    - $ref: '#/components/parameters/emailAddressId'
+    delete:
+      summary: Delete an email address
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  requestId:
+                    $ref: '#/components/schemas/Request-ID'
+                  entityId:
+                    $ref: '#/components/schemas/Entity-ID'
+                  emailAddressId:
+                    type: string
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Invalid EntityId:
+                  value:
+                    errorCode: API-0400,
+                    errorMsg: 'Multiple Errors: See Issues list'
+                    details:
+                    - issue: 'entityId in path must be of type uuid: "test"'
+                      issueLocation: VALIDATE-entityId
+                    requestId: 01HM5XJ7VASZ3EJMB1VQGTBFJ4
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Invalid authentication:
+                  value:
+                    errorCode: AUTH-0002,
+                    errorMsg: Unauthorized
+                    details:
+                    - issue: Invalid Authentication provided. Access denied.
+                      issueLocation: request
+                    requestId: 00000000S6MNG7624K2TDXT1E3
+                No Api-Key:
+                  value:
+                    errorCode: AUTH-0401
+                    errorMsg: Unauthorized
+                    details:
+                    - issue: No api key provided. Access denied.
+                      issueLocation: request
+                    requestId: 00000001S6MNG7624K2TDXT1E3
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      operationId: deleteEmailAddress
+      description: Delete an individual's email address with the given id.
+      parameters:
+      - $ref: '#/components/parameters/Api-Key'
+      - $ref: '#/components/parameters/X-Frankie-CustomerID'
+      - $ref: '#/components/parameters/X-Frankie-CustomerChildID'
+      - $ref: '#/components/parameters/X-Frankie-Channel'
+      - $ref: '#/components/parameters/X-Frankie-Username'
+      tags:
+      - Individual Entity Elements
+      security:
+      - Api-Key: []
+      - jwt:
+        - kyc:api
+  /v2/individuals/{entityId}/phonenumbers/{phoneNumberId}:
+    parameters:
+    - $ref: '#/components/parameters/entityId'
+    - $ref: '#/components/parameters/phoneNumberId'
+    delete:
+      summary: Delete phone number
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  requestId:
+                    $ref: '#/components/schemas/Request-ID'
+                  entityId:
+                    $ref: '#/components/schemas/Entity-ID'
+                  phoneNumberId:
+                    type: string
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Invalid EntityId:
+                  value:
+                    errorCode: API-0400,
+                    errorMsg: 'Multiple Errors: See Issues list'
+                    details:
+                    - issue: 'entityId in path must be of type uuid: "test"'
+                      issueLocation: VALIDATE-entityId
+                    requestId: 01HM5XJ7VASZ3EJMB1VQGTBFJ4
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Invalid authentication:
+                  value:
+                    errorCode: AUTH-0002,
+                    errorMsg: Unauthorized
+                    details:
+                    - issue: Invalid Authentication provided. Access denied.
+                      issueLocation: request
+                    requestId: 00000000S6MNG7624K2TDXT1E3
+                No Api-Key:
+                  value:
+                    errorCode: AUTH-0401
+                    errorMsg: Unauthorized
+                    details:
+                    - issue: No api key provided. Access denied.
+                      issueLocation: request
+                    requestId: 00000001S6MNG7624K2TDXT1E3
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      operationId: deletePhoneNumber
+      description: Delete an individual's phone number with the given id.
+      parameters:
+      - $ref: '#/components/parameters/Api-Key'
+      - $ref: '#/components/parameters/X-Frankie-CustomerID'
+      - $ref: '#/components/parameters/X-Frankie-CustomerChildID'
+      - $ref: '#/components/parameters/X-Frankie-Channel'
+      - $ref: '#/components/parameters/X-Frankie-Username'
+      tags:
+      - Individual Entity Elements
+      security:
+      - Api-Key: []
+      - jwt:
+        - kyc:api
+  /v2/individuals/{entityId}/consents/{consentType}:
+    parameters:
+    - $ref: '#/components/parameters/entityId'
+    - $ref: '#/components/parameters/consentType'
+    delete:
+      summary: Withdraw a previously provided consent
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  requestId:
+                    $ref: '#/components/schemas/Request-ID'
+                  entityId:
+                    $ref: '#/components/schemas/Entity-ID'
+                  consentType:
+                    type: string
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Invalid EntityId:
+                  value:
+                    errorCode: API-0400,
+                    errorMsg: 'Multiple Errors: See Issues list'
+                    details:
+                    - issue: 'entityId in path must be of type uuid: "test"'
+                      issueLocation: VALIDATE-entityId
+                    requestId: 01HM5XJ7VASZ3EJMB1VQGTBFJ4
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Invalid authentication:
+                  value:
+                    errorCode: AUTH-0002,
+                    errorMsg: Unauthorized
+                    details:
+                    - issue: Invalid Authentication provided. Access denied.
+                      issueLocation: request
+                    requestId: 00000000S6MNG7624K2TDXT1E3
+                No Api-Key:
+                  value:
+                    errorCode: AUTH-0401
+                    errorMsg: Unauthorized
+                    details:
+                    - issue: No api key provided. Access denied.
+                      issueLocation: request
+                    requestId: 00000001S6MNG7624K2TDXT1E3
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      operationId: deleteConsent
+      description: Withdraw an individual's consent of a specific type.
+      parameters:
+      - $ref: '#/components/parameters/Api-Key'
+      - $ref: '#/components/parameters/X-Frankie-CustomerID'
+      - $ref: '#/components/parameters/X-Frankie-CustomerChildID'
+      - $ref: '#/components/parameters/X-Frankie-Channel'
+      - $ref: '#/components/parameters/X-Frankie-Username'
+      tags:
+      - Individual Entity Elements
+      security:
+      - Api-Key: []
+      - jwt:
+        - kyc:api
+  /v2/individuals/{entityId}/externalreferences:
+    parameters:
+    - $ref: '#/components/parameters/entityId'
+    get:
+      summary: Get a list of external references
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  requestId:
+                    $ref: '#/components/schemas/Request-ID'
+                  externalReferences:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/External-Reference'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Invalid EntityId:
+                  value:
+                    errorCode: API-0400,
+                    errorMsg: 'Multiple Errors: See Issues list'
+                    details:
+                    - issue: 'entityId in path must be of type uuid: "test"'
+                      issueLocation: VALIDATE-entityId
+                    requestId: 01HM5XJ7VASZ3EJMB1VQGTBFJ4
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Invalid authentication:
+                  value:
+                    errorCode: AUTH-0002,
+                    errorMsg: Unauthorized
+                    details:
+                    - issue: Invalid Authentication provided. Access denied.
+                      issueLocation: request
+                    requestId: 00000000S6MNG7624K2TDXT1E3
+                No Api-Key:
+                  value:
+                    errorCode: AUTH-0401
+                    errorMsg: Unauthorized
+                    details:
+                    - issue: No api key provided. Access denied.
+                      issueLocation: request
+                    requestId: 00000001S6MNG7624K2TDXT1E3
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      operationId: getExternalReference
+      description: Get a list of an individual's external references.
+      parameters:
+      - $ref: '#/components/parameters/Api-Key'
+      - $ref: '#/components/parameters/X-Frankie-CustomerID'
+      - $ref: '#/components/parameters/X-Frankie-CustomerChildID'
+      - $ref: '#/components/parameters/X-Frankie-Channel'
+      - $ref: '#/components/parameters/X-Frankie-Username'
+      tags:
+      - Individual Entity Elements
+      security:
+      - Api-Key: []
+      - jwt:
+        - kyc:api
+  /v2/individuals/{entityId}/externalreferences/{referenceId}:
+    parameters:
+    - $ref: '#/components/parameters/entityId'
+    - $ref: '#/components/parameters/referenceId'
+    delete:
+      summary: Delete an external reference
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  requestId:
+                    $ref: '#/components/schemas/Request-ID'
+                  entityId:
+                    $ref: '#/components/schemas/Entity-ID'
+                  referenceId:
+                    type: string
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Invalid EntityId:
+                  value:
+                    errorCode: API-0400,
+                    errorMsg: 'Multiple Errors: See Issues list'
+                    details:
+                    - issue: 'entityId in path must be of type uuid: "test"'
+                      issueLocation: VALIDATE-entityId
+                    requestId: 01HM5XJ7VASZ3EJMB1VQGTBFJ4
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Invalid authentication:
+                  value:
+                    errorCode: AUTH-0002,
+                    errorMsg: Unauthorized
+                    details:
+                    - issue: Invalid Authentication provided. Access denied.
+                      issueLocation: request
+                    requestId: 00000000S6MNG7624K2TDXT1E3
+                No Api-Key:
+                  value:
+                    errorCode: AUTH-0401
+                    errorMsg: Unauthorized
+                    details:
+                    - issue: No api key provided. Access denied.
+                      issueLocation: request
+                    requestId: 00000001S6MNG7624K2TDXT1E3
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      operationId: deleteExternalReference
+      description: Delete an individual's external reference with the given id.
+      parameters:
+      - $ref: '#/components/parameters/Api-Key'
+      - $ref: '#/components/parameters/X-Frankie-CustomerID'
+      - $ref: '#/components/parameters/X-Frankie-CustomerChildID'
+      - $ref: '#/components/parameters/X-Frankie-Channel'
+      - $ref: '#/components/parameters/X-Frankie-Username'
+      tags:
+      - Individual Entity Elements
+      security:
+      - Api-Key: []
+      - jwt:
+        - kyc:api
+components:
+  schemas:
+    Error-Base:
+      type: object
+      properties:
+        errorCode:
+          type: string
+        errorMsg:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/Issue'
+    Error:
+      type: object
+      x-examples:
+        '400':
+          requestId: 0123456789ABCDEFGHIJKLMNOP
+          errorCode: API-0400
+          errorMsg: Parsing credentials from "<invalid>" failed, because invalid.
+          httpStatusCode: 400
+        '401':
+          requestId: 0123456789ABCDEFGHIJKLMNOP
+          errorCode: API-0401
+          errorMsg: Unauthenticated due to invalid credentials.
+          httpStatusCode: 401
+        '409':
+          requestId: 0123456789ABCDEFGHIJKLMNOP
+          errorCode: API-0409
+          errorMsg: Conflict.
+          httpStatusCode: 409
+      allOf:
+      - $ref: '#/components/schemas/Error-Base'
+      - type: object
+        properties:
+          requestId:
+            $ref: '#/components/schemas/Request-ID'
+    Issue:
+      type: object
+      properties:
+        issue:
+          type: string
+          description: Description of the issue.
+        issueLocation:
+          type: string
+          description: The location or context where the issue was identified.
+        issueType:
+          type: string
+          description: The type or category of the issue.
+    Consent-Type-Param:
+      type: string
+      enum:
+      - GENERAL
+      - DOCS
+      - CREDITHEADER
+      - UNDER18
+      - PAYROLL
+      - INSURANCE
+      - SUPERANNUATION
+      description: The type of consent provided by an entity.
+      example: UNDER18
+    Request-ID:
+      type: string
+      example: 01HN9XHZN6MGXM9JXG50K59Q85
+      description: The unique request identifier for the API call made.
+    External-Reference:
+      type: object
+      description: Reference information used to identify the individual in systems external to FrankieOne.
+      allOf:
+      - type: object
+        properties:
+          referenceId:
+            type: string
+            description: 'As external references are added to an entity, they are assigned a unique identifier to assist with modification and reference.
+
+              To modify an external reference, include the referenceId in an update request for the individual.'
+            example: 24de15f64-5717-4562-b3fc-2c963f66e23e
+            readOnly: true
+          type:
+            type: string
+            enum:
+            - SYSTEM
+            - CUSTOMER
+            - OTHER
+            default: CUSTOMER
+          sourceId:
+            type: string
+            description: The source from which specific information was sourced. This is a link to an informationSource object in the informationSources map.
+            example: 93da15f64-5717-4562-b3fc-2c963f6663fe
+            readOnly: true
+      - $ref: '#/components/schemas/External-Reference-Information'
+    Entity-ID:
+      type: string
+      description: 'Entities are assigned an auto-generated UUID to ensure global uniqueness, represented as entityId. The entityId allows for precise modification when required.
+
+        To modify an entity, set the entityId of the entity you wish to update in an update request.'
+      example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+      readOnly: true
+    External-Reference-Information:
+      type: object
+      x-examples:
+        Customer Reference:
+          name: CUSTOMER-REFERENCE
+          value: CUST-00001342
+          description: This is the customer id in the core banking system
+      required:
+      - name
+      - value
+      description: Used to store references and identifying information about an entity that is external to FrankieOne. If you wish to filter or search on customer information relevant to your business, that information should be added as an external reference.
+      properties:
+        name:
+          type: string
+          description: The name of the external reference.
+          example: CUSTOMER-REFERENCE
+        value:
+          type: string
+          description: The value of the external reference.
+          example: CUST-00001342
+        description:
+          type: string
+          description: A summary of what this external reference is and what it is used for.
+          example: This is the customer ID in the core banking system.
+  parameters:
+    entityId:
+      name: entityId
+      in: path
+      schema:
+        type: string
+      description: Unique FrankieOne identifier for an entity
+      required: true
+    referenceId:
+      name: referenceId
+      in: path
+      schema:
+        type: string
+      description: Unique external reference identifier
+      required: true
+    X-Frankie-Username:
+      name: X-Frankie-Username
+      in: header
+      description: Username provided by API caller
+      required: false
+      schema:
+        type: string
+        example: fred.flintstone@frankieone.com
+    emailAddressId:
+      name: emailAddressId
+      in: path
+      schema:
+        type: string
+      required: true
+    consentType:
+      name: consentType
+      x-go-name: ConsentTypeParam
+      in: path
+      schema:
+        $ref: '#/components/schemas/Consent-Type-Param'
+      required: true
+    phoneNumberId:
+      name: phoneNumberId
+      in: path
+      schema:
+        type: string
+      required: true
+    X-Frankie-CustomerChildID:
+      name: X-Frankie-CustomerChildID
+      in: header
+      required: false
+      schema:
+        type: string
+        example: 87654321-4321-4321-4321-210987654321
+      description: Your Customer Child ID provided by FrankieOne
+    Api-Key:
+      name: api_key
+      in: header
+      schema:
+        type: string
+        example: 245c765b124a098d09ef8765....
+      description: Your API key provided by FrankieOne
+      required: true
+    addressId:
+      name: addressId
+      in: path
+      schema:
+        type: string
+      description: Unique identifier for an address
+      required: true
+    dateOfBirthId:
+      name: dateOfBirthId
+      in: path
+      schema:
+        type: string
+      required: true
+    X-Frankie-Channel:
+      name: X-Frankie-Channel
+      in: header
+      required: false
+      schema:
+        type: string
+      description: 'Open string that can be used to define the "channel" the request comes in from. It can potentially be used in routing and risk calculations upon request. Default values that can be used are:  api portal smartui Any alphanumeric string is supported though. Anything over 64 characters will be truncated.'
+    nameId:
+      name: nameId
+      in: path
+      schema:
+        type: string
+      required: true
+    X-Frankie-CustomerID:
+      name: X-Frankie-CustomerID
+      in: header
+      required: true
+      schema:
+        type: string
+        example: 12345678-1234-1234-1234-123456789012
+      description: Your Customer ID provided by FrankieOne
+  securitySchemes:
+    Api-Key:
+      type: apiKey
+      in: header
+      name: api_key
+      description: ''
+    jwt:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

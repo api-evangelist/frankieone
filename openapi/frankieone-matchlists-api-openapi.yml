@@ -1,0 +1,1584 @@
+openapi: 3.0.3
+info:
+  title: Core V2 Audit Matchlists API
+  version: 2.0.0
+  description: This is the APIs for V2 Core. It allows you to do common operations, such as read audit entries or get workflow lists.
+  contact:
+    name: FrankieOne
+    url: https://www.frankieone.com/
+    email: help@frankieone.com
+servers:
+- url: https://api.uat.frankie.one
+security:
+- Api-Key: []
+tags:
+- name: Matchlists
+paths:
+  /v2/search/matchlists:
+    parameters:
+    - $ref: '#/components/parameters/X-Frankie-CustomerID'
+    - $ref: '#/components/parameters/X-Frankie-CustomerChildID'
+    - $ref: '#/components/parameters/X-Frankie-RequestID'
+    - $ref: '#/components/parameters/X-Frankie-Channel'
+    post:
+      summary: Search for matchlist entries
+      description: Retrieve all matching entries for the search criteria.
+      operationId: searchMatchlists
+      tags:
+      - Matchlists
+      parameters:
+      - $ref: '#/components/parameters/limit'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Search-Matchlists-Request'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Search-Matchlists-Matches-Response'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Unprocessable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v2/matchlists:
+    get:
+      summary: Retrieve a list of matchlist details
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  requestId:
+                    $ref: '#/components/schemas/Request-ID'
+                  matchlists:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Matchlist'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Invalid EntityId:
+                  value:
+                    errorCode: API-0400,
+                    errorMsg: 'Multiple Errors: See Issues list'
+                    details:
+                    - issue: 'entityId in path must be of type uuid: "test"'
+                      issueLocation: VALIDATE-entityId
+                    requestId: 01HM5XJ7VASZ3EJMB1VQGTBFJ4
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Invalid authentication:
+                  value:
+                    errorCode: AUTH-0002,
+                    errorMsg: Unauthorized
+                    details:
+                    - issue: Invalid Authentication provided. Access denied.
+                      issueLocation: request
+                    requestId: 00000000S6MNG7624K2TDXT1E3
+                No Api-Key:
+                  value:
+                    errorCode: AUTH-0401
+                    errorMsg: Unauthorized
+                    details:
+                    - issue: No api key provided. Access denied.
+                      issueLocation: request
+                    requestId: 00000001S6MNG7624K2TDXT1E3
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      operationId: getMatchlist
+      description: Retrieve a list of matchlists that new entries can be added or removed.
+      parameters:
+      - $ref: '#/components/parameters/Api-Key'
+      - $ref: '#/components/parameters/X-Frankie-CustomerID'
+      - $ref: '#/components/parameters/X-Frankie-CustomerChildID'
+      - $ref: '#/components/parameters/X-Frankie-Channel'
+      - $ref: '#/components/parameters/X-Frankie-Background'
+      - $ref: '#/components/parameters/X-Frankie-Username'
+      - $ref: '#/components/parameters/query_matchlist_states'
+      tags:
+      - Matchlists
+      security:
+      - Api-Key: []
+      - jwt:
+        - kyc:api
+  /v2/matchlists/{matchlistName}/entries:
+    parameters:
+    - $ref: '#/components/parameters/matchlistName'
+    post:
+      summary: Create one or more entries in a matchlist
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Create-Matchlist-Entries-Request'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Matchlist-Entries-Response'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Invalid EntityId:
+                  value:
+                    errorCode: API-0400,
+                    errorMsg: 'Multiple Errors: See Issues list'
+                    details:
+                    - issue: 'entityId in path must be of type uuid: "test"'
+                      issueLocation: VALIDATE-entityId
+                    requestId: 01HM5XJ7VASZ3EJMB1VQGTBFJ4
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Invalid authentication:
+                  value:
+                    errorCode: AUTH-0002,
+                    errorMsg: Unauthorized
+                    details:
+                    - issue: Invalid Authentication provided. Access denied.
+                      issueLocation: request
+                    requestId: 00000000S6MNG7624K2TDXT1E3
+                No Api-Key:
+                  value:
+                    errorCode: AUTH-0401
+                    errorMsg: Unauthorized
+                    details:
+                    - issue: No api key provided. Access denied.
+                      issueLocation: request
+                    requestId: 00000001S6MNG7624K2TDXT1E3
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      operationId: createMatchlistEntry
+      description: 'Create a new entry in an existing matchlist.
+
+        Entries must have at least one attribute and those attributes must be of valid types. Attribute values must have at least one non-whitespace character in their values.
+
+        Optionally a batch name can be provided in the request, which will be applied to all given entries. The batch name should reflect the source of the entry list, for example blocklist.csv. The entries can later be retrieved by batch name.
+
+        Optionally a reference can be provided for each entry in the request. The reference should be a unique name (but uniqueness is not required) from for example an externally sourced blocklist. The entries can later be retrieved by reference.
+
+        Optionally each entry can refer to an entity ID and type (both ID and type, or neither), to indicate that the entry is based on en existing entity.'
+      parameters:
+      - $ref: '#/components/parameters/Api-Key'
+      - $ref: '#/components/parameters/X-Frankie-CustomerID'
+      - $ref: '#/components/parameters/X-Frankie-CustomerChildID'
+      - $ref: '#/components/parameters/X-Frankie-Channel'
+      - $ref: '#/components/parameters/X-Frankie-Username'
+      tags:
+      - Matchlists
+      security:
+      - Api-Key: []
+      - jwt:
+        - kyc:api
+    get:
+      summary: Get a list of matchlist entries
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  requestId:
+                    $ref: '#/components/schemas/Request-ID'
+                  entries:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Matchlist-Entry'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Invalid EntityId:
+                  value:
+                    errorCode: API-0400,
+                    errorMsg: 'Multiple Errors: See Issues list'
+                    details:
+                    - issue: 'entityId in path must be of type uuid: "test"'
+                      issueLocation: VALIDATE-entityId
+                    requestId: 01HM5XJ7VASZ3EJMB1VQGTBFJ4
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Invalid authentication:
+                  value:
+                    errorCode: AUTH-0002,
+                    errorMsg: Unauthorized
+                    details:
+                    - issue: Invalid Authentication provided. Access denied.
+                      issueLocation: request
+                    requestId: 00000000S6MNG7624K2TDXT1E3
+                No Api-Key:
+                  value:
+                    errorCode: AUTH-0401
+                    errorMsg: Unauthorized
+                    details:
+                    - issue: No api key provided. Access denied.
+                      issueLocation: request
+                    requestId: 00000001S6MNG7624K2TDXT1E3
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      operationId: getMatchlistEntries
+      description: 'The query parameter `entityId` can be used to filter the entries by entity ID. The entity UUID must be in lower case.
+
+        The query parameter `reference` can be used to filter the entries by reference.
+
+        The query parameter `batchName` can be used to filter the entries by batch name.
+
+        The query parameter `states` can be used to filter the entries by state. If set, the response will include only entries with the specified states. By default only `ACTIVE` entries are returned if the matchlist is `ACTIVE`. If the matchlist is `ARCHIVED` only `EXPIRED` entries will be returned. Possible values are: `ACTIVE`, `EXPIRED`, and `DELETED`. Multiple values can be provided as a comma-separated list. For example, `DELETED,EXPIRED`.
+
+        The query parameter `sortFields` (`createdAt`, `updatedAt` or `state`) can be set to one or more fields for sorting. The default is to use just `createdAt`.
+
+        The query parameter `sort` can set the sort order to ascending (`asc`) or descending (`desc`). The default is ascending.
+
+        The query parameters `limit` (default 10) and `page` (default 1) can be used to control paging of the returned entries. The values given must be positive.
+
+        If no matching entries are found, or the page is too large, then the entries array will be empty, but the result code is still 200.
+
+        In addition to the entries, the response will also include the basic details of the matchlist, including its state. This is important, since if a matchlist is `ARCHIVED`, all previously `ACTIVE` entries will be `EXPIRED`, and will only be seen in the response if the `states` includes `EXPIRED`. So the entries array will be blank for `ARCHIVED` matchlists if `states` is not given.'
+      parameters:
+      - $ref: '#/components/parameters/Api-Key'
+      - $ref: '#/components/parameters/X-Frankie-CustomerID'
+      - $ref: '#/components/parameters/X-Frankie-CustomerChildID'
+      - $ref: '#/components/parameters/X-Frankie-Channel'
+      - $ref: '#/components/parameters/X-Frankie-Username'
+      - $ref: '#/components/parameters/query_entry_states'
+      - $ref: '#/components/parameters/query_batch_name'
+      - $ref: '#/components/parameters/query_reference'
+      - $ref: '#/components/parameters/query_entity_id'
+      - $ref: '#/components/parameters/query_entry_id'
+      - $ref: '#/components/parameters/sort'
+      - $ref: '#/components/parameters/matchlist_sort_fields'
+      - $ref: '#/components/parameters/page'
+      - $ref: '#/components/parameters/limit'
+      tags:
+      - Matchlists
+      security:
+      - Api-Key: []
+      - jwt:
+        - kyc:api
+  /v2/matchlists/{matchlistName}/entries/{entryId}:
+    parameters:
+    - $ref: '#/components/parameters/matchlistName'
+    - $ref: '#/components/parameters/entryId'
+    patch:
+      operationId: updateMatchlistEntry
+      summary: Modify a matchlist entry
+      description: "This can be used in updating a matchlist entry's non-attribute fields such as `reference`, `state`, `reason`.\n\nThis endpoint can also be used to \"delete\" an entry by changing its state to `DELETED` and capturing comments.\n\nNOTE: Updating `attributes` field of a matchlist entry is not allowed. An entry could be used in existing matches, and modifying attributes directly could lead to inconsistencies. \nAs a workaround, retrieve the entry details, then create a new entry with the original and updated values. The old entry should have its state changed to `DELETED`."
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                entry:
+                  $ref: '#/components/schemas/Update-Matchlist-Entry-Request'
+                comment:
+                  $ref: '#/components/schemas/Comment'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  requestId:
+                    $ref: '#/components/schemas/Request-ID'
+                  entry:
+                    $ref: '#/components/schemas/Matchlist-Entry'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Invalid EntityId:
+                  value:
+                    errorCode: API-0400,
+                    errorMsg: 'Multiple Errors: See Issues list'
+                    details:
+                    - issue: 'entityId in path must be of type uuid: "test"'
+                      issueLocation: VALIDATE-entityId
+                    requestId: 01HM5XJ7VASZ3EJMB1VQGTBFJ4
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Invalid authentication:
+                  value:
+                    errorCode: AUTH-0002,
+                    errorMsg: Unauthorized
+                    details:
+                    - issue: Invalid Authentication provided. Access denied.
+                      issueLocation: request
+                    requestId: 00000000S6MNG7624K2TDXT1E3
+                No Api-Key:
+                  value:
+                    errorCode: AUTH-0401
+                    errorMsg: Unauthorized
+                    details:
+                    - issue: No api key provided. Access denied.
+                      issueLocation: request
+                    requestId: 00000001S6MNG7624K2TDXT1E3
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      parameters:
+      - $ref: '#/components/parameters/Api-Key'
+      - $ref: '#/components/parameters/X-Frankie-CustomerID'
+      - $ref: '#/components/parameters/X-Frankie-CustomerChildID'
+      - $ref: '#/components/parameters/X-Frankie-Channel'
+      - $ref: '#/components/parameters/X-Frankie-Background'
+      - $ref: '#/components/parameters/X-Frankie-Username'
+      tags:
+      - Matchlists
+      security:
+      - Api-Key: []
+      - jwt:
+        - kyc:api
+    get:
+      operationId: getMatchlistEntry
+      summary: Retrieve a matchlist entry
+      description: Retrieve a single matchlist entry using an entryId.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  requestId:
+                    $ref: '#/components/schemas/Request-ID'
+                  entry:
+                    $ref: '#/components/schemas/Matchlist-Entry'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Invalid EntityId:
+                  value:
+                    errorCode: API-0400,
+                    errorMsg: 'Multiple Errors: See Issues list'
+                    details:
+                    - issue: 'entityId in path must be of type uuid: "test"'
+                      issueLocation: VALIDATE-entityId
+                    requestId: 01HM5XJ7VASZ3EJMB1VQGTBFJ4
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Invalid authentication:
+                  value:
+                    errorCode: AUTH-0002,
+                    errorMsg: Unauthorized
+                    details:
+                    - issue: Invalid Authentication provided. Access denied.
+                      issueLocation: request
+                    requestId: 00000000S6MNG7624K2TDXT1E3
+                No Api-Key:
+                  value:
+                    errorCode: AUTH-0401
+                    errorMsg: Unauthorized
+                    details:
+                    - issue: No api key provided. Access denied.
+                      issueLocation: request
+                    requestId: 00000001S6MNG7624K2TDXT1E3
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      parameters:
+      - $ref: '#/components/parameters/Api-Key'
+      - $ref: '#/components/parameters/X-Frankie-CustomerID'
+      - $ref: '#/components/parameters/X-Frankie-CustomerChildID'
+      - $ref: '#/components/parameters/X-Frankie-Channel'
+      - $ref: '#/components/parameters/X-Frankie-Background'
+      - $ref: '#/components/parameters/X-Frankie-Username'
+      tags:
+      - Matchlists
+      security:
+      - Api-Key: []
+      - jwt:
+        - kyc:api
+  /v2/matchlists/{matchlistName}/entries/addEntity:
+    parameters:
+    - $ref: '#/components/parameters/matchlistName'
+    post:
+      summary: Add an individual entity to a matchlist
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Add-Matchlist-Entity-Request'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  requestId:
+                    $ref: '#/components/schemas/Request-ID'
+                  entry:
+                    $ref: '#/components/schemas/Matchlist-Entry'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Invalid EntityId:
+                  value:
+                    errorCode: API-0400,
+                    errorMsg: 'Multiple Errors: See Issues list'
+                    details:
+                    - issue: 'entityId in path must be of type uuid: "test"'
+                      issueLocation: VALIDATE-entityId
+                    requestId: 01HM5XJ7VASZ3EJMB1VQGTBFJ4
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Invalid authentication:
+                  value:
+                    errorCode: AUTH-0002,
+                    errorMsg: Unauthorized
+                    details:
+                    - issue: Invalid Authentication provided. Access denied.
+                      issueLocation: request
+                    requestId: 00000000S6MNG7624K2TDXT1E3
+                No Api-Key:
+                  value:
+                    errorCode: AUTH-0401
+                    errorMsg: Unauthorized
+                    details:
+                    - issue: No api key provided. Access denied.
+                      issueLocation: request
+                    requestId: 00000001S6MNG7624K2TDXT1E3
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      operationId: addMatchlistEntity
+      description: Creates an individual entity and its attributes as a new entry in an existing matchlist.
+      parameters:
+      - $ref: '#/components/parameters/Api-Key'
+      - $ref: '#/components/parameters/X-Frankie-CustomerID'
+      - $ref: '#/components/parameters/X-Frankie-CustomerChildID'
+      - $ref: '#/components/parameters/X-Frankie-Channel'
+      - $ref: '#/components/parameters/X-Frankie-Background'
+      - $ref: '#/components/parameters/X-Frankie-Username'
+      tags:
+      - Matchlists
+      security:
+      - Api-Key: []
+      - jwt:
+        - kyc:api
+  /v2/matchlists/{matchlistName}/entries/removeEntity:
+    parameters:
+    - $ref: '#/components/parameters/matchlistName'
+    patch:
+      summary: Remove an individual entity matchlist
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Remove-Matchlist-Entity-Request'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  requestId:
+                    $ref: '#/components/schemas/Request-ID'
+                  entityId:
+                    $ref: '#/components/schemas/Entity-ID'
+                  matchlistId:
+                    $ref: '#/components/schemas/Matchlist-ID'
+                  state:
+                    $ref: '#/components/schemas/Matchlist-Entry-State'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Invalid EntityId:
+                  value:
+                    errorCode: API-0400,
+                    errorMsg: 'Multiple Errors: See Issues list'
+                    details:
+                    - issue: 'entityId in path must be of type uuid: "test"'
+                      issueLocation: VALIDATE-entityId
+                    requestId: 01HM5XJ7VASZ3EJMB1VQGTBFJ4
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Invalid authentication:
+                  value:
+                    errorCode: AUTH-0002,
+                    errorMsg: Unauthorized
+                    details:
+                    - issue: Invalid Authentication provided. Access denied.
+                      issueLocation: request
+                    requestId: 00000000S6MNG7624K2TDXT1E3
+                No Api-Key:
+                  value:
+                    errorCode: AUTH-0401
+                    errorMsg: Unauthorized
+                    details:
+                    - issue: No api key provided. Access denied.
+                      issueLocation: request
+                    requestId: 00000001S6MNG7624K2TDXT1E3
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      operationId: removeMatchlistEntity
+      description: "Remove a matchlist entry's state using an entity ID. This automatically sets the state of the entry to `DELETED` .\n- **Important**: Deletion cannot be undone.\n- Delete a matchlist entry using the `entityId` associated with the entry.\n- Deleted entries will not be used for screening.\n- However, deleted entries can still be retrieved:\n  - By `entityId`, using the multi-entry `GET` (list) API, by specifying an `includeStates` filter that includes `DELETED`."
+      parameters:
+      - $ref: '#/components/parameters/Api-Key'
+      - $ref: '#/components/parameters/X-Frankie-CustomerID'
+      - $ref: '#/components/parameters/X-Frankie-CustomerChildID'
+      - $ref: '#/components/parameters/X-Frankie-Channel'
+      - $ref: '#/components/parameters/X-Frankie-Background'
+      - $ref: '#/components/parameters/X-Frankie-Username'
+      tags:
+      - Matchlists
+      security:
+      - Api-Key: []
+      - jwt:
+        - kyc:api
+components:
+  schemas:
+    Matchlist-State:
+      type: string
+      description: "The state of the matchlist. Possible values:\n  - \"ACTIVE\": The matchlist is active and can be used for matching. Note: the default matchlist is always active.\n  - \"ARCHIVED\": The matchlist is archived and cannot be used for matching."
+      default: ACTIVE
+      enum:
+      - ACTIVE
+      - ARCHIVED
+    Error-Base:
+      type: object
+      properties:
+        errorCode:
+          type: string
+        errorMsg:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/Issue'
+    Search-Matchlists-Matches-Response:
+      type: object
+      description: 'All matches for a matchlist search. The entries contain the matchlist ID reference for looking up the matchlist details in matchlists.
+
+        If there are no matches, empty lists are returned.
+
+        Results will be ordered by descending entry match confidence for fuzzy searches, and otehrwise by matchlist and entry ID.'
+      required:
+      - requestId
+      - matchlists
+      - entries
+      - meta
+      properties:
+        requestId:
+          $ref: '#/components/schemas/Request-ID'
+        matchlists:
+          type: object
+          description: 'List of matchlists with at least one matches entry in the entries list. Keyed on the matchlist ID which is also present in
+
+            entries.
+
+            '
+          additionalProperties:
+            $ref: '#/components/schemas/Matchlist-Base'
+        entries:
+          type: array
+          description: 'The list of matches that match the search criteria. Includes associated match strengths if the search was fuzzy.
+
+            If no matches were found, the list will be empty.'
+          items:
+            $ref: '#/components/schemas/Matchlists-Search-Matched-Entry'
+        meta:
+          type: object
+          description: Meta information about the request and response that will be returned during a search operation
+          required:
+          - total
+          - limit
+          - count
+          properties:
+            total:
+              type: integer
+              description: The Total number of items that have been found for the search criteria
+            limit:
+              type: integer
+              description: The current limit applied for this response
+            count:
+              type: integer
+              description: The number of items that were returned in this response
+    Matchlists-Search-Matched-Attribute:
+      type: object
+      description: An entry attribute that matched the matchlist search criteria.
+      required:
+      - attribute
+      properties:
+        attribute:
+          $ref: '#/components/schemas/Matchlist-Entry-Attribute'
+        confidence:
+          $ref: '#/components/schemas/Search-Confidence'
+    Matchlist-Entry-Base-With-Audit:
+      type: object
+      description: Basic details about a matchlist entry, including audit metadata.
+      allOf:
+      - $ref: '#/components/schemas/Matchlist-Entry-Base'
+      - type: object
+        properties:
+          createdBy:
+            type: string
+            readOnly: true
+            description: The user who created the matchlist entry. This is set to the value in the `X-Frankie-Username` header.
+          createdAt:
+            type: string
+            format: date-time
+            readOnly: true
+            description: The date and time when the matchlist entry was created.
+          updatedBy:
+            type: string
+            readOnly: true
+            description: The user who last updated the matchlist entry. This is set to the value in the `X-Frankie-Username` header. On creation, this is the same as `createdBy`.
+          updatedAt:
+            type: string
+            format: date-time
+            readOnly: true
+            description: The date and time when the matchlist entry was last updated. On creation, this is the same as `createdAt`.
+    Entity-Type-Writeable:
+      type: string
+      enum:
+      - INDIVIDUAL
+      - ORGANIZATION
+      - UNKNOWN
+      description: The type of entity within Frankie. This can be "INDIVIDUAL", "ORGANIZATION", or "UNKNOWN".
+    Matchlist:
+      type: object
+      description: 'A matchlist is a collection of entries used to match against incoming data. '
+      allOf:
+      - $ref: '#/components/schemas/Matchlist-Base'
+      - type: object
+        description: Additional details about the matchlist.
+        title: Matchlist
+        properties:
+          state:
+            $ref: '#/components/schemas/Matchlist-State'
+          createdBy:
+            type: string
+            readOnly: true
+            description: The user who created the matchlist.
+          createdAt:
+            type: string
+            format: date-time
+            readOnly: true
+            description: The date and time when the matchlist was created.
+          updatedBy:
+            type: string
+            readOnly: true
+            description: The user who last updated the matchlist. On creation, this is the same as `createdBy`.
+          updatedAt:
+            type: string
+            format: date-time
+            readOnly: true
+            description: The date and time when the matchlist was last updated. On creation, this is the same as `createdAt`.
+    Error:
+      type: object
+      x-examples:
+        '400':
+          requestId: 0123456789ABCDEFGHIJKLMNOP
+          errorCode: API-0400
+          errorMsg: Parsing credentials from "<invalid>" failed, because invalid.
+          httpStatusCode: 400
+        '401':
+          requestId: 0123456789ABCDEFGHIJKLMNOP
+          errorCode: API-0401
+          errorMsg: Unauthenticated due to invalid credentials.
+          httpStatusCode: 401
+        '409':
+          requestId: 0123456789ABCDEFGHIJKLMNOP
+          errorCode: API-0409
+          errorMsg: Conflict.
+          httpStatusCode: 409
+      allOf:
+      - $ref: '#/components/schemas/Error-Base'
+      - type: object
+        properties:
+          requestId:
+            $ref: '#/components/schemas/Request-ID'
+    Create-Matchlist-Entries-Request:
+      type: object
+      description: Request to create one or more entries in a matchlist
+      required:
+      - entries
+      properties:
+        batchName:
+          type: string
+          description: Optional name to identify a batch of matchlist entries. This name should reflect the source of the batch. When entries are later retrieved, they can be filtered by this batch name.
+          example: blocklist.csv
+        entries:
+          description: Entries to create in the matchlist
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/Create-Matchlist-Entry-Request'
+        comment:
+          $ref: '#/components/schemas/Comment'
+    Matchlist-Entry:
+      type: object
+      description: Represents a single entry in a matchlist.
+      allOf:
+      - $ref: '#/components/schemas/Matchlist-Entry-Base'
+      - type: object
+        description: Additional entry details that are only visible to the matchlist owner.
+        title: Matchlist Entry
+        required:
+        - attributes
+        properties:
+          attributes:
+            $ref: '#/components/schemas/Matchlist-Entry-Attributes'
+          state:
+            $ref: '#/components/schemas/Matchlist-Entry-State'
+          batchName:
+            type: string
+            description: Optional batch name to identify the source of this entry.
+            example: blocklist.csv
+          createdBy:
+            type: string
+            readOnly: true
+            description: The user who created the matchlist entry. This is set to the value in the `X-Frankie-Username` header.
+          createdAt:
+            type: string
+            format: date-time
+            readOnly: true
+            description: The date and time when the matchlist entry was created.
+          updatedBy:
+            type: string
+            readOnly: true
+            description: The user who last updated the matchlist entry. This is set to the value in the `X-Frankie-Username` header. On creation, this is the same as `createdBy`.
+          updatedAt:
+            type: string
+            format: date-time
+            readOnly: true
+            description: The date and time when the matchlist entry was last updated. On creation, this is the same as `createdAt`.
+    Matchlists-Search-Filter:
+      type: object
+      description: Specification of the matchlists to be searched. By default, only the default matchlist is searched.
+      properties:
+        listScope:
+          type: string
+          description: "The lists to search in. If not provided, the search will be performed only in the default list.\n  - DEFAULT: Search in the default list.\n  - ALL: Search in all lists.\n  - CUSTOM: Search in the lists provided in the searchLists parameter."
+          default: DEFAULT
+          enum:
+          - DEFAULT
+          - ALL
+          - CUSTOM
+        searchLists:
+          type: array
+          description: The IDs of matchlists to search in. Required if listScope is CUSTOM.
+          items:
+            type: string
+            format: uuid
+            description: The ID of the matchlist to search in.
+    Add-Matchlist-Entity-Request:
+      type: object
+      description: Used for adding an entity to a matchlist
+      required:
+      - entityId
+      properties:
+        entityId:
+          $ref: '#/components/schemas/Entity-ID-Writeable'
+          description: The entity ID of the entity from which the attributes of this entry will be derived.
+        entityType:
+          $ref: '#/components/schemas/Entity-Type-Writeable'
+          description: The entity type of the entity from which the attributes of this entry will be derived.
+        reasons:
+          description: The reasons for the matchlist entry. These codes will translate to configured description strings.
+          type: array
+          items:
+            $ref: '#/components/schemas/Matchlist-Entry-Reason-Code'
+        comment:
+          $ref: '#/components/schemas/Comment'
+    Matchlist-Action:
+      type: string
+      description: "Default action recommended for a match. The action can be one of the following:\n  - `BLOCK`: Recommended action is to block the entity.\n  - `ALERT`: Recommended action is to create an alert for the entity.\n  - `ALLOW`: Recommended action is to allow the entity.\n  - `REVIEW`: Recommended action is to review the entity.\n  - `NONE`: No action; only use the `riskFactor` if any."
+      enum:
+      - BLOCK
+      - ALERT
+      - ALLOW
+      - REVIEW
+      - NONE
+    Entity-Type:
+      type: string
+      enum:
+      - INDIVIDUAL
+      - ORGANIZATION
+      - UNKNOWN
+      description: The type of entity within Frankie. This can be "INDIVIDUAL", "ORGANIZATION", or "UNKNOWN".
+      readOnly: true
+    Issue:
+      type: object
+      properties:
+        issue:
+          type: string
+          description: Description of the issue.
+        issueLocation:
+          type: string
+          description: The location or context where the issue was identified.
+        issueType:
+          type: string
+          description: The type or category of the issue.
+    Matchlist-Entry-Attribute:
+      type: object
+      description: Represents a single attribute of a matchlist entry.
+      required:
+      - type
+      - value
+      properties:
+        type:
+          $ref: '#/components/schemas/Matchlist-Entry-Attribute-Type'
+        value:
+          description: The value of the attribute, e.g., last name "Smith" if the type is IND_FAMILY_NAME.
+          type: string
+    Search-Confidence:
+      type: number
+      format: float
+      minimum: 0
+      maximum: 1
+      description: 'Confidence level of the search result, represented as a number between 0 and 1.
+
+        A higher value indicates greater confidence in the accuracy of the search result.
+
+        '
+    Search-Matchlists-Request:
+      type: object
+      description: Request to search for entries one or more matchlists
+      required:
+      - search
+      properties:
+        search:
+          $ref: '#/components/schemas/Matchlists-Search-Criteria'
+        filter:
+          $ref: '#/components/schemas/Matchlists-Search-Filter'
+    Comment:
+      type: object
+      properties:
+        commentId:
+          type: string
+          description: Unique identifier for the comment.
+          example: 55fc5d54-46f7-49c8-bf78-e07ec79cd6e7
+          readOnly: true
+        text:
+          type: string
+          description: The text content of the comment.
+          example: Update after speaking to customer over the phone directly.
+    Matchlist-Entry-Attribute-Type:
+      type: string
+      description: 'Entity attributes eligible for screening.
+
+
+        A matchlist entry may not contain both `ORG_*` and `IND_*` attributes, and they must match the `ENTITY_TYPE` if it is provided.'
+      enum:
+      - ENTITY_TYPE
+      - EMAIL_ADDRESS
+      - EMAIL_DOMAIN
+      - PHONE_NUMBER
+      - ADDR_STREET_NUMBER
+      - ADDR_STREET_NAME
+      - ADDR_STREET_TYPE
+      - ADDR_NEIGHBORHOOD
+      - ADDR_LOCALITY
+      - ADDR_DISTRICT
+      - ADDR_SUBDIVISION
+      - ADDR_COUNTRY
+      - ADDR_POSTAL_CODE
+      - ADDR_UNSTRUCTURED_LONG_FORM
+      - DOC_CLASS
+      - DOC_TYPE
+      - DOC_SUBTYPE
+      - DOC_PRIMARY_IDENTIFIER
+      - DOC_SECONDARY_IDENTIFIER
+      - IND_DISPLAY_NAME
+      - IND_GIVEN_NAME
+      - IND_FAMILY_NAME
+      - IND_MIDDLE_NAME
+      - IND_DATE_OF_BIRTH
+      - IND_NATIONALITY
+      - ORG_REGISTERED_SUBDIVISION
+      - ORG_REGISTERED_COUNTRY
+      - ORG_REGISTRATION_NUMBER
+      - ORG_REGISTRATION_NUMBER_TYPE
+      - ORG_NAME
+    Matchlists-Search-Criteria:
+      type: object
+      description: Specification of the matchlist entry attributes to search for.
+      required:
+      - attributes
+      properties:
+        type:
+          $ref: '#/components/schemas/Search-Type'
+        attributes:
+          $ref: '#/components/schemas/Matchlist-Entry-Attributes'
+    Matchlist-ID:
+      type: string
+      format: uuid
+      description: 'Matchlists are assigned an auto-generated UUID to ensure global uniqueness, represented as matchlistId. The matchlistId allows for precise modification when required.
+
+        To create or modify a matchlist entry, set the matchlistId of the matchlist you wish to update in a matchlist entry request.'
+      example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+      readOnly: true
+    Request-ID:
+      type: string
+      example: 01HN9XHZN6MGXM9JXG50K59Q85
+      description: The unique request identifier for the API call made.
+    Matchlist-Entry-Base:
+      type: object
+      description: Basic details about a matchlist entry, excluding metadata.
+      properties:
+        entryId:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Unique identifier for the matchlist entry.
+        entityId:
+          type: string
+          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+          description: The entity ID from which the attributes of this entry are derived. This is optional and can be used to link the matchlist entry to an entity.
+        entityType:
+          $ref: '#/components/schemas/Entity-Type'
+          description: The type of entity from which the attributes of this entry are derived. This is optional and can be used to link the matchlist entry to an entity.
+        reference:
+          type: string
+          description: Optional reference describing the context of this entry.
+          example: CERT-BAD-ACTOR-1234-5678
+        reasons:
+          description: The reasons for the matchlist entry. These codes will be translated to configured description strings.
+          type: array
+          items:
+            $ref: '#/components/schemas/Matchlist-Entry-Reason-Code'
+    Matchlists-Search-Matched-Entry:
+      type: object
+      description: An entry that matched the matchlist search criteria.
+      required:
+      - matchlistId
+      - entry
+      - attributes
+      properties:
+        matchlistId:
+          type: string
+          format: uuid
+          description: Unique identifier of the matchlist to which this entry belongs.
+        entry:
+          $ref: '#/components/schemas/Matchlist-Entry-Base-With-Audit'
+        attributes:
+          type: array
+          description: All attributes of the matchlist entry. At least one attribute will match to some extent.
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/Matchlists-Search-Matched-Attribute'
+        confidence:
+          $ref: '#/components/schemas/Search-Confidence'
+    Create-Matchlist-Entry-Request:
+      type: object
+      description: Request to create an entry in a matchlist. The entity ID and type must either both be omitted, or both be provided. Note that the entity type is separate from the entity type in the attributes to be searched for. For example an entry may be created from an address of an individual, but the search may be set to only apply to organisations.
+      required:
+      - attributes
+      properties:
+        entityId:
+          $ref: '#/components/schemas/Entity-ID-Writeable'
+          description: The entity ID of the entity from which the attributes of this entry are derived. This is optional and can be used to link the matchlist entry to an entity
+        entityType:
+          $ref: '#/components/schemas/Entity-Type'
+          description: The type of the entity from which the attributes of this entry are derived. This is optional and can be used to link the matchlist entry to an entity.
+        reference:
+          type: string
+          description: Optional reference to describe the context of this entry.
+          example: CERT-BAD-ACTOR-1234-5678
+        reasons:
+          description: Optional reasons for the matchlist entry. These codes will translate to configured description strings.
+          type: array
+          items:
+            $ref: '#/components/schemas/Matchlist-Entry-Reason-Code'
+        attributes:
+          $ref: '#/components/schemas/Matchlist-Entry-Attributes'
+    Matchlist-Entry-State-Writeable:
+      type: string
+      description: "The state of the matchlist entry.\n  - `ACTIVE`: The matchlist entry is active and can be used for matching.\n  - `EXPIRED`: The matchlist entry has expired. It is visible and retrievable, but cannot be used for matching.\n  - `DELETED`: The matchlist entry has been marked as deleted, rendering it unusable.\n\nTo modify an entry's state, use `Matchlist-Entry-State-Writeable`."
+      default: ACTIVE
+      enum:
+      - ACTIVE
+      - EXPIRED
+      - DELETED
+    Entity-ID:
+      type: string
+      description: 'Entities are assigned an auto-generated UUID to ensure global uniqueness, represented as entityId. The entityId allows for precise modification when required.
+
+        To modify an entity, set the entityId of the entity you wish to update in an update request.'
+      example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+      readOnly: true
+    Matchlist-Entries-Response:
+      type: object
+      description: Response object for a list of matchlist entries.
+      required:
+      - requestId
+      - matchlist
+      - entries
+      properties:
+        requestId:
+          $ref: '#/components/schemas/Request-ID'
+        matchlist:
+          $ref: '#/components/schemas/Matchlist-Entry-Matchlist'
+        entries:
+          description: Entries in the matchlist.
+          type: array
+          items:
+            $ref: '#/components/schemas/Matchlist-Entry'
+    Matchlist-Entry-Reason-Code:
+      type: string
+      description: The reason code for the matchlist entry. This code will be translated to a configured description string. Supported codes are 1 to 24 characters long, consisting only of uppercase letters (A-Z), digits (0-9), underscores (_), or hyphens (-), with no spaces or special characters.
+      pattern: ^[A-Z0-9_-]{1,24}$
+    Matchlist-Base:
+      type: object
+      description: Basic details about a matchlist, excluding metadata.
+      properties:
+        matchlistId:
+          $ref: '#/components/schemas/Matchlist-ID'
+        name:
+          type: string
+          description: Unique name identifying the matchlist.
+        description:
+          type: string
+          description: Description of the matchlist.
+        isDefault:
+          description: Flag indicating whether this matchlist is the default list.
+          type: boolean
+        action:
+          $ref: '#/components/schemas/Matchlist-Action'
+        riskScore:
+          type: number
+          description: Risk score to assign if there is a match, unless overridden by risk configuration.
+    Matchlist-Entry-Matchlist:
+      type: object
+      description: The basic details for the matchlist to which the entry or entries belong.
+      required:
+      - matchlistId
+      - name
+      - action
+      - state
+      properties:
+        matchlistId:
+          type: string
+          format: uuid
+          description: Unique identifier of the matchlist.
+        name:
+          type: string
+          description: Unique name of the matchlist.
+        action:
+          $ref: '#/components/schemas/Matchlist-Action'
+        state:
+          $ref: '#/components/schemas/Matchlist-State'
+    Update-Matchlist-Entry-Request:
+      type: object
+      description: 'Request to change the state and the optional parts of an entry in a matchlist.
+
+        '
+      properties:
+        reference:
+          type: string
+          description: 'Optional reference to describe the context of this entry.
+
+            '
+          example: CERT-BAD-ACTOR-1234-5678
+        reasons:
+          type: array
+          description: 'Optional reasons for the matchlist entry. These codes will translate to configured description strings.
+
+            Note: Reasons are not additive to existing reasons. Updating the reasons will replace the existing value.
+
+            '
+          items:
+            $ref: '#/components/schemas/Matchlist-Entry-Reason-Code'
+        state:
+          $ref: '#/components/schemas/Matchlist-Entry-State-Writeable'
+    Matchlist-Entry-State:
+      type: string
+      description: "The state of the matchlist entry.\n  - `ACTIVE`: The matchlist entry is active and can be used for matching.\n  - `EXPIRED`: The matchlist entry has expired. It is visible and retrievable, but cannot be used for matching.\n  - `DELETED`: The matchlist entry has been marked as deleted, rendering it unusable.\n\nTo modify an entry's state, use `Matchlist-Entry-State-Writeable`."
+      default: ACTIVE
+      readOnly: true
+      enum:
+      - ACTIVE
+      - EXPIRED
+      - DELETED
+    Entity-ID-Writeable:
+      type: string
+      description: 'Entities are assigned an auto-generated UUID to ensure global uniqueness, represented as entityId. The entityId allows for precise modification when required.
+
+        To modify an entity, set the entityId of the entity you wish to update in an update request.'
+      example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+    Remove-Matchlist-Entity-Request:
+      type: object
+      description: Used for removing an entity from a matchlist.
+      required:
+      - entityId
+      properties:
+        entityId:
+          $ref: '#/components/schemas/Entity-ID-Writeable'
+          description: The entity ID of the entity from which the entry to be marked as deleted was derived.
+        entityType:
+          $ref: '#/components/schemas/Entity-Type-Writeable'
+          description: The entity type of the entity from which the attributes of this entry will be derived.
+        comment:
+          $ref: '#/components/schemas/Comment'
+    Search-Type:
+      type: string
+      description: 'Specifies the type of search to perform.
+
+
+        - "EXACT": Returns only results that exactly match the search term.
+
+        - "FUZZY": Returns results that are similar to the search term.'
+      enum:
+      - EXACT
+      - FUZZY
+    Matchlist-Entry-Attributes:
+      type: array
+      description: All attributes associated with a matchlist entry.
+      minItems: 1
+      items:
+        $ref: '#/components/schemas/Matchlist-Entry-Attribute'
+  parameters:
+    query_batch_name:
+      name: batchName
+      in: query
+      schema:
+        description: Batch name of entries to include in the response.
+        type: string
+        example: blocklist.csv
+      description: If set, the response will include only entries from the specified batch. By default, all entries will be returned.
+    X-Frankie-Username:
+      name: X-Frankie-Username
+      in: header
+      description: Username provided by API caller
+      required: false
+      schema:
+        type: string
+        example: fred.flintstone@frankieone.com
+    sort:
+      in: query
+      name: sort
+      schema:
+        type: string
+        enum:
+        - asc
+        - desc
+      description: Order of the sort fields will be sorted upon
+    matchlist_sort_fields:
+      name: sortFields
+      in: query
+      style: form
+      explode: false
+      example: state
+      schema:
+        type: array
+        description: List of sort fields
+        items:
+          type: string
+          description: One sort field
+          enum:
+          - updatedAt
+          - createdAt
+          - state
+      description: The list of sort fields that will be used in the query.  The order of the sort fields will determine the order in which the items are sorted. If state is added the sort order will always be `ACTIVE`, `EXPIRED`, `DELETED`.
+    query_entity_id:
+      name: entityId
+      in: query
+      schema:
+        description: Entity ID of entries to include in the response.
+        type: string
+        format: uuid
+        example: 12345678-1234-1234-1234-123456789012
+      description: If set, the response will include only entries created with the specified entityId. By default, all entries will be returned.
+    query_entry_id:
+      name: entryId
+      in: query
+      schema:
+        description: Entry ID of entries to include in the response.
+        type: string
+        format: uuid
+        example: 12345678-1234-1234-1234-123456789987
+      description: If set, the response will include only the entry with the specified id. By default, all entries will be returned.
+    page:
+      in: query
+      name: page
+      example: 2
+      schema:
+        type: integer
+      description: The page number that you want to retrieve for the list query
+    query_reference:
+      name: reference
+      in: query
+      schema:
+        description: Reference of entries to include in the response.
+        type: string
+        example: CERT-BAD-ACTOR-1234-5678
+      description: If set, the response will include only entries with the specified reference. By default, all entries will be returned.
+    entryId:
+      name: entryId
+      in: path
+      schema:
+        type: string
+      description: The unique identifier of the matchlist entry.
+      required: true
+    query_entry_states:
+      name: states
+      in: query
+      style: form
+      explode: false
+      schema:
+        description: List of states to include in the response.
+        type: array
+        items:
+          $ref: '#/components/schemas/Matchlist-Entry-State'
+      description: 'If set, the response will include only entries with the specified states. By default, only `ACTIVE` entries are returned. Possible values are: `ACTIVE`, `EXPIRED`, and `DELETED`. Multiple values can be provided as a comma-separated list. For example, `DELETED,EXPIRED`.'
+    X-Frankie-Background:
+      name: X-Frankie-Background
+      schema:
+        type: integer
+        enum:
+        - 0
+        - 1
+      description: 'If this header parameter is supplied and set to 1, then the request will not wait for the process to finish,
+
+        and will return a 202 if there are no obvious errors in the input. The request will then run in the background
+
+        and send a notification back to the customer. See our callback API for details on this.
+
+        '
+      in: header
+      required: false
+    X-Frankie-CustomerChildID:
+      name: X-Frankie-CustomerChildID
+      in: header
+      required: false
+      schema:
+        type: string
+        example: 87654321-4321-4321-4321-210987654321
+      description: Your Customer Child ID provided by FrankieOne
+    matchlistName:
+      name: matchlistName
+      in: path
+      schema:
+        type: string
+      description: The name of the matchlist.
+      required: true
+    query_matchlist_states:
+      name: states
+      in: query
+      style: form
+      explode: false
+      schema:
+        description: List of states to include in the response.
+        type: array
+        items:
+          $ref: '#/components/schemas/Matchlist-State'
+      description: 'If set, the response will include only entries with the specified states. By default, only `ACTIVE` entries are returned. Possible values are: `ACTIVE`, and `ARCHIVED`. Multiple values can be provided as a comma-separated list. For example, `ACTIVE,ARCHIVED`. If the value is not one of the possible values, it will be ignored. If the value is not provided, only `ACTIVE` entries are returned.'
+    Api-Key:
+      name: api_key
+      in: header
+      schema:
+        type: string
+        example: 245c765b124a098d09ef8765....
+      description: Your API key provided by FrankieOne
+      required: true
+    limit:
+      in: query
+      name: limit
+      schema:
+        type: integer
+        minimum: 1
+        default: 20
+      example: 20
+      description: Limit the number of items that will be returned as part of the request
+    X-Frankie-Channel:
+      name: X-Frankie-Channel
+      in: header
+      required: false
+      schema:
+        type: string
+      description: 'Open string that can be used to define the "channel" the request comes in from. It can potentially be used in routing and risk calculations upon request. Default values that can be used are:  api portal smartui Any alphanumeric string is supported though. Anything over 64 characters will be truncated.'
+    X-Frankie-RequestID:
+      name: X-Frankie-RequestID
+      in: header
+      description: GUID identifier for request
+      required: true
+      schema:
+        type: string
+        example: 82988375-1F9C-40C7-8543-ECCA0D94CC7C
+    X-Frankie-CustomerID:
+      name: X-Frankie-CustomerID
+      in: header
+      required: true
+      schema:
+        type: string
+        example: 12345678-1234-1234-1234-123456789012
+      description: Your Customer ID provided by FrankieOne
+  securitySchemes:
+    Api-Key:
+      type: apiKey
+      in: header
+      name: api_key
+      description: ''
+    jwt:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

@@ -1,0 +1,1791 @@
+openapi: 3.0.3
+info:
+  title: Core V2 Audit API
+  version: 2.0.0
+  description: This is the APIs for V2 Core. It allows you to do common operations, such as read audit entries or get workflow lists.
+  contact:
+    name: FrankieOne
+    url: https://www.frankieone.com/
+    email: help@frankieone.com
+servers:
+- url: https://api.uat.frankie.one
+security:
+- Api-Key: []
+tags:
+- name: Audit
+  description: Manage audit entries
+paths:
+  /v2/audit:
+    parameters:
+    - $ref: '#/components/parameters/Api-Key'
+    - $ref: '#/components/parameters/X-Frankie-CustomerID'
+    - $ref: '#/components/parameters/X-Frankie-CustomerChildID'
+    - $ref: '#/components/parameters/X-Frankie-Channel'
+    get:
+      summary: List audit events
+      description: List all audit events with filtering.
+      parameters:
+      - $ref: '#/components/parameters/query_filter_entity_id'
+      - $ref: '#/components/parameters/query_filter_workflow_names'
+      - $ref: '#/components/parameters/query_filter_workflow_risk_levels'
+      - $ref: '#/components/parameters/query_filter_sources'
+      - $ref: '#/components/parameters/query_filter_request_id'
+      - $ref: '#/components/parameters/query_filter_timestamp_after'
+      - $ref: '#/components/parameters/query_filter_timestamp_before'
+      - $ref: '#/components/parameters/query_filter_channels'
+      - $ref: '#/components/parameters/sort'
+      - $ref: '#/components/parameters/query_sort_fields'
+      - $ref: '#/components/parameters/page'
+      - $ref: '#/components/parameters/limit'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  requestId:
+                    $ref: '#/components/schemas/Request-ID'
+                  meta:
+                    $ref: '#/components/schemas/List-Operation-Meta'
+                  events:
+                    description: List of audit events matching the query.
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Audit'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Invalid EntityId:
+                  value:
+                    errorCode: API-0400,
+                    errorMsg: 'Multiple Errors: See Issues list'
+                    details:
+                    - issue: 'entityId in path must be of type uuid: "test"'
+                      issueLocation: VALIDATE-entityId
+                    requestId: 01HM5XJ7VASZ3EJMB1VQGTBFJ4
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Invalid authentication:
+                  value:
+                    errorCode: AUTH-0002,
+                    errorMsg: Unauthorized
+                    details:
+                    - issue: Invalid Authentication provided. Access denied.
+                      issueLocation: request
+                    requestId: 00000000S6MNG7624K2TDXT1E3
+                No Api-Key:
+                  value:
+                    errorCode: AUTH-0401
+                    errorMsg: Unauthorized
+                    details:
+                    - issue: No api key provided. Access denied.
+                      issueLocation: request
+                    requestId: 00000001S6MNG7624K2TDXT1E3
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      operationId: listAuditEvents
+      tags:
+      - Audit
+      security:
+      - Api-Key: []
+components:
+  schemas:
+    Supplementary-Data-AuditEvent-KYC:
+      type: object
+      description: 'Contains requirements and results for KYC supplementary data.
+
+        '
+      allOf:
+      - $ref: '#/components/schemas/Supplementary-Data-AuditEvent-Base'
+      - type: object
+        description: 'Contains requirements and results for KYC supplementary data.
+
+          '
+        properties:
+          requirements:
+            type: string
+            description: The requirements for this KYC check.
+          result:
+            type: string
+            description: The result of this KYC check.
+    Workflow-Step-Summary-Entity-Lookup-Address:
+      type: object
+      description: 'Object containing address details, categorized by address type.
+
+        Each address type may include specific properties relevant to its context.
+
+        '
+      properties:
+        RESIDENTIAL:
+          description: 'Represents a residential address, typically used for services or communications directed to personal living spaces.
+
+            '
+          $ref: '#/components/schemas/Workflow-Step-Summary-Entity-Lookup-Residential'
+    Code-Description:
+      type: object
+      properties:
+        code:
+          description: Short standard code or normalized representation of the information
+          type: string
+        description:
+          description: The information relevant to the code, could be a more descriptive information
+          type: string
+    Audit-Event-Result-Summary:
+      type: object
+      properties:
+        sourceNormalized:
+          type: string
+          description: The normalized source of the event or result.
+        objectId:
+          type: string
+          description: The identifier of the object used by the connector, if known.
+        objectType:
+          type: string
+          description: The type of object used by the connector, if known.
+        result:
+          type: string
+          description: The outcome of the action or check, e.g., "MATCH" or "TokenRetrieved".
+        notes:
+          $ref: '#/components/schemas/Custom-Attributes'
+    Workflow-Step-Risk-Result:
+      type: object
+      description: 'Calculated risk result for a workflow step.
+
+        '
+      properties:
+        level:
+          type: string
+          description: Current risk level.
+        contributedScore:
+          type: integer
+          description: Risk score contributed by this step.
+        overallScore:
+          type: integer
+          description: Current overall risk score.
+        factors:
+          type: array
+          description: List of contributing score factors.
+          items:
+            $ref: '#/components/schemas/Workflow-Step-Risk-Result-Detail'
+    Supplementary-Data-AuditEvent-AML-Connector:
+      type: object
+      description: 'Includes requirements and results for AML Connector supplementary data.
+
+        '
+      allOf:
+      - $ref: '#/components/schemas/Supplementary-Data-AuditEvent-Base-Connector'
+      - type: object
+        description: Includes requirements and results for AML Connector supplementary data.
+        properties:
+          numHits:
+            type: integer
+            format: int32
+            minimum: 0
+            description: Total number of AML hits from this provider.
+          numFalsePositives:
+            type: integer
+            format: int32
+            minimum: 0
+            description: Total number of AML hits marked as false positives from this provider.
+          numTruePositives:
+            type: integer
+            format: int32
+            minimum: 0
+            description: Total number of AML hits marked as true positives from this provider.
+          numUnknown:
+            type: integer
+            format: int32
+            minimum: 0
+            description: Total number of AML hits marked as unknown from this provider.
+          numUnresolved:
+            type: integer
+            format: int32
+            minimum: 0
+            description: Total number of AML hits that remain unresolved from this provider.
+          numUnresolvedPEP:
+            type: integer
+            format: int32
+            minimum: 0
+            description: Total number of AML hits with unresolved PEP entries from this provider.
+          numUnresolvedSanction:
+            type: integer
+            format: int32
+            minimum: 0
+            description: Total number of AML hits with unresolved sanction entries from this provider.
+          numUnresolvedWatchlist:
+            type: integer
+            format: int32
+            minimum: 0
+            description: Total number of AML hits with unresolved watchlist entries from this provider.
+          numUnresolvedAdverseMedia:
+            type: integer
+            format: int32
+            minimum: 0
+            description: Total number of AML hits with unresolved adverse media entries from this provider.
+    Issue:
+      type: object
+      properties:
+        issue:
+          type: string
+          description: Description of the issue.
+        issueLocation:
+          type: string
+          description: The location or context where the issue was identified.
+        issueType:
+          type: string
+          description: The type or category of the issue.
+    Workflow-Step-Risk-Result-Detail:
+      type: object
+      description: 'Details of a calculated risk result for a workflow step.
+
+        '
+      required:
+      - factor
+      - score
+      - value
+      properties:
+        factor:
+          type: string
+          description: Name of the risk factor contributing to this score.
+        score:
+          type: integer
+          description: Score contributed by this factor.
+        value:
+          type: string
+          description: Value used for the score factor.
+    Request-ID:
+      type: string
+      example: 01HN9XHZN6MGXM9JXG50K59Q85
+      description: The unique request identifier for the API call made.
+    Supplementary-Data-AuditEvent-Base-Connector:
+      type: object
+      required:
+      - type
+      allOf:
+      - $ref: '#/components/schemas/Supplementary-Data-AuditEvent-Base'
+      - type: object
+        properties:
+          connectorName:
+            type: string
+            description: The connector service used to generate the result.
+          connectorDriverName:
+            type: string
+            description: The specific connector driver used to generate the result.
+          connectorConfiguration:
+            type: array
+            items:
+              $ref: '#/components/schemas/Audit-Event-Connector-Config'
+            description: The configuration used by the connector for processing the request.
+          validationIssues:
+            type: array
+            items:
+              $ref: '#/components/schemas/Audit-Event-Error'
+            description: Any issues found during validation that prevented the connector from processing the request.
+          resultSummary:
+            type: array
+            items:
+              $ref: '#/components/schemas/Audit-Event-Result-Summary'
+            description: A summary of the results of the check performed by this connector.
+    Audit-Result-Change:
+      type: object
+      properties:
+        objectId:
+          type: string
+          description: Unique identifier of the object that was changed.
+        objectType:
+          type: string
+          description: Type of the object that was changed, e.g., "result".
+        changeDescription:
+          type: string
+          description: Description of the change that was made.
+        previousStatus:
+          type: string
+          description: The status of the object before the change.
+        newStatus:
+          type: string
+          description: The status of the object after the change.
+    Entity-ID:
+      type: string
+      description: 'Entities are assigned an auto-generated UUID to ensure global uniqueness, represented as entityId. The entityId allows for precise modification when required.
+
+        To modify an entity, set the entityId of the entity you wish to update in an update request.'
+      example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+      readOnly: true
+    Matchlist-Entry-Reason-Code:
+      type: string
+      description: The reason code for the matchlist entry. This code will be translated to a configured description string. Supported codes are 1 to 24 characters long, consisting only of uppercase letters (A-Z), digits (0-9), underscores (_), or hyphens (-), with no spaces or special characters.
+      pattern: ^[A-Z0-9_-]{1,24}$
+    Supplementary-Data-AuditEvent-Individual-Change:
+      type: object
+      description: 'Contains information about changes to individual KYC supplementary data, including added, updated, invalidated fields, and validation issues.
+
+        '
+      allOf:
+      - $ref: '#/components/schemas/Supplementary-Data-AuditEvent-Base'
+      - type: object
+        properties:
+          fieldsAdded:
+            type: array
+            items:
+              $ref: '#/components/schemas/Audit-Event-Change'
+            description: New fields that were added.
+          fieldsUpdated:
+            type: array
+            items:
+              $ref: '#/components/schemas/Audit-Event-Change'
+            description: Fields that were updated.
+          fieldsInvalidated:
+            type: array
+            items:
+              $ref: '#/components/schemas/Audit-Event-Change'
+            description: Fields that were changed and invalidated a result.
+          resultsInvalidated:
+            type: array
+            items:
+              $ref: '#/components/schemas/Audit-Event-Change'
+            description: Results that were invalidated.
+          validationIssues:
+            type: array
+            items:
+              $ref: '#/components/schemas/Audit-Event-Error'
+            description: Issues found during validation that prevented the change from being made.
+    Supplementary-Data-AuditEvent-Matchlist-Entries:
+      type: object
+      description: 'Contains audit event details for managing multiple matchlist entries. Only a summary of the changes is provided, not the full list of entries.
+
+
+        For a single operation, use `Supplementary-Data-AuditEvent-Matchlist-Entry`.
+
+        '
+      allOf:
+      - $ref: '#/components/schemas/Supplementary-Data-AuditEvent-Base'
+      - $ref: '#/components/schemas/Audit-Matchlist'
+      - type: object
+        properties:
+          entries:
+            $ref: '#/components/schemas/Audit-Matchlist-Entries'
+    Supplementary-Data-AuditEvent-Organization-Data-Fetch-Connector:
+      type: object
+      description: Contains details relevant to KYB Connector audit events.
+      allOf:
+      - $ref: '#/components/schemas/Supplementary-Data-AuditEvent-Base-Connector'
+    Supplementary-Data-AuditEvent-Activity-Result:
+      type: object
+      properties:
+        result:
+          type: string
+          description: The overall result of the activity.
+        class:
+          type: string
+          description: The classification of the result.
+        riskLevel:
+          type: string
+          description: The risk level associated with the activity.
+        activities:
+          type: array
+          items:
+            $ref: '#/components/schemas/Supplementary-Data-AuditEvent-Activity-Detail'
+    Activity-ID:
+      type: string
+      readOnly: true
+      description: Activity ID that identifies an activity within the Frankie platform
+      format: ulid
+    AuditEvent-Channel:
+      type: string
+      example: API
+      description: The channel through which the audit event was generated.
+      enum:
+      - API
+      - PORTAL
+      - ONESDK
+      - SYSTEM
+    Error-Base:
+      type: object
+      properties:
+        errorCode:
+          type: string
+        errorMsg:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/Issue'
+    Process-Result-ID:
+      type: string
+      description: When a process result object is first created, it is assigned an ID. When updating the process result object, set the processResultID to the ID of the process result object you are referring to.
+      readOnly: true
+    Supplementary-Data-AuditEvent-Activity-Detail:
+      type: object
+      properties:
+        activityId:
+          $ref: '#/components/schemas/Activity-ID'
+        processResultId:
+          $ref: '#/components/schemas/Process-Result-ID'
+    Supplementary-Data-AuditEvent-Duplicate:
+      type: object
+      description: 'Contains details relevant to duplicate hits for an audit event.
+
+        '
+      allOf:
+      - $ref: '#/components/schemas/Supplementary-Data-AuditEvent-Base'
+      - type: object
+        properties:
+          result:
+            type: string
+            description: The result of the duplicate check.
+          duplicates:
+            type: array
+            description: The list of entities found to be duplicates, along with their respective process result IDs.
+            items:
+              type: object
+              properties:
+                entityId:
+                  $ref: '#/components/schemas/Entity-ID'
+                processResultId:
+                  $ref: '#/components/schemas/Process-Result-ID'
+    Supplementary-Data-AuditEvent-IDV-Connector:
+      type: object
+      description: 'Contains requirements and results for IDV Connector supplementary data.
+
+        '
+      allOf:
+      - $ref: '#/components/schemas/Supplementary-Data-AuditEvent-Base-Connector'
+      - type: object
+        description: Contains requirements and results for IDV Connector supplementary data.
+        properties:
+          notes:
+            $ref: '#/components/schemas/Custom-Attributes'
+    Audit-Matchlist:
+      type: object
+      description: 'Contains details about a matchlist used in an audit event.
+
+        '
+      properties:
+        matchlist:
+          type: object
+          properties:
+            name:
+              type: string
+              description: 'The unique name identifying the matchlist.
+
+                '
+            action:
+              $ref: '#/components/schemas/Matchlist-Action'
+              description: 'The action to be taken if a match is found in the matchlist.
+
+                '
+            riskScore:
+              type: number
+              description: 'The risk score to assign if there is a match, unless overridden by risk configuration.
+
+                '
+    Supplementary-Data-AuditEvent-Decision:
+      type: object
+      description: 'Includes requirements and results for Decision Step supplementary data.
+
+        '
+      allOf:
+      - $ref: '#/components/schemas/Supplementary-Data-AuditEvent-Base'
+      - type: object
+        properties:
+          previous:
+            type: object
+            description: Shows the previous status.
+            properties:
+              workflowStatus:
+                type: string
+    Audit-Event-Risk-Override-Result:
+      type: object
+      description: 'Represents the risk profile of an entity before and after a risk override, including details about the type of override applied.
+
+        '
+      required:
+      - overrideType
+      properties:
+        riskBeforeOverride:
+          type: object
+          description: The risk profile of the entity before the override was applied.
+          properties:
+            riskScore:
+              type: number
+              description: The risk score of the entity before the override.
+            riskLevel:
+              $ref: '#/components/schemas/Risk-Level'
+              description: The risk level of the entity before the override.
+        overrideType:
+          type: string
+          description: 'The type of risk override that was applied.
+
+            - `SPECIFIC`: Only a specific risk factor of the entity was overridden. This does not immediately change the overall risk level or score, but will impact the next run of the workflow.
+
+            - `OVERALL`: All risk factors of the entity were overridden, which changes both the current risk score and the risk level.
+
+            '
+          enum:
+          - SPECIFIC
+          - OVERALL
+        riskAfterOverride:
+          type: object
+          description: The risk profile of the entity after the override was applied.
+          properties:
+            level:
+              $ref: '#/components/schemas/Risk-Level'
+              description: The risk level of the entity after the override.
+            score:
+              type: integer
+              description: The risk score after the override.
+            factors:
+              type: array
+              description: A list of risk factors considered during the override process.
+              items:
+                $ref: '#/components/schemas/Audit-Event-Risk-Factor-Override-Data'
+    Audit-Event-Change:
+      type: object
+      properties:
+        objectId:
+          type: string
+          description: Unique identifier of the object that was changed.
+        objectType:
+          type: string
+          description: Type of the object that was changed, e.g., "User" or "Name".
+        changeDescription:
+          type: string
+          description: Description of the change that was made, including which fields were added, modified, or deleted.
+    Supplementary-Data-AuditEvent-Fraud-Details:
+      type: object
+      description: Details of a single fraud check result.
+      properties:
+        checkType:
+          $ref: '#/components/schemas/Fraud-Check-Types'
+        processResultId:
+          $ref: '#/components/schemas/Process-Result-ID'
+        result:
+          type: string
+          description: The outcome of the fraud check.
+    Supplementary-Data-AuditEvent-Base:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          enum:
+          - RISK_ASSESSMENT
+          - KYC
+          - DECISION
+          - KYC_CONNECTOR
+          - INDIVIDUAL_CHANGE
+          - KYB
+          - ORG_DATA_FETCH_CONNECTOR
+          - RESULT_UPDATE
+          - AML_CONNECTOR
+          - AML
+          - IDV
+          - IDV_CONNECTOR
+          - RISK_OVERRIDE
+          - ENTITY_LOOKUP
+          - MATCHLIST
+          - MATCHLIST_ENTRY
+          - MATCHLIST_ENTRIES
+          - MATCHLIST_RESULT
+          - VISA
+          - ACTIVITY
+          - FRAUD
+        origin:
+          $ref: '#/components/schemas/Audit-Event-Origin'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Audit-Event-Error'
+          description: Any errors that occurred during the process and prevented the results from being retrieved or generated.
+    Supplementary-Data-AuditEvent-Matchlist:
+      type: object
+      description: 'Contains details relevant to managing a matchlist for an audit event.
+
+        '
+      allOf:
+      - $ref: '#/components/schemas/Supplementary-Data-AuditEvent-Base'
+      - $ref: '#/components/schemas/Matchlist-Base'
+    Supplementary-Data-AuditEvent-KYB:
+      type: object
+      description: 'Captures details relevant to KYB processes and is associated with specific KYB-related audit events.
+
+        Associated audit events include: creation of an entity, creation of a service profile for an entity, invoking a workflow, and saving organizations and linked entities to Org-DOS.
+
+        '
+      allOf:
+      - $ref: '#/components/schemas/Supplementary-Data-AuditEvent-Base'
+      - type: object
+        properties:
+          matchDetails:
+            $ref: '#/components/schemas/Audit-Event-Organization-Entity-Match'
+          linkedOrganizationIds:
+            type: array
+            description: List of organization IDs related to the focus organization.
+            items:
+              type: string
+              format: uuid
+          linkedIndividualIds:
+            type: array
+            description: List of individual IDs related to the focus organization.
+            items:
+              type: string
+              format: uuid
+          linkedUnknownIds:
+            type: array
+            description: List of unknown entity IDs related to the focus organization.
+            items:
+              type: string
+              format: uuid
+    Supplementary-Data-AuditEvent-AML:
+      type: object
+      description: 'Includes requirements and results for AML supplementary data.
+
+        '
+      allOf:
+      - $ref: '#/components/schemas/Supplementary-Data-AuditEvent-Base'
+      - type: object
+        description: 'Includes requirements and results for AML supplementary data.
+
+          '
+        properties:
+          result:
+            type: string
+            description: The result of the AML check.
+          numHits:
+            type: integer
+            format: int32
+            minimum: 0
+            description: Total number of AML hits from this provider.
+          numFalsePositives:
+            type: integer
+            format: int32
+            minimum: 0
+            description: Total number of AML hits marked as false positives from this provider.
+          numTruePositives:
+            type: integer
+            format: int32
+            minimum: 0
+            description: Total number of AML hits marked as true positives from this provider.
+          numUnknown:
+            type: integer
+            format: int32
+            minimum: 0
+            description: Total number of AML hits marked as unknown from this provider.
+          numUnresolved:
+            type: integer
+            format: int32
+            minimum: 0
+            description: Total number of AML hits that remain unresolved from this provider.
+          numUnresolvedPEP:
+            type: integer
+            format: int32
+            minimum: 0
+            description: Total number of AML hits with unresolved PEP entries from this provider.
+          numUnresolvedSanction:
+            type: integer
+            format: int32
+            minimum: 0
+            description: Total number of AML hits with unresolved sanction entries from this provider.
+          numUnresolvedWatchlist:
+            type: integer
+            format: int32
+            minimum: 0
+            description: Total number of AML hits with unresolved watchlist entries from this provider.
+          numUnresolvedAdverseMedia:
+            type: integer
+            format: int32
+            minimum: 0
+            description: Total number of AML hits with unresolved adverse media entries from this provider.
+    Supplementary-Data-AuditEvent-KYC-Connector:
+      type: object
+      description: 'Contains requirements and results for KYC Connector supplementary data.
+
+        '
+      allOf:
+      - $ref: '#/components/schemas/Supplementary-Data-AuditEvent-Base-Connector'
+    Audit-Event-Risk-Factor-Override-Data:
+      type: object
+      description: Information about a risk factor that has been manually overridden, including details of the factor, original and override scores, and the override process.
+      required:
+      - factor
+      - score
+      - value
+      properties:
+        factor:
+          type: string
+          description: The name of the risk factor that was overridden.
+        score:
+          type: integer
+          description: The original score of the risk factor before the override was applied.
+        value:
+          type: string
+          description: The value associated with the risk factor.
+        manualOverrideScore:
+          type: number
+          description: The manually assigned score for the risk factor, replacing the original score when the override is applied.
+        status:
+          $ref: '#/components/schemas/Risk-Factor-Status'
+    Audit-Matchlist-Entry:
+      type: object
+      description: 'A single entry in a matchlist.
+
+        For bulk operations, use `Audit-Matchlist-Entries`.
+
+        '
+      allOf:
+      - $ref: '#/components/schemas/Matchlist-Entry-Base'
+      - type: object
+        description: 'Audit event details for managing a single matchlist entry operation.
+
+          '
+        title: Matchlist Entry
+        properties:
+          attributes:
+            type: array
+            description: 'A list of attributes associated with the matchlist entry, including details such as attribute type, value, and any additional metadata relevant to the entry.
+
+              '
+            minItems: 1
+            items:
+              $ref: '#/components/schemas/Matchlist-Entry-Attribute-Type'
+          state:
+            $ref: '#/components/schemas/Matchlist-Entry-State'
+          batchName:
+            type: string
+            description: 'Optional batch name to identify the source of this entry.
+
+              '
+            example: blocklist.csv
+    Supplementary-Data-AuditEvent-IDV:
+      type: object
+      description: 'Contains requirements and results for KYC supplementary data.
+
+        '
+      allOf:
+      - $ref: '#/components/schemas/Supplementary-Data-AuditEvent-Base'
+      - type: object
+        description: 'Contains requirements and results for KYC supplementary data.
+
+          '
+        properties:
+          idvRequirements:
+            type: array
+            items:
+              type: string
+              description: The requirements for this IDV check.
+          result:
+            type: string
+            description: The result of this IDV check.
+          notes:
+            $ref: '#/components/schemas/Custom-Attributes'
+          resultSummary:
+            type: array
+            items:
+              $ref: '#/components/schemas/Audit-Event-Result-Summary'
+            description: A summary of the results.
+    Supplementary-Data-AuditEvent-Matchlist-Result:
+      type: object
+      description: 'Contains audit event details for matchlist screening results.
+
+        '
+      allOf:
+      - $ref: '#/components/schemas/Supplementary-Data-AuditEvent-Base'
+      - type: object
+        properties:
+          totalMatches:
+            type: integer
+            format: int32
+            minimum: 0
+            description: Total number of matches across all matchlists.
+          matchSummaries:
+            type: array
+            description: Summary of results for each provider.
+            items:
+              type: object
+              allOf:
+              - $ref: '#/components/schemas/Audit-Matchlist'
+              properties:
+                numMatches:
+                  type: integer
+                  format: int32
+                  minimum: 0
+                  description: Number of matched entries in the matchlist.
+                entries:
+                  type: array
+                  description: List of matched entries.
+                  items:
+                    $ref: '#/components/schemas/Audit-Matchlist-Entry'
+    Risk-Factor-Status:
+      type: string
+      enum:
+      - VALID
+      - STALE
+      - OVERRIDDEN
+      - DISCARDED
+      description: "The current status of the risk factor:\n  - VALID: The risk factor is applicable to the entity.\n  - STALE: The risk factor is no longer applicable to the entity. If this status is returned, it means that at the time of risk assessment, the risk factor was valid.\n  - OVERRIDDEN: The risk factor was manually overridden. If present, manualOverrideScore was used for risk score calculation in the risk assessment.\n  - DISCARDED: The risk factor was added during workflow execution but was discarded at a later stage in the same workflow. This factor was not used in the final risk assessment.\n"
+      default: VALID
+    Error:
+      type: object
+      x-examples:
+        '400':
+          requestId: 0123456789ABCDEFGHIJKLMNOP
+          errorCode: API-0400
+          errorMsg: Parsing credentials from "<invalid>" failed, because invalid.
+          httpStatusCode: 400
+        '401':
+          requestId: 0123456789ABCDEFGHIJKLMNOP
+          errorCode: API-0401
+          errorMsg: Unauthenticated due to invalid credentials.
+          httpStatusCode: 401
+        '409':
+          requestId: 0123456789ABCDEFGHIJKLMNOP
+          errorCode: API-0409
+          errorMsg: Conflict.
+          httpStatusCode: 409
+      allOf:
+      - $ref: '#/components/schemas/Error-Base'
+      - type: object
+        properties:
+          requestId:
+            $ref: '#/components/schemas/Request-ID'
+    Matchlist-Action:
+      type: string
+      description: "Default action recommended for a match. The action can be one of the following:\n  - `BLOCK`: Recommended action is to block the entity.\n  - `ALERT`: Recommended action is to create an alert for the entity.\n  - `ALLOW`: Recommended action is to allow the entity.\n  - `REVIEW`: Recommended action is to review the entity.\n  - `NONE`: No action; only use the `riskFactor` if any."
+      enum:
+      - BLOCK
+      - ALERT
+      - ALLOW
+      - REVIEW
+      - NONE
+    Matchlist-Entry-Attribute-Type:
+      type: string
+      description: 'Entity attributes eligible for screening.
+
+
+        A matchlist entry may not contain both `ORG_*` and `IND_*` attributes, and they must match the `ENTITY_TYPE` if it is provided.'
+      enum:
+      - ENTITY_TYPE
+      - EMAIL_ADDRESS
+      - EMAIL_DOMAIN
+      - PHONE_NUMBER
+      - ADDR_STREET_NUMBER
+      - ADDR_STREET_NAME
+      - ADDR_STREET_TYPE
+      - ADDR_NEIGHBORHOOD
+      - ADDR_LOCALITY
+      - ADDR_DISTRICT
+      - ADDR_SUBDIVISION
+      - ADDR_COUNTRY
+      - ADDR_POSTAL_CODE
+      - ADDR_UNSTRUCTURED_LONG_FORM
+      - DOC_CLASS
+      - DOC_TYPE
+      - DOC_SUBTYPE
+      - DOC_PRIMARY_IDENTIFIER
+      - DOC_SECONDARY_IDENTIFIER
+      - IND_DISPLAY_NAME
+      - IND_GIVEN_NAME
+      - IND_FAMILY_NAME
+      - IND_MIDDLE_NAME
+      - IND_DATE_OF_BIRTH
+      - IND_NATIONALITY
+      - ORG_REGISTERED_SUBDIVISION
+      - ORG_REGISTERED_COUNTRY
+      - ORG_REGISTRATION_NUMBER
+      - ORG_REGISTRATION_NUMBER_TYPE
+      - ORG_NAME
+    Supplementary-Data-AuditEvent-Matchlist-Entry:
+      type: object
+      description: 'Contains audit event details for managing a single matchlist entry.
+
+
+        For bulk operations, use `Supplementary-Data-AuditEvent-Matchlist-Entries`.
+
+        '
+      required:
+      - matchlist
+      - entry
+      allOf:
+      - $ref: '#/components/schemas/Supplementary-Data-AuditEvent-Base'
+      - $ref: '#/components/schemas/Audit-Matchlist'
+      - type: object
+        properties:
+          entry:
+            $ref: '#/components/schemas/Audit-Matchlist-Entry'
+    Workflow-LifecyclePhaseEnum:
+      type: string
+      description: "Specifies the lifecycle phase of the customer in which this workflow is executed:\n  - ONBOARDING: Workflow is in the onboarding stage.\n  - MONITORING: Workflow is in the monitoring stage.\n  - OTHER: Workflow is in another stage.\n"
+      enum:
+      - ONBOARDING
+      - MONITORING
+      - OTHER
+      default: OTHER
+    Attribute:
+      type: object
+      required:
+      - type
+      - value
+      properties:
+        type:
+          description: The attribute type.
+          type: string
+          maxLength: 64
+        value:
+          description: The value assigned to the attribute.
+          type: string
+    Supplementary-Data-AuditEvent-Entity-Lookup:
+      type: object
+      description: 'Contains details relevant to entity lookup for an audit event.
+
+        '
+      allOf:
+      - $ref: '#/components/schemas/Supplementary-Data-AuditEvent-Base'
+      - $ref: '#/components/schemas/Workflow-Step-Summary-Entity-Lookup-Address'
+    Supplementary-Data-AuditEvent-Risk-Assessment:
+      type: object
+      description: 'Contains risk profile, results, and both current and previous risk scores and risk levels at the time of risk assessment step execution.
+
+        '
+      allOf:
+      - $ref: '#/components/schemas/Supplementary-Data-AuditEvent-Base'
+      - type: object
+        properties:
+          previousRisk:
+            type: object
+            properties:
+              riskScore:
+                type: number
+                description: The risk score of the entity at the previous step.
+              riskLevel:
+                $ref: '#/components/schemas/Risk-Level'
+                description: The risk level of the entity at the previous step.
+          risk:
+            $ref: '#/components/schemas/Workflow-Step-Risk-Result'
+    Workflow-Step-Summary-Entity-Lookup-Residential:
+      type: object
+      required:
+      - country
+      - status
+      properties:
+        country:
+          type: string
+          description: 'Country The ISO-3166-1 country. You must use the alpha3 country code (e.g. AUS, USA, IDR, KOR, etc).
+
+
+            For more details refer to: https://en.wikipedia.org/wiki/ISO_3166-1
+
+            '
+        status:
+          type: string
+          description: "The status of the address, indicating its relevance over time. \n\n* `CURRENT` - The address is currently in use.\n* `PREVIOUS` - The address was used in the past.\n* `FUTURE` - The address is planned for future use.\n* `UNKNOWN` - There is no valid address status available.\n"
+          enum:
+          - CURRENT
+          - PREVIOUS
+          - FUTURE
+          - UNKNOWN
+    AuditEvent-Type:
+      type: string
+      enum:
+      - CUSTOMER_SETUP
+      - CUSTOMER_UPDATE
+      - ENTITY_CREATE
+      - ENTITY_LOOKUP
+      - ENTITY_PURGE
+      - ENTITY_RESULT_UPDATE
+      - ENTITY_RESULT_INVALIDATE
+      - ENTITY_UPDATE
+      - GENERATE_REPORT
+      - LEGACY_AUDIT
+      - MATCHLIST_ENTRY
+      - PORTAL_ACTION
+      - RISK_OVERRIDE
+      - SERVICE_PROFILE_CREATE
+      - SERVICE_PROFILE_UPDATE
+      - SERVICE_PROFILE_STATE_CHANGE
+      - WORKFLOW_EVENT
+      - WORKFLOW_COMPLETE
+      - WORKFLOW_RISK_CHANGE
+      - WORKFLOW_STATUS_CHANGE
+      - OTHER
+      description: 'Type of the audit event.
+
+        - CUSTOMER_SETUP: Audit event for customer setup.
+
+        - CUSTOMER_UPDATE: Audit event for updating a customer.
+
+        - ENTITY_CREATE: Create entity.
+
+        - ENTITY_LOOKUP: Lookup entity.
+
+        - ENTITY_PURGE: Delete entity and all associated information.
+
+        - ENTITY_RESULT_UPDATE: Manual result update.
+
+        - ENTITY_RESULT_INVALIDATE: Invalidate result.
+
+        - ENTITY_UPDATE: Update entity.
+
+        - GENERATE_REPORT: Generate a report.
+
+        - LEGACY_AUDIT: Audit event from V1.
+
+        - MATCHLIST_ENTRY: Matchlist entry operations.
+
+        - PORTAL_ACTION: Portal events.
+
+        - RISK_OVERRIDE: Risk override.
+
+        - SERVICE_PROFILE_CREATE: Create service profile.
+
+        - SERVICE_PROFILE_UPDATE: Update service profile.
+
+        - SERVICE_PROFILE_STATE_CHANGE: Service profile state change.
+
+        - WORKFLOW_EVENT: Generic event in a workflow other than status, risk, or complete.
+
+        - WORKFLOW_COMPLETE: Workflow is complete.
+
+        - WORKFLOW_RISK_CHANGE: Workflow risk change.
+
+        - WORKFLOW_STATUS_CHANGE: Workflow status change.
+
+        - OTHER: Other event type.'
+    Audit-Event-Organization-Entity-Match:
+      type: object
+      description: Details of the entity matching process during creation, specifically for KYB (Know Your Business).
+      properties:
+        country:
+          type: string
+          description: 'The ISO-3166-1 country code. You must use the alpha-3 country code (e.g., AUS, USA, IDR, KOR, etc). Conversion will be handled as needed.
+
+            For more details, refer to: https://en.wikipedia.org/wiki/ISO_3166-1'
+        registrationNumber:
+          type: string
+          description: The registration number of the organization in the registry.
+        registry:
+          $ref: '#/components/schemas/Organization-Registry'
+        subdivision:
+          type: string
+          description: The administrative area, state, or sub-division. Use local abbreviations, such as VIC (Victoria) or TX (Texas).
+        name:
+          type: string
+          description: The name as registered in the primary registry of the organization.
+    Supplementary-Data-AuditEvent-Activity:
+      type: object
+      description: 'Contains details relevant to activity monitoring hits for an audit event.
+
+        '
+      allOf:
+      - $ref: '#/components/schemas/Supplementary-Data-AuditEvent-Base'
+      - type: object
+        properties:
+          results:
+            type: array
+            items:
+              $ref: '#/components/schemas/Supplementary-Data-AuditEvent-Activity-Result'
+    Service-Profile-State:
+      type: string
+      description: 'Current state of the Service Profile
+
+        - INIT: Initial state when the profile is created.
+
+        - AUTO: Automatically assigned state, typically after initial processing.
+
+        - ACTIVE: The profile is active and in use.
+
+        - ARCHIVED: The profile has been archived and is no longer active.
+
+        - BLOCKLISTED: The profile is blocked from further actions.
+
+        - INACTIVE: The profile is inactive, not currently in use.
+
+        - DELETED: The profile has been deleted.
+
+        - DUPLICATE: The profile is a duplicate of another existing profile.'
+      enum:
+      - INIT
+      - AUTO
+      - ACTIVE
+      - ARCHIVED
+      - BLOCKLISTED
+      - INACTIVE
+      - DELETED
+      - DUPLICATE
+    Audit-Event-Connector-Config:
+      type: object
+      properties:
+        configurationKey:
+          type: string
+          description: The key or name of the configuration that was used.
+        description:
+          type: string
+          description: A brief description of the purpose or function of the configuration.
+        value:
+          type: string
+          description: The value assigned to the configuration.
+    Matchlist-Base:
+      type: object
+      description: Basic details about a matchlist, excluding metadata.
+      properties:
+        matchlistId:
+          $ref: '#/components/schemas/Matchlist-ID'
+        name:
+          type: string
+          description: Unique name identifying the matchlist.
+        description:
+          type: string
+          description: Description of the matchlist.
+        isDefault:
+          description: Flag indicating whether this matchlist is the default list.
+          type: boolean
+        action:
+          $ref: '#/components/schemas/Matchlist-Action'
+        riskScore:
+          type: number
+          description: Risk score to assign if there is a match, unless overridden by risk configuration.
+    AuditEvent-Status:
+      type: string
+      example: SUCCESS
+      enum:
+      - SUCCESS
+      - ERROR
+      - INFO
+    Custom-Attributes:
+      type: object
+      additionalProperties:
+        $ref: '#/components/schemas/Attribute'
+    Fraud-Check-Types:
+      type: string
+      description: 'The supported types of fraud checks.
+
+        '
+      enum:
+      - DEVICE
+      - IP
+      - EMAIL_ADDRESS
+      - PHONE_NUMBER
+    Audit:
+      type: object
+      required:
+      - eventId
+      - schemaVersion
+      - requestId
+      - level
+      - type
+      - description
+      - source
+      - channel
+      - eventStatus
+      - timestamp
+      properties:
+        eventId:
+          type: string
+          format: uuid
+          example: 123e4567-e89b-12d3-a456-426614174000
+          description: Unique identifier for the audit event.
+        schemaVersion:
+          type: integer
+          example: 2
+          description: Version of the audit event schema.
+        elapsedTimeInMilliSeconds:
+          type: integer
+          example: 2
+          description: The total time, in milliseconds, that the operation took.
+        level:
+          type: integer
+          example: 2
+          description: 'Level of the audit event.
+
+            1 -- Conclusion of the entire process. What happened.
+
+            2 -- Conclusion of a sub-task. Why the overall event happened.
+
+            3 -- Finer detail within a task. How the overall event came to be.
+
+            '
+        requestId:
+          $ref: '#/components/schemas/Request-ID'
+        type:
+          $ref: '#/components/schemas/AuditEvent-Type'
+        timestamp:
+          type: string
+          format: date-time
+          example: '2020-01-01T00:00:00.000Z'
+          description: The timestamp of the audit event.
+        source:
+          type: string
+          example: FrankieOne System
+          description: Source of the audit event, which could be an internal system or a user.
+        functionName:
+          type: string
+          example: executeVendorCheck
+          description: Name of the function that generated the audit event.
+        description:
+          type: string
+          example: Executing Vendor Check for Entity
+          description: Brief description of the audit event.
+        descriptionDetails:
+          type: string
+          example: "A new entity has been created with the following attributes:\n - Name\n - Address\n"
+          description: More in-depth description of the audit log event.
+        objectId:
+          type: string
+        objectType:
+          $ref: '#/components/schemas/Object-Type'
+        entityId:
+          $ref: '#/components/schemas/Entity-ID'
+        batchId:
+          type: string
+          description: ID of the batch associated with the audit event.
+        channel:
+          $ref: '#/components/schemas/AuditEvent-Channel'
+        serviceProfileId:
+          type: string
+          description: ID of the profile associated with the audit event.
+        serviceName:
+          type: string
+          example: kyc
+          description: Name of the profile associated with the audit event.
+        status:
+          $ref: '#/components/schemas/Workflow-Execution-ResultEnum'
+          description: Current status of the workflow.
+        workflowExecutionId:
+          type: string
+          description: ID of the workflow execution associated with the audit event.
+        workflowName:
+          type: string
+          example: safe_harbour_1+1
+          description: Name of the workflow associated with the audit event.
+        workflowVersion:
+          type: string
+          example: v23
+          description: Version of the workflow associated with the audit event.
+        stepResultId:
+          type: string
+          description: ID of the step result associated with the audit event.
+        stepName:
+          type: string
+          example: kyc-equifax
+          description: Name of the step associated with the audit event.
+        stepVersion:
+          type: string
+          example: v2.0.0
+          description: Version of the step associated with the audit event.
+        eventStatus:
+          $ref: '#/components/schemas/AuditEvent-Status'
+        riskScore:
+          type: number
+          example: 10
+          description: Risk score associated with the audit event.
+        riskLevel:
+          $ref: '#/components/schemas/Risk-Level'
+          description: Risk level associated with the audit event.
+        entityType:
+          $ref: '#/components/schemas/Entity-Type'
+        userComment:
+          $ref: '#/components/schemas/Comment'
+        lifecyclePhase:
+          $ref: '#/components/schemas/Workflow-LifecyclePhaseEnum'
+        supplementaryData:
+          type: object
+          oneOf:
+          - $ref: '#/components/schemas/Supplementary-Data-AuditEvent-Risk-Assessment'
+          - $ref: '#/components/schemas/Supplementary-Data-AuditEvent-KYC'
+          - $ref: '#/components/schemas/Supplementary-Data-AuditEvent-Decision'
+          - $ref: '#/components/schemas/Supplementary-Data-AuditEvent-Individual-Change'
+          - $ref: '#/components/schemas/Supplementary-Data-AuditEvent-KYC-Connector'
+          - $ref: '#/components/schemas/Supplementary-Data-AuditEvent-Result-Update'
+          - $ref: '#/components/schemas/Supplementary-Data-AuditEvent-AML-Connector'
+          - $ref: '#/components/schemas/Supplementary-Data-AuditEvent-AML'
+          - $ref: '#/components/schemas/Supplementary-Data-AuditEvent-IDV'
+          - $ref: '#/components/schemas/Supplementary-Data-AuditEvent-IDV-Connector'
+          - $ref: '#/components/schemas/Supplementary-Data-AuditEvent-Risk-Override'
+          - $ref: '#/components/schemas/Supplementary-Data-AuditEvent-Entity-Lookup'
+          - $ref: '#/components/schemas/Supplementary-Data-AuditEvent-KYB'
+          - $ref: '#/components/schemas/Supplementary-Data-AuditEvent-Organization-Data-Fetch-Connector'
+          - $ref: '#/components/schemas/Supplementary-Data-AuditEvent-Matchlist'
+          - $ref: '#/components/schemas/Supplementary-Data-AuditEvent-Matchlist-Entry'
+          - $ref: '#/components/schemas/Supplementary-Data-AuditEvent-Matchlist-Entries'
+          - $ref: '#/components/schemas/Supplementary-Data-AuditEvent-Matchlist-Result'
+          - $ref: '#/components/schemas/Supplementary-Data-AuditEvent-Duplicate'
+          - $ref: '#/components/schemas/Supplementary-Data-AuditEvent-Entity-Profile-State-Change'
+          - $ref: '#/components/schemas/Supplementary-Data-AuditEvent-Activity'
+          - $ref: '#/components/schemas/Supplementary-Data-AuditEvent-Fraud'
+          discriminator:
+            propertyName: type
+            mapping:
+              RISK_ASSESSMENT: '#/components/schemas/Supplementary-Data-AuditEvent-Risk-Assessment'
+              KYC: '#/components/schemas/Supplementary-Data-AuditEvent-KYC'
+              DECISION: '#/components/schemas/Supplementary-Data-AuditEvent-Decision'
+              INDIVIDUAL_CHANGE: '#/components/schemas/Supplementary-Data-AuditEvent-Individual-Change'
+              KYC_CONNECTOR: '#/components/schemas/Supplementary-Data-AuditEvent-KYC-Connector'
+              RESULT_UPDATE: '#/components/schemas/Supplementary-Data-AuditEvent-Result-Update'
+              AML_CONNECTOR: '#/components/schemas/Supplementary-Data-AuditEvent-AML-Connector'
+              AML: '#/components/schemas/Supplementary-Data-AuditEvent-AML'
+              IDV: '#/components/schemas/Supplementary-Data-AuditEvent-IDV'
+              IDV_CONNECTOR: '#/components/schemas/Supplementary-Data-AuditEvent-IDV-Connector'
+              RISK_OVERRIDE: '#/components/schemas/Supplementary-Data-AuditEvent-Risk-Override'
+              ENTITY_LOOKUP: '#/components/schemas/Supplementary-Data-AuditEvent-Entity-Lookup'
+              KYB: '#/components/schemas/Supplementary-Data-AuditEvent-KYB'
+              ORG_DATA_FETCH_CONNECTOR: '#/components/schemas/Supplementary-Data-AuditEvent-Organization-Data-Fetch-Connector'
+              MATCHLIST: '#/components/schemas/Supplementary-Data-AuditEvent-Matchlist'
+              MATCHLIST_ENTRY: '#/components/schemas/Supplementary-Data-AuditEvent-Matchlist-Entry'
+              MATCHLIST_ENTRIES: '#/components/schemas/Supplementary-Data-AuditEvent-Matchlist-Entries'
+              MATCHLIST_RESULT: '#/components/schemas/Supplementary-Data-AuditEvent-Matchlist-Result'
+              DUPLICATE: '#/components/schemas/Supplementary-Data-AuditEvent-Duplicate'
+              ENTITY_PROFILE_STATE_UPDATE: '#/components/schemas/Supplementary-Data-AuditEvent-Entity-Profile-State-Change'
+              ACTIVITY: '#/components/schemas/Supplementary-Data-AuditEvent-Activity'
+              FRAUD: '#/components/schemas/Supplementary-Data-AuditEvent-Fraud'
+    Object-Type:
+      description: The type of object being annotated.
+      type: string
+      enum:
+      - ADDRESS
+      - NAME
+      - PHONE_NUMBER
+      - EMAIL
+      - DATE_OF_BIRTH
+      - WEBSITE
+      - SHAREHOLDER
+      - OFFICIAL
+      - UBO
+      - REGISTRATION
+      - SHAREHOLDING
+      - SHARECAPITAL
+      - DOCUMENT
+      - DOCUMENT_ATTACHMENT
+      - RESULT_PROCESS
+      - RESULT_STEP
+      - RESULT_WORKFLOW
+      - SERVICE_PROFILE
+      - AUDIT_EVENT
+      - EXTERNAL_REFERENCE
+      - RISK_ASSESSMENT
+      - MATCHLIST
+    Risk-Level:
+      type: string
+      enum:
+      - UNKNOWN
+      - LOW
+      - MEDIUM
+      - HIGH
+      - UNACCEPTABLE
+      description: "The risk level classification:\n  - UNKNOWN: Risk level is not determined.\n  - LOW: Low risk.\n  - MEDIUM: Medium risk.\n  - HIGH: High risk.\n  - UNACCEPTABLE: Risk level is unacceptable.\n"
+    Supplementary-Data-AuditEvent-Risk-Override:
+      type: object
+      description: "Contains all details related to a risk override event, including:\n  - The previous risk profile (score and level before the override).\n  - The current risk profile (score and level after the override).\n  - The type of override applied.\n  - The risk factors affected by the override.\n"
+      allOf:
+      - $ref: '#/components/schemas/Supplementary-Data-AuditEvent-Base'
+      - $ref: '#/components/schemas/Audit-Event-Risk-Override-Result'
+    Workflow-Execution-ResultEnum:
+      type: string
+      description: "Outcome of this workflow execution. Possible results:\n  - UNCHECKED: The workflow has not yet been run and has no result.\n  - IN_PROGRESS: The workflow is currently running and awaiting completion.\n  - REVIEW: The workflow produced results that require review. Check the risks and step results for more details.\n  - PASS: The workflow successfully completed with a PASS recommendation.\n  - FAIL: The workflow finished with a FAIL recommendation.\n  - COMPLETE: The workflow has finished and the results are considered complete. PASS/FAIL is not required.\n  - INCOMPLETE: The workflow has finished and the results are considered incomplete. PASS/FAIL is not required.\n  - NEEDS_APPROVAL: The workflow requires an approval process. Once approved, re-run the workflow.\n  - APPROVED: The workflow was approved, typically by an external source such as a human.\n  - REJECTED: The workflow was rejected, typically by an external source such as a human.\n  - BLOCKED: The workflow was blocked from completing. Manual review is required.\n  - CLEAR: The workflow completed with no issues raised. Often used for ongoing monitoring workflows.\n  - URGENT: The workflow completed with matters requiring urgent review. Often used for ongoing monitoring workflows that return sanctions or similarly critical items.\n  - MONITOR: The workflow completed and further monitoring is required. Should be manually reviewed.\n"
+      default: UNCHECKED
+      enum:
+      - UNCHECKED
+      - IN_PROGRESS
+      - REVIEW
+      - PASS
+      - FAIL
+      - COMPLETE
+      - INCOMPLETE
+      - NEEDS_APPROVAL
+      - APPROVED
+      - REJECTED
+      - BLOCKED
+      - CLEAR
+      - URGENT
+      - MONITOR
+    Audit-Event-Error:
+      type: object
+      properties:
+        code:
+          type: string
+          description: The error code, usually similar to an HTTP error code but not always, e.g., API-400.
+        description:
+          type: string
+          description: A description of the error, which may originate from the connector itself or the provider.
+        location:
+          type: string
+          description: If known, the location of the error, e.g., a field name.
+    Entity-Type:
+      type: string
+      enum:
+      - INDIVIDUAL
+      - ORGANIZATION
+      - UNKNOWN
+      description: The type of entity within Frankie. This can be "INDIVIDUAL", "ORGANIZATION", or "UNKNOWN".
+      readOnly: true
+    Comment:
+      type: object
+      properties:
+        commentId:
+          type: string
+          description: Unique identifier for the comment.
+          example: 55fc5d54-46f7-49c8-bf78-e07ec79cd6e7
+          readOnly: true
+        text:
+          type: string
+          description: The text content of the comment.
+          example: Update after speaking to customer over the phone directly.
+    Audit-Matchlist-Entries:
+      type: object
+      description: 'Audit event details for managing multiple matchlist entries. This provides a summary of the changes, not the full list of entries.
+
+
+        For a single operation, use `Audit-Matchlist-Entry`.
+
+        '
+      properties:
+        numOfEntries:
+          type: integer
+          description: 'The number of matchlist entries to be added or updated.
+
+            '
+          minimum: 2
+          example: 2
+        attributes:
+          type: array
+          description: 'A list of attributes that were added or modified for the matchlist entries.
+
+            '
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/Matchlist-Entry-Attribute-Type'
+        state:
+          description: 'The state of the matchlist entries that were added or updated.
+
+            '
+          $ref: '#/components/schemas/Matchlist-Entry-State'
+          default: ACTIVE
+        batchName:
+          type: string
+          description: 'Optional batch name to identify the source of these entries.
+
+            '
+          example: blocklist.csv
+    Matchlist-ID:
+      type: string
+      format: uuid
+      description: 'Matchlists are assigned an auto-generated UUID to ensure global uniqueness, represented as matchlistId. The matchlistId allows for precise modification when required.
+
+        To create or modify a matchlist entry, set the matchlistId of the matchlist you wish to update in a matchlist entry request.'
+      example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+      readOnly: true
+    Supplementary-Data-AuditEvent-Fraud:
+      type: object
+      description: Contains details relevant to fraud hits for an audit event.
+      allOf:
+      - $ref: '#/components/schemas/Supplementary-Data-AuditEvent-Base'
+      - type: object
+        properties:
+          result:
+            type: string
+            description: The overall result of the fraud check.
+          details:
+            type: array
+            description: A list of fraud checks that were performed and their results.
+            items:
+              $ref: '#/components/schemas/Supplementary-Data-AuditEvent-Fraud-Details'
+    Matchlist-Entry-Base:
+      type: object
+      description: Basic details about a matchlist entry, excluding metadata.
+      properties:
+        entryId:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Unique identifier for the matchlist entry.
+        entityId:
+          type: string
+          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+          description: The entity ID from which the attributes of this entry are derived. This is optional and can be used to link the matchlist entry to an entity.
+        entityType:
+          $ref: '#/components/schemas/Entity-Type'
+          description: The type of entity from which the attributes of this entry are derived. This is optional and can be used to link the matchlist entry to an entity.
+        reference:
+          type: string
+          description: Optional reference describing the context of this entry.
+          example: CERT-BAD-ACTOR-1234-5678
+        reasons:
+          description: The reasons for the matchlist entry. These codes will be translated to configured description strings.
+          type: array
+          items:
+            $ref: '#/components/schemas/Matchlist-Entry-Reason-Code'
+    Organization-Registry:
+      type: object
+      properties:
+        registry:
+          description: Registry the organization is registered at
+          type: string
+        registryDescription:
+          description: The description of the registry
+          type: string
+    Matchlist-Entry-State:
+      type: string
+      description: "The state of the matchlist entry.\n  - `ACTIVE`: The matchlist entry is active and can be used for matching.\n  - `EXPIRED`: The matchlist entry has expired. It is visible and retrievable, but cannot be used for matching.\n  - `DELETED`: The matchlist entry has been marked as deleted, rendering it unusable.\n\nTo modify an entry's state, use `Matchlist-Entry-State-Writeable`."
+      default: ACTIVE
+      readOnly: true
+      enum:
+      - ACTIVE
+      - EXPIRED
+      - DELETED
+    Supplementary-Data-AuditEvent-Entity-Profile-State-Change:
+      type: object
+      description: 'Contains details relevant to changes in the state of an entity or its service profiles.
+
+        If the serviceProfileId is omitted, the state change applies to all service profiles associated with the entity.'
+      allOf:
+      - $ref: '#/components/schemas/Supplementary-Data-AuditEvent-Base'
+      - type: object
+        properties:
+          previousState:
+            $ref: '#/components/schemas/Service-Profile-State'
+          currentState:
+            $ref: '#/components/schemas/Service-Profile-State'
+          processResultId:
+            $ref: '#/components/schemas/Process-Result-ID'
+    Audit-Event-Origin:
+      type: object
+      description: Specifies the origin of the entity being audited, which may include its source or creation context. Provides details on how and why the entity was created, tracking its provenance across different contexts.
+      properties:
+        entityId:
+          $ref: '#/components/schemas/Entity-ID'
+        entityType:
+          $ref: '#/components/schemas/Entity-Type'
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/Code-Description'
+          description: "Provides additional context about the origin.\nFor example, in the case of KYB:\n  code: \"FOCUS_ORG\"\n  description: \"Organization that triggered the creation of this entity.\""
+    List-Operation-Meta:
+      type: object
+      description: Meta information about the request and response returned during a list operation.
+      properties:
+        page:
+          type: integer
+          description: The current page number of the request.
+        total:
+          type: integer
+          description: The total number of items found for the search criteria.
+        limit:
+          type: integer
+          description: The limit applied to this response.
+        count:
+          type: integer
+          description: The number of items returned in this response.
+        sort:
+          type: string
+          enum:
+          - asc
+          - desc
+          description: The sort order applied to the items in the response.
+        sortFields:
+          type: array
+          items:
+            type: string
+            enum:
+            - createdAt
+            - updatedAt
+    Supplementary-Data-AuditEvent-Result-Update:
+      type: object
+      description: 'Contains details about changes to results.
+
+        '
+      allOf:
+      - $ref: '#/components/schemas/Supplementary-Data-AuditEvent-Base'
+      - type: object
+        properties:
+          resultsUpdated:
+            type: array
+            items:
+              $ref: '#/components/schemas/Audit-Result-Change'
+            description: Results that were updated.
+  parameters:
+    query_sort_fields:
+      name: sortFields
+      in: query
+      example: timestamp
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+          - timestamp
+      description: The list of sort fields that will be used in the query, the order of the sort fields will determine the order in which the items are sorted
+    X-Frankie-CustomerChildID:
+      name: X-Frankie-CustomerChildID
+      in: header
+      required: false
+      schema:
+        type: string
+        example: 87654321-4321-4321-4321-210987654321
+      description: Your Customer Child ID provided by FrankieOne
+    X-Frankie-Channel:
+      name: X-Frankie-Channel
+      in: header
+      required: false
+      schema:
+        type: string
+      description: 'Open string that can be used to define the "channel" the request comes in from. It can potentially be used in routing and risk calculations upon request. Default values that can be used are:  api portal smartui Any alphanumeric string is supported though. Anything over 64 characters will be truncated.'
+    query_filter_workflow_risk_levels:
+      name: workflowRiskLevels
+      in: query
+      schema:
+        type: array
+        items:
+          type: string
+      description: List of workflow risk levels to filter the audit events upon
+      example:
+      - LOW
+      - HIGH
+      required: false
+    page:
+      in: query
+      name: page
+      example: 2
+      schema:
+        type: integer
+      description: The page number that you want to retrieve for the list query
+    query_filter_entity_id:
+      name: entityId
+      in: query
+      schema:
+        type: string
+      description: Entity ID
+      required: false
+    query_filter_timestamp_before:
+      name: beforeTimestamp
+      in: query
+      schema:
+        type: string
+        format: date
+      description: Filter the Audit Events before the given filter based on the Event 'timestamp' value
+      required: false
+    Api-Key:
+      name: api_key
+      in: header
+      schema:
+        type: string
+        example: 245c765b124a098d09ef8765....
+      description: Your API key provided by FrankieOne
+      required: true
+    limit:
+      in: query
+      name: limit
+      schema:
+        type: integer
+        minimum: 1
+        default: 20
+      example: 20
+      description: Limit the number of items that will be returned as part of the request
+    query_filter_timestamp_after:
+      name: afterTimestamp
+      in: query
+      schema:
+        type: string
+        format: date
+      description: Filter the Audit Events after the given filter based on the Event 'timestamp' value
+      required: false
+    query_filter_request_id:
+      name: requestId
+      in: query
+      schema:
+        type: string
+      description: Request Identifier to filter the audit events upon
+      required: false
+    query_filter_workflow_names:
+      name: workflowNames
+      in: query
+      schema:
+        type: array
+        items:
+          type: string
+      description: List of Workflow Names to filter the audit events upon
+      example:
+      - KYC Onboarding
+      - Transaction Monitoring
+      required: false
+    sort:
+      in: query
+      name: sort
+      schema:
+        type: string
+        enum:
+        - asc
+        - desc
+      description: Order of the sort fields will be sorted upon
+    query_filter_channels:
+      name: channels
+      in: query
+      schema:
+        type: array
+        items:
+          $ref: '#/components/schemas/AuditEvent-Channel'
+      description: List of Channels to filter the audit events upon
+      required: false
+    query_filter_sources:
+      name: sources
+      in: query
+      schema:
+        type: array
+        items:
+          type: string
+      description: List of Sources that the audit events will be filtered upon
+      example:
+      - user@username.com
+      - FrankieOne System
+      - Experian Connector
+      required: false
+    X-Frankie-CustomerID:
+      name: X-Frankie-CustomerID
+      in: header
+      required: true
+      schema:
+        type: string
+        example: 12345678-1234-1234-1234-123456789012
+      description: Your Customer ID provided by FrankieOne
+  securitySchemes:
+    Api-Key:
+      type: apiKey
+      in: header
+      name: api_key
+      description: ''
+    jwt:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

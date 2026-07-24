@@ -1,0 +1,1264 @@
+openapi: 3.0.3
+info:
+  title: Core V2 Audit Individual Documents API
+  version: 2.0.0
+  description: This is the APIs for V2 Core. It allows you to do common operations, such as read audit entries or get workflow lists.
+  contact:
+    name: FrankieOne
+    url: https://www.frankieone.com/
+    email: help@frankieone.com
+servers:
+- url: https://api.uat.frankie.one
+security:
+- Api-Key: []
+tags:
+- name: Individual Documents
+  description: Manage documents for individuals
+paths:
+  /v2/individuals/{entityId}/documents:
+    parameters:
+    - $ref: '#/components/parameters/entityId'
+    - $ref: '#/components/parameters/levelQuery'
+    post:
+      summary: Create a new document for an individual.
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/individuals_entity_document_response'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Invalid EntityId:
+                  value:
+                    errorCode: API-0400,
+                    errorMsg: 'Multiple Errors: See Issues list'
+                    details:
+                    - issue: 'entityId in path must be of type uuid: "test"'
+                      issueLocation: VALIDATE-entityId
+                    requestId: 01HM5XJ7VASZ3EJMB1VQGTBFJ4
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Invalid authentication:
+                  value:
+                    errorCode: AUTH-0002,
+                    errorMsg: Unauthorized
+                    details:
+                    - issue: Invalid Authentication provided. Access denied.
+                      issueLocation: request
+                    requestId: 00000000S6MNG7624K2TDXT1E3
+                No Api-Key:
+                  value:
+                    errorCode: AUTH-0401
+                    errorMsg: Unauthorized
+                    details:
+                    - issue: No api key provided. Access denied.
+                      issueLocation: request
+                    requestId: 00000001S6MNG7624K2TDXT1E3
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Internal Server Error:
+                  value:
+                    errorCode: SYS-1063,
+                    errorMsg: Failed to generate KYC report
+                    requestId: 01HM5EM2QNNSC9K0PX9VC06HX3
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                document:
+                  allOf:
+                  - type: object
+                    properties:
+                      class:
+                        $ref: '#/components/schemas/Document-Class'
+                  - $ref: '#/components/schemas/Document-Information'
+                comment:
+                  $ref: '#/components/schemas/Comment'
+      operationId: createDocuments
+      description: Add a new document to an entity.
+      parameters:
+      - $ref: '#/components/parameters/Api-Key'
+      - $ref: '#/components/parameters/X-Frankie-CustomerID'
+      - $ref: '#/components/parameters/X-Frankie-CustomerChildID'
+      - $ref: '#/components/parameters/X-Frankie-Channel'
+      - $ref: '#/components/parameters/X-Frankie-Username'
+      tags:
+      - Individual Documents
+      security:
+      - Api-Key: []
+      - jwt:
+        - kyc:api
+    get:
+      summary: Get all documents for an entity
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Entity-Documents'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Invalid EntityId:
+                  value:
+                    errorCode: API-0400,
+                    errorMsg: 'Multiple Errors: See Issues list'
+                    details:
+                    - issue: 'entityId in path must be of type uuid: "test"'
+                      issueLocation: VALIDATE-entityId
+                    requestId: 01HM5XJ7VASZ3EJMB1VQGTBFJ4
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Invalid authentication:
+                  value:
+                    errorCode: AUTH-0002,
+                    errorMsg: Unauthorized
+                    details:
+                    - issue: Invalid Authentication provided. Access denied.
+                      issueLocation: request
+                    requestId: 00000000S6MNG7624K2TDXT1E3
+                No Api-Key:
+                  value:
+                    errorCode: AUTH-0401
+                    errorMsg: Unauthorized
+                    details:
+                    - issue: No api key provided. Access denied.
+                      issueLocation: request
+                    requestId: 00000001S6MNG7624K2TDXT1E3
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Internal Server Error:
+                  value:
+                    errorCode: SYS-1063,
+                    errorMsg: Failed to generate KYC report
+                    requestId: 01HM5EM2QNNSC9K0PX9VC06HX3
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      operationId: getDocuments
+      description: Get all documents for an entity.
+      parameters:
+      - $ref: '#/components/parameters/Api-Key'
+      - $ref: '#/components/parameters/X-Frankie-CustomerID'
+      - $ref: '#/components/parameters/X-Frankie-CustomerChildID'
+      - $ref: '#/components/parameters/X-Frankie-Channel'
+      - $ref: '#/components/parameters/X-Frankie-Username'
+      tags:
+      - Individual Documents
+      security:
+      - Api-Key: []
+      - jwt:
+        - kyc:api
+  /v2/individuals/{entityId}/documents/{documentId}:
+    parameters:
+    - $ref: '#/components/parameters/entityId'
+    - $ref: '#/components/parameters/documentId'
+    patch:
+      summary: Update a single document by it's id.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/individuals_entity_document_response'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Invalid EntityId:
+                  value:
+                    errorCode: API-0400,
+                    errorMsg: 'Multiple Errors: See Issues list'
+                    details:
+                    - issue: 'entityId in path must be of type uuid: "test"'
+                      issueLocation: VALIDATE-entityId
+                    requestId: 01HM5XJ7VASZ3EJMB1VQGTBFJ4
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Invalid authentication:
+                  value:
+                    errorCode: AUTH-0002,
+                    errorMsg: Unauthorized
+                    details:
+                    - issue: Invalid Authentication provided. Access denied.
+                      issueLocation: request
+                    requestId: 00000000S6MNG7624K2TDXT1E3
+                No Api-Key:
+                  value:
+                    errorCode: AUTH-0401
+                    errorMsg: Unauthorized
+                    details:
+                    - issue: No api key provided. Access denied.
+                      issueLocation: request
+                    requestId: 00000001S6MNG7624K2TDXT1E3
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Internal Server Error:
+                  value:
+                    errorCode: SYS-1063,
+                    errorMsg: Failed to generate KYC report
+                    requestId: 01HM5EM2QNNSC9K0PX9VC06HX3
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                document:
+                  $ref: '#/components/schemas/Document-Information'
+                comment:
+                  $ref: '#/components/schemas/Comment'
+      operationId: updateDocument
+      description: Update document by id.
+      parameters:
+      - $ref: '#/components/parameters/Api-Key'
+      - $ref: '#/components/parameters/X-Frankie-CustomerID'
+      - $ref: '#/components/parameters/X-Frankie-CustomerChildID'
+      - $ref: '#/components/parameters/X-Frankie-Channel'
+      - $ref: '#/components/parameters/X-Frankie-Username'
+      - $ref: '#/components/parameters/levelNoIdQuery'
+      tags:
+      - Individual Documents
+      security:
+      - Api-Key: []
+      - jwt:
+        - kyc:api
+    get:
+      summary: Get a single document by it's id.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Document-Information'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Invalid EntityId:
+                  value:
+                    errorCode: API-0400,
+                    errorMsg: 'Multiple Errors: See Issues list'
+                    details:
+                    - issue: 'entityId in path must be of type uuid: "test"'
+                      issueLocation: VALIDATE-entityId
+                    requestId: 01HM5XJ7VASZ3EJMB1VQGTBFJ4
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Invalid authentication:
+                  value:
+                    errorCode: AUTH-0002,
+                    errorMsg: Unauthorized
+                    details:
+                    - issue: Invalid Authentication provided. Access denied.
+                      issueLocation: request
+                    requestId: 00000000S6MNG7624K2TDXT1E3
+                No Api-Key:
+                  value:
+                    errorCode: AUTH-0401
+                    errorMsg: Unauthorized
+                    details:
+                    - issue: No api key provided. Access denied.
+                      issueLocation: request
+                    requestId: 00000001S6MNG7624K2TDXT1E3
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Internal Server Error:
+                  value:
+                    errorCode: SYS-1063,
+                    errorMsg: Failed to generate KYC report
+                    requestId: 01HM5EM2QNNSC9K0PX9VC06HX3
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      operationId: getDocument
+      description: Get a single document by it's id.
+      parameters:
+      - $ref: '#/components/parameters/Api-Key'
+      - $ref: '#/components/parameters/X-Frankie-CustomerID'
+      - $ref: '#/components/parameters/X-Frankie-CustomerChildID'
+      - $ref: '#/components/parameters/X-Frankie-Channel'
+      - $ref: '#/components/parameters/X-Frankie-Username'
+      - $ref: '#/components/parameters/levelNoIdQuery'
+      tags:
+      - Individual Documents
+      security:
+      - Api-Key: []
+      - jwt:
+        - kyc:api
+    delete:
+      summary: Delete a document
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  requestId:
+                    $ref: '#/components/schemas/Request-ID'
+                  entityId:
+                    $ref: '#/components/schemas/Entity-ID'
+                  documentId:
+                    $ref: '#/components/schemas/Document-ID'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Invalid EntityId:
+                  value:
+                    errorCode: API-0400,
+                    errorMsg: 'Multiple Errors: See Issues list'
+                    details:
+                    - issue: 'entityId in path must be of type uuid: "test"'
+                      issueLocation: VALIDATE-entityId
+                    requestId: 01HM5XJ7VASZ3EJMB1VQGTBFJ4
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Invalid authentication:
+                  value:
+                    errorCode: AUTH-0002,
+                    errorMsg: Unauthorized
+                    details:
+                    - issue: Invalid Authentication provided. Access denied.
+                      issueLocation: request
+                    requestId: 00000000S6MNG7624K2TDXT1E3
+                No Api-Key:
+                  value:
+                    errorCode: AUTH-0401
+                    errorMsg: Unauthorized
+                    details:
+                    - issue: No api key provided. Access denied.
+                      issueLocation: request
+                    requestId: 00000001S6MNG7624K2TDXT1E3
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Internal Server Error:
+                  value:
+                    errorCode: SYS-1063,
+                    errorMsg: Failed to generate KYC report
+                    requestId: 01HM5EM2QNNSC9K0PX9VC06HX3
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      operationId: deleteDocument
+      description: Delete a single document and all of it's attachments.
+      parameters:
+      - $ref: '#/components/parameters/Api-Key'
+      - $ref: '#/components/parameters/X-Frankie-CustomerID'
+      - $ref: '#/components/parameters/X-Frankie-CustomerChildID'
+      - $ref: '#/components/parameters/X-Frankie-Channel'
+      - $ref: '#/components/parameters/X-Frankie-Username'
+      tags:
+      - Individual Documents
+      security:
+      - Api-Key: []
+      - jwt:
+        - kyc:api
+  /v2/individuals/{entityId}/documents/{documentId}/attachments/{attachmentId}:
+    parameters:
+    - $ref: '#/components/parameters/entityId'
+    - $ref: '#/components/parameters/documentId'
+    - $ref: '#/components/parameters/attachmentId'
+    delete:
+      summary: Delete an attachment
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  requestId:
+                    $ref: '#/components/schemas/Request-ID'
+                  entityId:
+                    $ref: '#/components/schemas/Entity-ID'
+                  documentId:
+                    $ref: '#/components/schemas/Document-ID'
+                  attachmentId:
+                    type: string
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Invalid EntityId:
+                  value:
+                    errorCode: API-0400,
+                    errorMsg: 'Multiple Errors: See Issues list'
+                    details:
+                    - issue: 'entityId in path must be of type uuid: "test"'
+                      issueLocation: VALIDATE-entityId
+                    requestId: 01HM5XJ7VASZ3EJMB1VQGTBFJ4
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Invalid authentication:
+                  value:
+                    errorCode: AUTH-0002,
+                    errorMsg: Unauthorized
+                    details:
+                    - issue: Invalid Authentication provided. Access denied.
+                      issueLocation: request
+                    requestId: 00000000S6MNG7624K2TDXT1E3
+                No Api-Key:
+                  value:
+                    errorCode: AUTH-0401
+                    errorMsg: Unauthorized
+                    details:
+                    - issue: No api key provided. Access denied.
+                      issueLocation: request
+                    requestId: 00000001S6MNG7624K2TDXT1E3
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Internal Server Error:
+                  value:
+                    errorCode: SYS-1063,
+                    errorMsg: Failed to generate KYC report
+                    requestId: 01HM5EM2QNNSC9K0PX9VC06HX3
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      operationId: deleteAttachments
+      description: Delete an attachment from a given document.
+      parameters:
+      - $ref: '#/components/parameters/Api-Key'
+      - $ref: '#/components/parameters/X-Frankie-CustomerID'
+      - $ref: '#/components/parameters/X-Frankie-CustomerChildID'
+      - $ref: '#/components/parameters/X-Frankie-Channel'
+      - $ref: '#/components/parameters/X-Frankie-Username'
+      tags:
+      - Individual Documents
+      security:
+      - Api-Key: []
+      - jwt:
+        - kyc:api
+components:
+  schemas:
+    Error-Base:
+      type: object
+      properties:
+        errorCode:
+          type: string
+        errorMsg:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/Issue'
+    Document-ID:
+      type: string
+      format: uuid
+      description: 'As documents are added to an entity, they are assigned a unique identifier to assist with modification and reference.
+
+        To modify a document, include the documentId in an update request.'
+      example: 92de15f64-5717-4562-b3fc-2c963f6665a7
+    Document-Attachment-ID:
+      type: string
+      format: uuid
+      description: When a document attachment is created or uploaded, it is assigned an attachmentId. This identifier will appear in a successful response or accepted response. It can be referenced in subsequent calls if you are uploading additional or updated data.
+    Document-Supplementary-Data-National-ID:
+      type: object
+      description: Supplementary information relevant to a national ID.
+      allOf:
+      - $ref: '#/components/schemas/Document-Supplementary-Data-Base'
+      - type: object
+        properties:
+          homeCountryFullName:
+            type: string
+            description: The original full name from the individual's home country national ID.
+            example: 张伟明
+          paternalFamilyName:
+            type: string
+            description: The individual's family name inherited from the father's side.
+            example: MENDOZA
+          maternalFamilyName:
+            type: string
+            description: The individual's family name inherited from the mother's side.
+            example: GARCIA
+    Error:
+      type: object
+      x-examples:
+        '400':
+          requestId: 0123456789ABCDEFGHIJKLMNOP
+          errorCode: API-0400
+          errorMsg: Parsing credentials from "<invalid>" failed, because invalid.
+          httpStatusCode: 400
+        '401':
+          requestId: 0123456789ABCDEFGHIJKLMNOP
+          errorCode: API-0401
+          errorMsg: Unauthenticated due to invalid credentials.
+          httpStatusCode: 401
+        '409':
+          requestId: 0123456789ABCDEFGHIJKLMNOP
+          errorCode: API-0409
+          errorMsg: Conflict.
+          httpStatusCode: 409
+      allOf:
+      - $ref: '#/components/schemas/Error-Base'
+      - type: object
+        properties:
+          requestId:
+            $ref: '#/components/schemas/Request-ID'
+    Document-Supplementary-Data-Base:
+      type: object
+      description: Supplementary data associated with a document.
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          description: The document type that defines the type of supplementary data returned.
+          enum:
+          - NATIONAL_HEALTH_ID
+          - BIRTH_CERT
+          - NATIONAL_ID
+          - CITIZENSHIP
+          - PASSPORT
+          - MARRIAGE_CERT
+    Document-Supplementary-Data:
+      type: object
+      description: Supplementary information relevant to a specific document or report type.
+      oneOf:
+      - $ref: '#/components/schemas/Document-Supplementary-Data-National-Health-ID'
+      - $ref: '#/components/schemas/Document-Supplementary-Data-Birth-Certificate'
+      - $ref: '#/components/schemas/Document-Supplementary-Data-National-ID'
+      - $ref: '#/components/schemas/Document-Supplementary-Data-Citizenship'
+      - $ref: '#/components/schemas/Document-Supplementary-Data-Passport'
+      - $ref: '#/components/schemas/Document-Supplementary-Data-Marriage-Certificate'
+      discriminator:
+        propertyName: type
+        mapping:
+          NATIONAL_HEALTH_ID: '#/components/schemas/Document-Supplementary-Data-National-Health-ID'
+          BIRTH_CERT: '#/components/schemas/Document-Supplementary-Data-Birth-Certificate'
+          NATIONAL_ID: '#/components/schemas/Document-Supplementary-Data-National-ID'
+          CITIZENSHIP: '#/components/schemas/Document-Supplementary-Data-Citizenship'
+          PASSPORT: '#/components/schemas/Document-Supplementary-Data-Passport'
+          MARRIAGE_CERT: '#/components/schemas/Document-Supplementary-Data-Marriage-Certificate'
+    Issue:
+      type: object
+      properties:
+        issue:
+          type: string
+          description: Description of the issue.
+        issueLocation:
+          type: string
+          description: The location or context where the issue was identified.
+        issueType:
+          type: string
+          description: The type or category of the issue.
+    Document-Supplementary-Data-Passport:
+      type: object
+      description: Supplementary information relevant to a national health id.
+      allOf:
+      - $ref: '#/components/schemas/Document-Supplementary-Data-Base'
+      - type: object
+        properties:
+          homeCountryFullName:
+            type: string
+            description: The original name from the home country of passport.
+            example: 张伟明
+    Document-Supplementary-Data-Marriage-Certificate:
+      type: object
+      description: Supplementary information relevant to a marriage certificate.
+      allOf:
+      - $ref: '#/components/schemas/Document-Supplementary-Data-Base'
+      - type: object
+        description: Supplementary information relevant to a marriage certificate.
+        properties:
+          partner1GivenName:
+            type: string
+            description: The given name of partner 1.
+            example: Harry
+          partner1FamilyName:
+            type: string
+            description: The family name of partner 1.
+            example: Versailles
+          partner1OtherName:
+            type: string
+            description: The other name of partner 1.
+            example: S.
+          partner2GivenName:
+            type: string
+            description: The given name of partner 2.
+            example: Harry
+          partner2FamilyName:
+            type: string
+            description: The family name of partner 2.
+            example: Versailles
+          partner2OtherName:
+            type: string
+            description: The other name of partner 2.
+            example: S.
+          registrationDate:
+            type: string
+            description: The date the marriage was registered.
+            example: '2023'
+          marriageDate:
+            type: string
+            description: The date the marriage was held.
+            example: '2023-10-01'
+          dateOfPrint:
+            type: string
+            description: The date the birth certificate was printed.
+            example: '2023-10-01'
+    Document-Attachment-Retrieval-Status:
+      type: string
+      readOnly: true
+      enum:
+      - NORMAL
+      - EXCLUDED
+      - FAILED
+      description: "The reason why the data in a response is missing.\n\n- \"NORMAL\": The data was retrieved and is included. If it is empty, then\n  it was never provided or was provided empty.\n\n- \"EXCLUDED\": The retrieval request was not for 'full' data, or the object\n  has been deleted, so the data is not included.\n\n- \"FAILED\": The data could not be retrieved from the secure document\n  store.\n\nThe retrievalStatus enum will not usually be set in a request. If an\nattachment in a response has a 'FAILED' retrieval state, then\nthat object should not be sent back in a future update. It should\neither be omitted or the original data should be resent if it is available\nfrom another source. However, it is safe to send the object in an update\nwith the state received in a response. Any state other than 'NORMAL' (or\n'') will cause the blank data to be ignored, but other fields in the\nobject will be updated if needed."
+    Comment:
+      type: object
+      properties:
+        commentId:
+          type: string
+          description: Unique identifier for the comment.
+          example: 55fc5d54-46f7-49c8-bf78-e07ec79cd6e7
+          readOnly: true
+        text:
+          type: string
+          description: The text content of the comment.
+          example: Update after speaking to customer over the phone directly.
+    Document-Supplementary-Data-Birth-Certificate:
+      type: object
+      description: Supplementary information relevant to a birth certificate.
+      allOf:
+      - $ref: '#/components/schemas/Document-Supplementary-Data-Base'
+      - type: object
+        description: Supplementary information relevant to a birth certificate.
+        properties:
+          registrationDate:
+            type: string
+            description: The date the birth was registered.
+            example: '2000'
+          registrationDistrict:
+            type: string
+            description: The district where the birth was registered.
+            example: Sydney
+          dateOfPrint:
+            type: string
+            description: The date the birth certificate was printed.
+            example: '2000'
+          givenName:
+            type: string
+            description: The given name as printed on the certificate.
+          otherNames:
+            type: string
+            description: Other name(s) as printed on the certificate.
+          familyName:
+            type: string
+            description: The family name as printed on the certificate.
+    individuals_entity_document_response:
+      type: object
+      required:
+      - requestId
+      properties:
+        entity:
+          $ref: '#/components/schemas/Entity-ID'
+        document:
+          $ref: '#/components/schemas/Document-Information'
+        requestId:
+          $ref: '#/components/schemas/Request-ID'
+    Document-Supplementary-Data-National-Health-ID:
+      type: object
+      description: Supplementary information relevant to a national health id.
+      allOf:
+      - $ref: '#/components/schemas/Document-Supplementary-Data-Base'
+      - type: object
+        properties:
+          reference:
+            type: string
+            description: The individual reference number used to identify the position of the applicant's name on the health card. Required for Australian Medicare cards (this is the number to the left of the name on the card).
+            example: '1'
+          nameOnCardLine1:
+            type: string
+            description: The individual's name as it appears on the card.
+          nameOnCardLine2:
+            type: string
+            description: If the individual's name spans more than one line, this is the part of the name that appears on line 2.
+          nameOnCardLine3:
+            type: string
+            description: If the individual's name spans more than two lines, this is the part of the name that appears on line 3.
+          nameOnCardLine4:
+            type: string
+            description: If the individual's name spans more than three lines, this is the part of the name that appears on line 4.
+          middleNameOnCard:
+            type: string
+            description: The individual's middle name or initial as it appears on the card.
+    Date:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/Date-Base'
+      - type: object
+        properties:
+          normalized:
+            type: string
+            format: date
+            description: Full date in ISO 8601 format ("YYYY-MM-DD"). This is a read-only field.
+            example: '1990-03-31'
+            readOnly: true
+    Attribute:
+      type: object
+      required:
+      - type
+      - value
+      properties:
+        type:
+          description: The attribute type.
+          type: string
+          maxLength: 64
+        value:
+          description: The value assigned to the attribute.
+          type: string
+    Request-ID:
+      type: string
+      example: 01HN9XHZN6MGXM9JXG50K59Q85
+      description: The unique request identifier for the API call made.
+    Entity-Documents:
+      type: object
+      properties:
+        REPORT:
+          type: array
+          items:
+            $ref: '#/components/schemas/Document-Information'
+        SUPPORTING:
+          type: array
+          items:
+            $ref: '#/components/schemas/Document-Information'
+        IDENTITY:
+          type: array
+          items:
+            $ref: '#/components/schemas/Document-Information'
+        OTHER:
+          type: array
+          items:
+            $ref: '#/components/schemas/Document-Information'
+    Document-Attachment-Type:
+      type: string
+      description: "General types of valid document attachments.\n  - \"PHOTO\": Any photo.\n  - \"VIDEO\": Any video.\n  - \"AUDIO\": Any audio.\n  - \"PDF\": PDF or PS file (may contain text, images, or both).\n  - \"DOC\": Word document, RTF, etc.\n  - \"ZIP\": Any compressed file(s)."
+    Entity-ID:
+      type: string
+      description: 'Entities are assigned an auto-generated UUID to ensure global uniqueness, represented as entityId. The entityId allows for precise modification when required.
+
+        To modify an entity, set the entityId of the entity you wish to update in an update request.'
+      example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+      readOnly: true
+    Date-Type:
+      type: string
+      default: GREGORIAN
+      enum:
+      - BUDDHIST
+      - DISCORDIAN
+      - GREGORIAN
+      - HEBREW
+      - ISLAMIC
+      - JULIAN
+      - LUNAR
+      - MESO_AMERICAN
+      - PERSIAN
+      - OTHER
+      description: The calendar system used for the date, e.g., BUDDHIST, DISCORDIAN, GREGORIAN, HEBREW, ISLAMIC, JULIAN, LUNAR, MESO_AMERICAN, PERSIAN, or OTHER.
+    Document-Class:
+      type: string
+      enum:
+      - OTHER
+      - IDENTITY
+      - SUPPORTING
+      - REPORT
+      description: The classification of the document, indicating how it should be used or interpreted.
+      example: IDENTITY
+    Custom-Attributes:
+      type: object
+      additionalProperties:
+        $ref: '#/components/schemas/Attribute'
+    Date-Base:
+      type: object
+      properties:
+        year:
+          type: string
+          description: Year in "YYYY" format.
+          example: '1990'
+        month:
+          type: string
+          description: Month in "MM" format.
+          example: '03'
+        day:
+          type: string
+          description: Day in "DD" format.
+          example: '27'
+        unstructured:
+          type: string
+          description: 'Raw date format without normalization or standardization to the Gregorian calendar.
+
+            This can be used to provide non-Gregorian dates (e.g., Islamic dates).'
+          example: 12 Rajab 1445 AH
+        type:
+          $ref: '#/components/schemas/Date-Type'
+    Document-Attachment:
+      type: object
+      required:
+      - data
+      description: Document attachment details.
+      properties:
+        attachmentId:
+          $ref: '#/components/schemas/Document-Attachment-ID'
+        sourceId:
+          type: string
+          readOnly: true
+          description: The source from which specific information was sourced. This is a link to an informationSource object in the informationSources map.
+        createdAt:
+          type: string
+          readOnly: true
+          format: date-time
+          description: The date and time the attachment was created. This is not the date of the attached document, which should be in the idIssued attribute of the document that owns this attachment.
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+          description: The date and time the attachment was last updated. This is not the date of the attached document, which should be in the idIssued attribute of the document that owns this attachment.
+        filename:
+          type: string
+          description: If you are uploading a file where it is important to keep the original filename, you can provide it here. Otherwise, the Frankie service will assign an arbitrary name based on the attachmentId and an extension based on the MIME type.
+        mimeType:
+          type: string
+          description: The standard MIME type of the file being uploaded. This will be verified, but providing it can help speed up processing.
+        pageNumber:
+          type: integer
+          description: If uploading multiple pages, this can be used to track page numbers. There is no enforcement of these numbers. You can have multiple page 1's or a page 29 if you wish.
+        side:
+          $ref: '#/components/schemas/Document-Attachment-Side'
+        type:
+          $ref: '#/components/schemas/Document-Attachment-Type'
+        location:
+          description: Reference to where the data can be retrieved from.
+          type: string
+        data:
+          $ref: '#/components/schemas/Data-URI-Base64'
+        lastMalwareScanAt:
+          type: string
+          format: date-time
+        retrievalStatus:
+          $ref: '#/components/schemas/Document-Attachment-Retrieval-Status'
+    Document-Information:
+      type: object
+      required:
+      - type
+      - country
+      properties:
+        documentId:
+          $ref: '#/components/schemas/Document-ID'
+        entityId:
+          $ref: '#/components/schemas/Entity-ID'
+        expiryDate:
+          $ref: '#/components/schemas/Date'
+          description: The expiry date of the document in YYYY-MM-DD format.
+        issueDate:
+          $ref: '#/components/schemas/Date'
+          description: The issue date of the document in YYYY-MM-DD format.
+        primaryIdentifier:
+          type: string
+          description: The primary ID number of the document, e.g., the ID number on a driver licence.
+          example: '000734130'
+        secondaryIdentifier:
+          type: string
+          description: The secondary ID number of the document, e.g., the card number on a driver licence.
+          example: P0001975
+        type:
+          $ref: '#/components/schemas/Document-Type'
+        subtype:
+          type: string
+          description: The sub-type of the document, if relevant. This can include specific report or attestation types, e.g., FACIAL_COMPARISON (attestation) or KYC (report).
+          example: Photo Comparison
+        subdivision:
+          type: string
+          description: The abbreviated ISO 3166 subdivision/region where the ID was issued, e.g., "VIC" for the Australian state of Victoria or "MA" for the US state of Massachusetts.
+          example: VIC
+        country:
+          type: string
+          maxLength: 3
+          description: 'The ISO 3166 alpha-3 country code where the document was issued, if relevant.
+
+            For more information, please refer to: https://en.wikipedia.org/wiki/List_of_ISO_3166_country_codes'
+          example: AUS
+        createdAt:
+          type: string
+          format: date-time
+          description: The date and time when the document record was created, in ISO 8601 format.
+          example: '2024-01-15T02:18:11.365Z'
+          readOnly: true
+        updatedAt:
+          type: string
+          format: date-time
+          description: The date and time when the document record was last updated, in ISO 8601 format.
+          example: '2025-01-16T02:18:11.365Z'
+          readOnly: true
+        validFrom:
+          $ref: '#/components/schemas/Date'
+          description: The date when the validity period for this document began, if applicable.
+        validTo:
+          $ref: '#/components/schemas/Date'
+          description: The date when the validity period for this document ended, if applicable.
+        sourceId:
+          type: string
+          description: The source from which specific information was sourced. This is a link to an informationSource object in the informationSources map.
+          example: 324f15f64-5717-4562-b3fc-2c963f66ffa1
+          readOnly: true
+        supplementaryData:
+          $ref: '#/components/schemas/Document-Supplementary-Data'
+        customAttributes:
+          $ref: '#/components/schemas/Custom-Attributes'
+        attachments:
+          type: array
+          description: 'List of scans, pages, or files for a single document, e.g., front and back images of a driver licence, or page 1, 2, and 3 of a supporting document.
+
+
+            Attachments can be uploaded in a single call or in multiple calls. To upload attachments over multiple calls, include the documentId in the request.'
+          items:
+            $ref: '#/components/schemas/Document-Attachment'
+    Document-Supplementary-Data-Citizenship:
+      type: object
+      description: Supplementary information relevant to a citizenship certificate.
+      allOf:
+      - $ref: '#/components/schemas/Document-Supplementary-Data-Base'
+      - type: object
+        description: Supplementary information relevant to a citizenship certificate.
+        properties:
+          acquisitionDate:
+            type: string
+            description: The date citizenship was acquired.
+            example: 2000/01/01
+          primaryCountry:
+            type: string
+            description: The primary country of citizenship, represented by its three-letter ISO 3166-1 alpha-3 code.
+            example: USA
+          secondaryCountry:
+            type: string
+            description: The secondary country of citizenship, if applicable, represented by its three-letter ISO 3166-1 alpha-3 code.
+            example: CAN
+    Document-Type:
+      type: string
+      enum:
+      - OTHER
+      - DRIVERS_LICENSE
+      - PASSPORT
+      - VISA
+      - IMMIGRATION
+      - NATIONAL_ID
+      - TAX_ID
+      - NATIONAL_HEALTH_ID
+      - CONCESSION
+      - HEALTH_CONCESSION
+      - PENSION
+      - MILITARY_ID
+      - BIRTH_CERT
+      - CITIZENSHIP
+      - MARRIAGE_CERT
+      - DEATH_CERT
+      - NAME_CHANGE
+      - UTILITY_BILL
+      - BANK_STATEMENT
+      - BANK_ACCOUNT
+      - INTENT_PROOF
+      - ATTESTATION
+      - SELF_IMAGE
+      - DEVICE
+      - VEHICLE_REGISTRATION
+      - PROOF_OF_ADDRESS
+      - HOUSE_REGISTRATION
+      - YELLOW_HOUSE_REGISTRATION
+      - WORK_PERMIT
+      - EMPLOYMENT_CERTIFICATE
+      - NOTARY_PUBLIC_ID
+      - EXTERNAL_ADMIN
+      - CHARGES
+      - PRE_ASIC
+      - ANNUAL_RETURN
+      - REPORT
+      - TRUST_DEED
+      - PARTNERSHIP_AGREEMENT
+      - ADMIN_CHANGE
+      - COMPANY_REPORT
+      - CHECK_RESULTS
+      - AVIATION_SECURITY_ID
+      - MARITIME_SECURITY_ID
+      description: "Valid document ID types.\n\n  - \"OTHER\": Generic document type. Unspecified.\n  - \"DRIVERS_LICENSE\": Driver's license.\n  - \"PASSPORT\": Passport.\n  - \"VISA\": Visa document (not Visa payment card).\n  - \"IMMIGRATION\": Immigration card.\n  - \"NATIONAL_ID\": Any national ID card.\n  - \"TAX_ID\": Any national tax identifier.\n  - \"NATIONAL_HEALTH_ID\": Any national health program ID card (e.g., Medicare, NHS).\n  - \"CONCESSION\": State-issued concession card.\n  - \"HEALTH_CONCESSION\": State-issued health-specific concession card.\n  - \"PENSION\": State-issued pension ID.\n  - \"MILITARY_ID\": Military ID.\n  - \"BIRTH_CERT\": Birth certificate.\n  - \"CITIZENSHIP\": Citizenship certificate.\n  - \"MARRIAGE_CERT\": Marriage certificate.\n  - \"DEATH_CERT\": Death certificate.\n  - \"NAME_CHANGE\": Name change confirmation.\n  - \"UTILITY_BILL\": Regulated utility bill, such as electricity, gas, etc.\n  - \"BANK_STATEMENT\": Bank/card statement.\n  - \"BANK_ACCOUNT\": Bank account.\n  - \"INTENT_PROOF\": Proof of intent, generally a photo/video or a scanned letter.\n  - \"ATTESTATION\": Document of attestation (e.g., Statutory Declaration).\n\n  NOTE: These cannot be used as a supporting document:\n  - \"SELF_IMAGE\": A \"selfie\" used for comparisons.\n  - \"DEVICE\": Device ID.\n  - \"VEHICLE_REGISTRATION\": Vehicle registration number.\n  - \"PROOF_OF_ADDRESS\": Any document that provides proof of address.\n  - \"HOUSE_REGISTRATION\": House registration document.\n  - \"YELLOW_HOUSE_REGISTRATION\": Yellow House Registration Thor Ror 13.\n  - \"WORK_PERMIT\": Work permit.\n  - \"EMPLOYMENT_CERTIFICATE\": Certificate of employment.\n  - \"NOTARY_PUBLIC_ID\": Notary Public Identification.\n\n  Business-related documentation:\n\n  - \"EXTERNAL_ADMIN\": Details of appointed administrator.\n  - \"CHARGES\": Details of any charges laid against a company or director.\n  - \"PRE_ASIC\": Any documents that are Pre-ASIC.\n  - \"ANNUAL_RETURN\": Details of a company's annual return.\n  - \"REPORT\": Frankie-generated report.\n  - \"TRUST_DEED\": Corporate trust deed.\n  - \"PARTNERSHIP_AGREEMENT\": Partnership agreement documents.\n  - \"ADMIN_CHANGE\": Change of administrator.\n  - \"COMPANY_REPORT\": Registry-filed company reports.\n\n  Special document types:\n\n  - \"CHECK_RESULTS\": Special document type for specifying results of checks completed other than through Frankie.\n  - \"AVIATION_SECURITY_ID\": Aviation Security Identification Card.\n  - \"MARITIME_SECURITY_ID\": Maritime Security Identification Card."
+    Document-Attachment-Side:
+      type: string
+      enum:
+      - FRONT
+      - BACK
+      description: Indicates whether the attachment is the front or back side of a document.
+    Data-URI-Base64:
+      description: A Base64-encoded string or URI representing the data.
+      oneOf:
+      - type: object
+        readOnly: true
+        required:
+        - uri
+        properties:
+          uri:
+            type: string
+            description: URI identifying the resource location.
+            example: https://s3.amazonaws.com/dev/41963bc5feff322020137de233c3be0fac6/croppedFrontID/38d54232-b840-431d-b248-152345fe214.jpg
+      - type: object
+        required:
+        - base64
+        properties:
+          base64:
+            type: string
+            description: Base64-encoded string of the raw attachment data.
+            example: ZG9jdW1lbnQgaW1hZ2UgZ29lcyBoZXJl
+  parameters:
+    entityId:
+      name: entityId
+      in: path
+      schema:
+        type: string
+      description: Unique FrankieOne identifier for an entity
+      required: true
+    levelNoIdQuery:
+      name: level
+      in: query
+      schema:
+        type: string
+        default: meta
+        enum:
+        - meta
+        - base64
+      description: "Determines what level of detail to return in the response\n - meta: Return all metadata only, no links or base64 data\n - base64: Return all metadata and images as base64"
+    X-Frankie-Username:
+      name: X-Frankie-Username
+      in: header
+      description: Username provided by API caller
+      required: false
+      schema:
+        type: string
+        example: fred.flintstone@frankieone.com
+    X-Frankie-Channel:
+      name: X-Frankie-Channel
+      in: header
+      required: false
+      schema:
+        type: string
+      description: 'Open string that can be used to define the "channel" the request comes in from. It can potentially be used in routing and risk calculations upon request. Default values that can be used are:  api portal smartui Any alphanumeric string is supported though. Anything over 64 characters will be truncated.'
+    attachmentId:
+      name: attachmentId
+      in: path
+      schema:
+        type: string
+      required: true
+    levelQuery:
+      name: level
+      in: query
+      schema:
+        type: string
+        default: meta
+        enum:
+        - id
+        - meta
+        - base64
+      description: "Determines what level of detail to return in the response\n - id: Return just an id\n - meta: Return all metadata only, no links or base64 data\n - base64: Return all metadata and data in base64 format"
+    documentId:
+      name: documentId
+      in: path
+      schema:
+        type: string
+      description: Unique identifier for a document
+      required: true
+    X-Frankie-CustomerChildID:
+      name: X-Frankie-CustomerChildID
+      in: header
+      required: false
+      schema:
+        type: string
+        example: 87654321-4321-4321-4321-210987654321
+      description: Your Customer Child ID provided by FrankieOne
+    Api-Key:
+      name: api_key
+      in: header
+      schema:
+        type: string
+        example: 245c765b124a098d09ef8765....
+      description: Your API key provided by FrankieOne
+      required: true
+    X-Frankie-CustomerID:
+      name: X-Frankie-CustomerID
+      in: header
+      required: true
+      schema:
+        type: string
+        example: 12345678-1234-1234-1234-123456789012
+      description: Your Customer ID provided by FrankieOne
+  securitySchemes:
+    Api-Key:
+      type: apiKey
+      in: header
+      name: api_key
+      description: ''
+    jwt:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

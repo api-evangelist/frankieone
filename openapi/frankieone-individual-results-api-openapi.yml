@@ -1,0 +1,3566 @@
+openapi: 3.0.3
+info:
+  title: Core V2 Audit Individual Results API
+  version: 2.0.0
+  description: This is the APIs for V2 Core. It allows you to do common operations, such as read audit entries or get workflow lists.
+  contact:
+    name: FrankieOne
+    url: https://www.frankieone.com/
+    email: help@frankieone.com
+servers:
+- url: https://api.uat.frankie.one
+security:
+- Api-Key: []
+tags:
+- name: Individual Results
+  description: Manage results for individuals
+paths:
+  /v2/individuals/{entityId}/results/mkyc:
+    parameters:
+    - $ref: '#/components/parameters/entityId'
+    post:
+      summary: Approve Manual KYC for an individual
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  requestId:
+                    $ref: '#/components/schemas/Request-ID'
+                  processResults:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Process-Result-Object'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Invalid EntityId:
+                  value:
+                    errorCode: API-0400,
+                    errorMsg: 'Multiple Errors: See Issues list'
+                    details:
+                    - issue: 'entityId in path must be of type uuid: "test"'
+                      issueLocation: VALIDATE-entityId
+                    requestId: 01HM5XJ7VASZ3EJMB1VQGTBFJ4
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Invalid authentication:
+                  value:
+                    errorCode: AUTH-0002,
+                    errorMsg: Unauthorized
+                    details:
+                    - issue: Invalid Authentication provided. Access denied.
+                      issueLocation: request
+                    requestId: 00000000S6MNG7624K2TDXT1E3
+                No Api-Key:
+                  value:
+                    errorCode: AUTH-0401
+                    errorMsg: Unauthorized
+                    details:
+                    - issue: No api key provided. Access denied.
+                      issueLocation: request
+                    requestId: 00000001S6MNG7624K2TDXT1E3
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Manual-KYC'
+      operationId: manualKYC
+      description: "Approve manual KYC (mKYC) for an individual as to allow them to pass all KYC workflow steps without performing eKYC. To ensure there is enough evidence for the mKYC process to be valid, the individual will need to have documents that match at least one of the following combinations:\n\n1 Primary Photographic ID e.g. \n  - \"DRIVERS_LICENSE\": Driver's license.\n  - \"PASSPORT\": Passport\n\n2 Primary Non-Photographic IDs e.g.\n  - \"BIRTH_CERT\": Birth certificate\n  - \"CITIZENSHIP\": Citizenship certificate\n\n1 Primary Non-Photographic ID AND 1 Secondary ID e.g.\n  - \"VISA\": Visa document (not Visa payment card)\n  - \"IMMIGRATION\": Immigration card\n  - \"NATIONAL_HEALTH_ID\": Any national health program ID card (e.g. Medicare, NHS)\n  - \"NAME_CHANGE\": Name change confirmation\n  - \"MARRIAGE_CERT\": Marriage certificate\n"
+      parameters:
+      - $ref: '#/components/parameters/Api-Key'
+      - $ref: '#/components/parameters/X-Frankie-CustomerID'
+      - $ref: '#/components/parameters/X-Frankie-CustomerChildID'
+      - $ref: '#/components/parameters/X-Frankie-Channel'
+      - $ref: '#/components/parameters/X-Frankie-Username'
+      tags:
+      - Individual Results
+      security:
+      - Api-Key: []
+      - jwt:
+        - kyc:api
+  /v2/individuals/{entityId}/results/mkyc/invalidate:
+    parameters:
+    - $ref: '#/components/parameters/entityId'
+    post:
+      summary: Invalidate any Manual KYC evidences of an individual
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  requestId:
+                    $ref: '#/components/schemas/Request-ID'
+                  processResults:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Process-Result-Object'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Invalid EntityId:
+                  value:
+                    errorCode: API-0400,
+                    errorMsg: 'Multiple Errors: See Issues list'
+                    details:
+                    - issue: 'entityId in path must be of type uuid: "test"'
+                      issueLocation: VALIDATE-entityId
+                    requestId: 01HM5XJ7VASZ3EJMB1VQGTBFJ4
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Invalid authentication:
+                  value:
+                    errorCode: AUTH-0002,
+                    errorMsg: Unauthorized
+                    details:
+                    - issue: Invalid Authentication provided. Access denied.
+                      issueLocation: request
+                    requestId: 00000000S6MNG7624K2TDXT1E3
+                No Api-Key:
+                  value:
+                    errorCode: AUTH-0401
+                    errorMsg: Unauthorized
+                    details:
+                    - issue: No api key provided. Access denied.
+                      issueLocation: request
+                    requestId: 00000001S6MNG7624K2TDXT1E3
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      operationId: manualKYCinvalidation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                comment:
+                  $ref: '#/components/schemas/Comment'
+      description: Invalidate any Manual KYC evidences of an individual. This will force the entity to be verified by eKYC processes when KYC verification is next run. Only invalidate mKYC evidences if manual KYC evidences had previously been supplied for this entity.
+      parameters:
+      - $ref: '#/components/parameters/Api-Key'
+      - $ref: '#/components/parameters/X-Frankie-CustomerID'
+      - $ref: '#/components/parameters/X-Frankie-CustomerChildID'
+      - $ref: '#/components/parameters/X-Frankie-Channel'
+      - $ref: '#/components/parameters/X-Frankie-Username'
+      tags:
+      - Individual Results
+      security:
+      - Api-Key: []
+      - jwt:
+        - kyc:api
+  /v2/individuals/{entityId}/results/aml:
+    parameters:
+    - $ref: '#/components/parameters/entityId'
+    patch:
+      summary: Update the status of AML process results
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  requestId:
+                    $ref: '#/components/schemas/Request-ID'
+                  processResults:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Process-Result-Object'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Invalid EntityId:
+                  value:
+                    errorCode: API-0400,
+                    errorMsg: 'Multiple Errors: See Issues list'
+                    details:
+                    - issue: 'entityId in path must be of type uuid: "test"'
+                      issueLocation: VALIDATE-entityId
+                    requestId: 01HM5XJ7VASZ3EJMB1VQGTBFJ4
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Invalid authentication:
+                  value:
+                    errorCode: AUTH-0002,
+                    errorMsg: Unauthorized
+                    details:
+                    - issue: Invalid Authentication provided. Access denied.
+                      issueLocation: request
+                    requestId: 00000000S6MNG7624K2TDXT1E3
+                No Api-Key:
+                  value:
+                    errorCode: AUTH-0401
+                    errorMsg: Unauthorized
+                    details:
+                    - issue: No api key provided. Access denied.
+                      issueLocation: request
+                    requestId: 00000001S6MNG7624K2TDXT1E3
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                processResults:
+                  type: array
+                  items:
+                    type: string
+                    format: UUID
+                manualStatus:
+                  $ref: '#/components/schemas/Process-Result-Manual-StatusEnum-AML'
+                comment:
+                  $ref: '#/components/schemas/Comment'
+      operationId: updateAML
+      description: Update the status of a set of AML process results.
+      parameters:
+      - $ref: '#/components/parameters/Api-Key'
+      - $ref: '#/components/parameters/X-Frankie-CustomerID'
+      - $ref: '#/components/parameters/X-Frankie-CustomerChildID'
+      - $ref: '#/components/parameters/X-Frankie-Channel'
+      - $ref: '#/components/parameters/X-Frankie-Username'
+      tags:
+      - Individual Results
+      security:
+      - Api-Key: []
+      - jwt:
+        - kyc:api
+  /v2/individuals/{entityId}/results/idv:
+    parameters:
+    - $ref: '#/components/parameters/entityId'
+    patch:
+      summary: Update the status of IDV process results
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  requestId:
+                    $ref: '#/components/schemas/Request-ID'
+                  processResults:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Process-Result-Object'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Invalid EntityId:
+                  value:
+                    errorCode: API-0400,
+                    errorMsg: 'Multiple Errors: See Issues list'
+                    details:
+                    - issue: 'entityId in path must be of type uuid: "test"'
+                      issueLocation: VALIDATE-entityId
+                    requestId: 01HM5XJ7VASZ3EJMB1VQGTBFJ4
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Invalid authentication:
+                  value:
+                    errorCode: AUTH-0002,
+                    errorMsg: Unauthorized
+                    details:
+                    - issue: Invalid Authentication provided. Access denied.
+                      issueLocation: request
+                    requestId: 00000000S6MNG7624K2TDXT1E3
+                No Api-Key:
+                  value:
+                    errorCode: AUTH-0401
+                    errorMsg: Unauthorized
+                    details:
+                    - issue: No api key provided. Access denied.
+                      issueLocation: request
+                    requestId: 00000001S6MNG7624K2TDXT1E3
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                processResults:
+                  type: array
+                  items:
+                    type: string
+                    format: UUID
+                manualStatus:
+                  $ref: '#/components/schemas/Process-Result-Manual-StatusEnum-IDV'
+                comment:
+                  $ref: '#/components/schemas/Comment'
+      operationId: updateIDV
+      description: Update the status of a set of IDV process results.
+      parameters:
+      - $ref: '#/components/parameters/Api-Key'
+      - $ref: '#/components/parameters/X-Frankie-CustomerID'
+      - $ref: '#/components/parameters/X-Frankie-CustomerChildID'
+      - $ref: '#/components/parameters/X-Frankie-Channel'
+      - $ref: '#/components/parameters/X-Frankie-Username'
+      tags:
+      - Individual Results
+      security:
+      - Api-Key: []
+      - jwt:
+        - kyc:api
+  /v2/individuals/{entityId}/results/matchlist:
+    parameters:
+    - $ref: '#/components/parameters/entityId'
+    patch:
+      summary: Update the status of Matchlist process results
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  requestId:
+                    $ref: '#/components/schemas/Request-ID'
+                  processResults:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Process-Result-Object'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Invalid EntityId:
+                  value:
+                    errorCode: API-0400,
+                    errorMsg: 'Multiple Errors: See Issues list'
+                    details:
+                    - issue: 'entityId in path must be of type uuid: "test"'
+                      issueLocation: VALIDATE-entityId
+                    requestId: 01HM5XJ7VASZ3EJMB1VQGTBFJ4
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Invalid authentication:
+                  value:
+                    errorCode: AUTH-0002,
+                    errorMsg: Unauthorized
+                    details:
+                    - issue: Invalid Authentication provided. Access denied.
+                      issueLocation: request
+                    requestId: 00000000S6MNG7624K2TDXT1E3
+                No Api-Key:
+                  value:
+                    errorCode: AUTH-0401
+                    errorMsg: Unauthorized
+                    details:
+                    - issue: No api key provided. Access denied.
+                      issueLocation: request
+                    requestId: 00000001S6MNG7624K2TDXT1E3
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                processResults:
+                  description: The process result IDs to update. These are the PROs created when a match has been found.
+                  type: array
+                  items:
+                    type: string
+                    format: UUID
+                manualStatus:
+                  $ref: '#/components/schemas/Process-Result-Manual-StatusEnum-Matchlist'
+                comment:
+                  $ref: '#/components/schemas/Comment'
+      operationId: updateMatches
+      description: Update the status of a set of Matchlist process results.
+      parameters:
+      - $ref: '#/components/parameters/Api-Key'
+      - $ref: '#/components/parameters/X-Frankie-CustomerID'
+      - $ref: '#/components/parameters/X-Frankie-CustomerChildID'
+      - $ref: '#/components/parameters/X-Frankie-Channel'
+      - $ref: '#/components/parameters/X-Frankie-Username'
+      tags:
+      - Individual Results
+      security:
+      - Api-Key: []
+      - jwt:
+        - kyc:api
+  /v2/individuals/{entityId}/results/duplicate:
+    parameters:
+    - $ref: '#/components/parameters/entityId'
+    patch:
+      summary: Update the status of Duplicate process results
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  requestId:
+                    $ref: '#/components/schemas/Request-ID'
+                  processResults:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Process-Result-Object'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Invalid EntityId:
+                  value:
+                    errorCode: API-0400,
+                    errorMsg: 'Multiple Errors: See Issues list'
+                    details:
+                    - issue: 'entityId in path must be of type uuid: "test"'
+                      issueLocation: VALIDATE-entityId
+                    requestId: 01HM5XJ7VASZ3EJMB1VQGTBFJ4
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Invalid authentication:
+                  value:
+                    errorCode: AUTH-0002,
+                    errorMsg: Unauthorized
+                    details:
+                    - issue: Invalid Authentication provided. Access denied.
+                      issueLocation: request
+                    requestId: 00000000S6MNG7624K2TDXT1E3
+                No Api-Key:
+                  value:
+                    errorCode: AUTH-0401
+                    errorMsg: Unauthorized
+                    details:
+                    - issue: No api key provided. Access denied.
+                      issueLocation: request
+                    requestId: 00000001S6MNG7624K2TDXT1E3
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                processResults:
+                  description: The process result IDs to update. These are the PROs created when a duplicate has been found.
+                  type: array
+                  items:
+                    type: string
+                    format: UUID
+                manualStatus:
+                  $ref: '#/components/schemas/Process-Result-Manual-StatusEnum-Duplicate'
+                comment:
+                  $ref: '#/components/schemas/Comment'
+      operationId: updateDuplicate
+      description: "Update the status of a set of Duplicate process results.\nThe request body supports batch processing of duplicate results with the following components:\n- processResults: Array of UUID strings identifying specific duplicate Process Results to update - manualStatus: The resolution status for the duplicates, which can be one of:\n  * FALSE_POSITIVE: When the flagged entities are determined to be different individuals (both records should be kept)\n  * TRUE_POSITIVE_ACCEPT: Keep the current entity as primary and mark the result entity as duplicate (use when current record is more complete/accurate)\n  * TRUE_POSITIVE_REJECT: Keep the result entity as primary and mark the current entity as duplicate (use when duplicate record is more complete/accurate)\n- comment: Optional documentation for the decision rationale, useful for audit trails and team communication"
+      parameters:
+      - $ref: '#/components/parameters/Api-Key'
+      - $ref: '#/components/parameters/X-Frankie-CustomerID'
+      - $ref: '#/components/parameters/X-Frankie-CustomerChildID'
+      - $ref: '#/components/parameters/X-Frankie-Channel'
+      - $ref: '#/components/parameters/X-Frankie-Username'
+      tags:
+      - Individual Results
+      security:
+      - Api-Key: []
+      - jwt:
+        - kyc:api
+  /v2/individuals/{entityId}/results/fraud:
+    parameters:
+    - $ref: '#/components/parameters/entityId'
+    patch:
+      summary: Update the status of Fraud process results
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/individual_pro_fraud_res'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Invalid EntityId:
+                  value:
+                    errorCode: API-0400,
+                    errorMsg: 'Multiple Errors: See Issues list'
+                    details:
+                    - issue: 'entityId in path must be of type uuid: "test"'
+                      issueLocation: VALIDATE-entityId
+                    requestId: 01HM5XJ7VASZ3EJMB1VQGTBFJ4
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Invalid authentication:
+                  value:
+                    errorCode: AUTH-0002,
+                    errorMsg: Unauthorized
+                    details:
+                    - issue: Invalid Authentication provided. Access denied.
+                      issueLocation: request
+                    requestId: 00000000S6MNG7624K2TDXT1E3
+                No Api-Key:
+                  value:
+                    errorCode: AUTH-0401
+                    errorMsg: Unauthorized
+                    details:
+                    - issue: No api key provided. Access denied.
+                      issueLocation: request
+                    requestId: 00000001S6MNG7624K2TDXT1E3
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/individual_pro_fraud_req'
+      operationId: updateFraud
+      description: "Update the status of a set of Fraud process results.\nThe request body supports batch processing of fraud results with the following components:\n- processResults: Array of UUID strings identifying specific fraud Process Results to update - manualStatus: The resolution status for the fraud, which can be one of:\n  * FALSE_POSITIVE: When the result is determined to be false positive.\n  * TRUE_POSITIVE: When the result is determined to be true positive.\n  * UNKNOWN: When the result is still being evaluated and you do not yet want to resolve it.\n- comment: Optional documentation for the decision rationale, useful for audit trails and team communication"
+      parameters:
+      - $ref: '#/components/parameters/Api-Key'
+      - $ref: '#/components/parameters/X-Frankie-CustomerID'
+      - $ref: '#/components/parameters/X-Frankie-CustomerChildID'
+      - $ref: '#/components/parameters/X-Frankie-Channel'
+      - $ref: '#/components/parameters/X-Frankie-Username'
+      tags:
+      - Individual Results
+      security:
+      - Api-Key: []
+      - jwt:
+        - kyc:api
+  /v2/individuals/{entityId}/results:
+    parameters:
+    - $ref: '#/components/parameters/entityId'
+    get:
+      summary: Get a list of process results
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  meta:
+                    $ref: '#/components/schemas/List-Operation-Meta'
+                  requestId:
+                    $ref: '#/components/schemas/Request-ID'
+                  processResults:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Process-Result-Object'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Invalid EntityId:
+                  value:
+                    errorCode: API-0400,
+                    errorMsg: 'Multiple Errors: See Issues list'
+                    details:
+                    - issue: 'entityId in path must be of type uuid: "test"'
+                      issueLocation: VALIDATE-entityId
+                    requestId: 01HM5XJ7VASZ3EJMB1VQGTBFJ4
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Invalid authentication:
+                  value:
+                    errorCode: AUTH-0002,
+                    errorMsg: Unauthorized
+                    details:
+                    - issue: Invalid Authentication provided. Access denied.
+                      issueLocation: request
+                    requestId: 00000000S6MNG7624K2TDXT1E3
+                No Api-Key:
+                  value:
+                    errorCode: AUTH-0401
+                    errorMsg: Unauthorized
+                    details:
+                    - issue: No api key provided. Access denied.
+                      issueLocation: request
+                    requestId: 00000001S6MNG7624K2TDXT1E3
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      operationId: getAllPROs
+      description: Get a list of process results for a given individual entity
+      parameters:
+      - $ref: '#/components/parameters/Api-Key'
+      - $ref: '#/components/parameters/X-Frankie-CustomerID'
+      - $ref: '#/components/parameters/X-Frankie-CustomerChildID'
+      - $ref: '#/components/parameters/X-Frankie-Channel'
+      - $ref: '#/components/parameters/X-Frankie-Username'
+      - $ref: '#/components/parameters/profileNameQuery'
+      - $ref: '#/components/parameters/entityId'
+      - $ref: '#/components/parameters/createdAtBefore'
+      - $ref: '#/components/parameters/createdAtAfter'
+      - $ref: '#/components/parameters/updatedAtBefore'
+      - $ref: '#/components/parameters/updatedAtAfter'
+      - $ref: '#/components/parameters/stepNames'
+      - $ref: '#/components/parameters/stepTypes'
+      - $ref: '#/components/parameters/objectTypes'
+      - $ref: '#/components/parameters/classes'
+      - $ref: '#/components/parameters/systemStatuses'
+      - $ref: '#/components/parameters/manualStatuses'
+      - $ref: '#/components/parameters/states'
+      - $ref: '#/components/parameters/results'
+      - $ref: '#/components/parameters/sortFields'
+      - $ref: '#/components/parameters/sort'
+      - $ref: '#/components/parameters/page'
+      - $ref: '#/components/parameters/limit'
+      tags:
+      - Individual Results
+      security:
+      - Api-Key: []
+      - jwt:
+        - kyc:api
+components:
+  parameters:
+    systemStatuses:
+      name: systemStatuses
+      in: query
+      style: form
+      explode: false
+      schema:
+        type: array
+        items:
+          type: string
+      description: 'List of systemStatus values to filter results with
+
+        Available values : VALID, EXPIRED, STALE, MARKED_INVALID, MARKED_IGNORE'
+    entityId:
+      name: entityId
+      in: path
+      schema:
+        type: string
+      description: Unique FrankieOne identifier for an entity
+      required: true
+    X-Frankie-Username:
+      name: X-Frankie-Username
+      in: header
+      description: Username provided by API caller
+      required: false
+      schema:
+        type: string
+        example: fred.flintstone@frankieone.com
+    stepTypes:
+      name: stepTypes
+      in: query
+      style: form
+      explode: false
+      schema:
+        type: array
+        items:
+          type: string
+      description: A list of stepTypes the Process Result is associated with
+    X-Frankie-CustomerChildID:
+      name: X-Frankie-CustomerChildID
+      in: header
+      required: false
+      schema:
+        type: string
+        example: 87654321-4321-4321-4321-210987654321
+      description: Your Customer Child ID provided by FrankieOne
+    createdAtBefore:
+      name: createdAtBefore
+      in: query
+      schema:
+        type: string
+        format: date-time
+      description: Filter on the createdAt field, results returned are based on being before the value (inclusively)
+      example: '2024-02-29T02:15:04Z'
+    sortFields:
+      name: sortFields
+      in: query
+      style: form
+      explode: false
+      schema:
+        type: array
+        items:
+          type: string
+      description: 'List of fields that the Process Results will be filtered with
+
+        Available values : createdAt, updatedAt'
+    X-Frankie-Channel:
+      name: X-Frankie-Channel
+      in: header
+      required: false
+      schema:
+        type: string
+      description: 'Open string that can be used to define the "channel" the request comes in from. It can potentially be used in routing and risk calculations upon request. Default values that can be used are:  api portal smartui Any alphanumeric string is supported though. Anything over 64 characters will be truncated.'
+    page:
+      in: query
+      name: page
+      example: 2
+      schema:
+        type: integer
+      description: The page number that you want to retrieve for the list query
+    objectTypes:
+      name: objectTypes
+      in: query
+      style: form
+      explode: false
+      schema:
+        type: array
+        items:
+          type: string
+      description: List of objectTypes to filter upon
+    updatedAtBefore:
+      name: updatedAtBefore
+      in: query
+      schema:
+        type: string
+        format: date-time
+      description: Filter on the updatedAt field, results returned are based on being before the value (inclusively)
+      example: '2024-02-29T02:15:04Z'
+    classes:
+      name: classes
+      in: query
+      style: form
+      explode: false
+      schema:
+        type: array
+        items:
+          type: string
+      description: 'List of classes to filter results with Available values : KYC, ID, IDV, AML, FRAUDLIST, FRAUDCHECK, DEVICE, MOBILE, EMAIL, LOOKUP, CREATE, UPDATE, DELETE, MANUAL, ORGANIZATION_PROFILE, ORGANIZATION_OWNERSHIP'
+    manualStatuses:
+      name: manualStatuses
+      in: query
+      style: form
+      explode: false
+      schema:
+        type: array
+        items:
+          type: string
+        description: 'List of manualStatus fields to filter results with Available values : UNKNOWN, FALSE_POSITIVE, TRUE_POSITIVE, TRUE_POSITIVE_REJECT, TRUE_POSITIVE_ACCEPT, PASS, FAIL'
+    profileNameQuery:
+      name: profileName
+      in: query
+      schema:
+        type: string
+      description: The unique name of the service profile
+    results:
+      name: results
+      in: query
+      style: form
+      explode: false
+      schema:
+        type: array
+        items:
+          type: string
+      description: 'List of result value that the Process Result will be filtered with
+
+        Available values : MATCH, PARTIAL_MATCH, INVALID_MATCH, NO_MATCH, CLEAR, HIT, BAD_DATA, CREATED, UPDATED, DELETED, FAIL'
+    Api-Key:
+      name: api_key
+      in: header
+      schema:
+        type: string
+        example: 245c765b124a098d09ef8765....
+      description: Your API key provided by FrankieOne
+      required: true
+    limit:
+      in: query
+      name: limit
+      schema:
+        type: integer
+        minimum: 1
+        default: 20
+      example: 20
+      description: Limit the number of items that will be returned as part of the request
+    createdAtAfter:
+      name: createdAtAfter
+      in: query
+      schema:
+        type: string
+        format: date-time
+      description: Filter on the createdAt field, results returned are based on being after the value (inclusively)
+      example: '2024-02-29T02:15:04Z'
+    stepNames:
+      name: stepNames
+      in: query
+      style: form
+      explode: false
+      schema:
+        type: array
+        items:
+          type: string
+      description: List of steps to include, separated by a comma.
+    sort:
+      in: query
+      name: sort
+      schema:
+        type: string
+        enum:
+        - asc
+        - desc
+      description: Order of the sort fields will be sorted upon
+    updatedAtAfter:
+      name: updatedAtAfter
+      in: query
+      schema:
+        type: string
+        format: date-time
+      description: Filter on the updatedAt field, results returned are based on being before the value (inclusively)
+      example: '2024-02-29T02:15:04Z'
+    X-Frankie-CustomerID:
+      name: X-Frankie-CustomerID
+      in: header
+      required: true
+      schema:
+        type: string
+        example: 12345678-1234-1234-1234-123456789012
+      description: Your Customer ID provided by FrankieOne
+    states:
+      name: states
+      in: query
+      style: form
+      explode: false
+      schema:
+        type: array
+        items:
+          type: string
+      description: 'List of state values to filter results with
+
+        Available values : IN_PROGRESS, COMPLETED, TIMEOUT, ERROR'
+  schemas:
+    Session:
+      type: object
+      description: Session details for an activity, this is always scoped to a singular entity.
+      properties:
+        token:
+          type: string
+          description: A token to identify the specific session for the activity
+    Phone-Number-ID:
+      type: string
+      description: 'As phone numbers are added to an entity, they are assigned an ID to assist with tracking.
+
+        If you are adjusting phone numbers, you will need to include the ID to reference it correctly in the list.'
+      example: ad165f64-5717-4562-b3fc-2c963f66bfa9
+    Supplementary-Data-Activity-Device:
+      type: object
+      description: 'Defines the details of an activity device result.
+
+        '
+      allOf:
+      - $ref: '#/components/schemas/Supplementary-Data-Base'
+      - type: object
+        properties:
+          riskLevel:
+            type: string
+          activityResults:
+            type: array
+            items:
+              $ref: '#/components/schemas/Supplementary-Data-Activity-Result-Detail'
+    Process-ResultEnum:
+      type: string
+      enum:
+      - MATCH
+      - PARTIAL_MATCH
+      - INVALID_MATCH
+      - NO_MATCH
+      - CLEAR
+      - HIT
+      - BAD_DATA
+      - CREATED
+      - UPDATED
+      - DELETED
+      - FAIL
+      - NOT_APPLICABLE
+      - SUSPECTED
+      - REJECTED
+      - MANUAL
+      - CLEAR_AUTO
+      - OVERRIDE
+      readOnly: true
+      description: 'The actual pass/fail result of the element check
+
+        - MATCH: The element check matched the expected criteria.
+
+        - PARTIAL_MATCH: The element check partially matched the expected criteria.
+
+        - INVALID_MATCH: The element check matched but was invalid.
+
+        - NO_MATCH: The element check did not match the expected criteria.
+
+        - CLEAR: The element check was cleared.
+
+        - HIT: The element check hit a specific condition or threshold.
+
+        - BAD_DATA: The element check encountered bad data.
+
+        - CREATED: The element check resulted in the creation of a new record.
+
+        - UPDATED: The element check resulted in the update of an existing record.
+
+        - DELETED: The element check resulted in the deletion of a record.
+
+        - FAIL: The element check failed.
+
+        - NOT_APPLICABLE: The element check was not applicable in the given context.
+
+        - SUSPECTED: The element check raised a suspicion but did not confirm it.
+
+        - REJECTED: The element check was rejected.
+
+        - MANUAL: The element check was manually reviewed or processed.
+
+        - CLEAR_AUTO: The element check was cleared automatically.
+
+        - OVERRIDE: The element check was overridden by a manual action or system rule.
+
+        '
+    Supplementary-Data-Matchlist:
+      type: object
+      description: 'Each match against a matchlist entry generates a PRO (Process Result Object), and this object describes the details of the matched entry.
+
+        '
+      allOf:
+      - $ref: '#/components/schemas/Supplementary-Data-Base'
+      - $ref: '#/components/schemas/Matchlist-Entry-Base'
+      - type: object
+        properties:
+          matchlistId:
+            type: string
+            format: uuid
+            description: Unique identifier for the matchlist.
+          matchlistName:
+            type: string
+            description: Unique name of the matchlist.
+          matchlistAction:
+            $ref: '#/components/schemas/Matchlist-Action'
+          confidence:
+            $ref: '#/components/schemas/Search-Confidence'
+          matchedFields:
+            type: array
+            items:
+              $ref: '#/components/schemas/Supplementary-Data-Matchlist-Field'
+    Supplementary-Data-AML-SanctionsData:
+      type: object
+      description: 'Contains sanction information about a specific matched entity.
+
+        '
+      properties:
+        countryCode:
+          type: string
+          description: 'The ISO 3166-1 alpha-3 country code where the sanction entry was recorded.
+
+            '
+        countryName:
+          type: string
+          description: 'The ISO 3166 country name where the sanction entry was recorded.
+
+            '
+        sourceName:
+          type: string
+          description: 'The source of the sanction entry data.
+
+            '
+        sourceUrl:
+          type: string
+          format: uri
+          description: 'The URL where the original sanction information can be found.
+
+            '
+        sourceReason:
+          type: string
+          description: 'The reason provided for sanctioning the individual or organization.
+
+            '
+        listingStart:
+          type: string
+          description: 'The date when the listing started. Will attempt to use ISO 8601 date format; otherwise, the format supplied by the source.
+
+            '
+        listingEnd:
+          type: string
+          description: 'The date when the listing ended (if available or known). Will attempt to use ISO 8601 date format; otherwise, the format supplied by the source.
+
+            '
+        imageUrl:
+          type: string
+          format: uri
+          description: 'Optional URL of an image of the person or company logo of the sanctioned entity.
+
+            '
+        referenceDocs:
+          type: array
+          items:
+            $ref: '#/components/schemas/Supplementary-Data-AML-ReferenceDocs'
+        additionalData:
+          type: array
+          items:
+            $ref: '#/components/schemas/Supplementary-Data-AML-AdditionalData'
+    Supplementary-Data-Activity-AML:
+      type: object
+      description: 'Provides details of an activity Anti-Money Laundering (AML) result.
+
+        '
+      allOf:
+      - $ref: '#/components/schemas/Supplementary-Data-Base'
+      - type: object
+        properties:
+          riskLevel:
+            type: string
+            description: Indicates the assessed risk level for the activity.
+          activityResults:
+            type: array
+            description: A list of detailed results for the activity AML check.
+            items:
+              $ref: '#/components/schemas/Supplementary-Data-Activity-Result-Detail'
+    Supplementary-Data-Fraud-IP-Address:
+      type: object
+      description: 'Defines the details of a single IP address fraud check.
+
+        '
+      allOf:
+      - $ref: '#/components/schemas/Supplementary-Data-Base'
+      - $ref: '#/components/schemas/Supplementary-Data-Fraud-IP-Address-Data'
+    Process-Result-Manual-StatusEnum-AML:
+      type: string
+      enum:
+      - TRUE_POSITIVE
+      - FALSE_POSITIVE
+      - TRUE_POSITIVE_ACCEPT
+      - TRUE_POSITIVE_REJECT
+      - UNKNOWN
+      - UNKNOWN_ACCEPT
+      - UNKNOWN_REJECT
+      description: 'The manual status that the AML process result should be set to after the results have been reviewed.
+
+        - FALSE_POSITIVE: The result is determined to be a false positive, but you do not necessarily want to resolve it.
+
+        - FALSE_POSITIVE_ACCEPT: The result is determined to be a false positive and you want to resolve it. "Accept" infers you want to accept the activity.
+
+        - TRUE_POSITIVE: The result is determined to be a true positive, but you do not necessarily want to resolve it.
+
+        - TRUE_POSITIVE_REJECT: The result is determined to be a true positive and you want to resolve it. "Reject" infers you want to reject the activity.
+
+        - UNKNOWN: The result is determined to be unknown, but you do not necessarily want to resolve it.
+
+        - UNKNOWN_ACCEPT: The result is determined to be unknown and you want to resolve it. "Accept" infers you want to accept the activity.
+
+        - UNKNOWN_REJECT: The result is determined to be unknown and you want to resolve it. "Reject" infers you want to reject the activity.
+
+        '
+    Likelihood:
+      type: string
+      description: 'Likelihood of a particular scenario
+
+        '
+      enum:
+      - LOW
+      - MEDIUM
+      - HIGH
+      - VERY_HIGH
+      - UNKNOWN
+    Supplementary-Data-AML-WatchlistData:
+      type: object
+      description: 'Contains non-PEP/non-sanction watchlist and other source information about a specific matched entity.
+
+        '
+      properties:
+        countryCode:
+          type: string
+          description: 'The ISO 3166-1 alpha-3 country code where the watchlist entry was recorded.
+
+            '
+        countryName:
+          type: string
+          description: 'The ISO 3166 country name where the watchlist entry was recorded.
+
+            '
+        sourceName:
+          type: string
+          description: 'The source of the watchlist entry data.
+
+            '
+        sourceUrl:
+          type: string
+          format: uri
+          description: 'The URL where the original watchlist information can be found.
+
+            '
+        sourceReason:
+          type: string
+          description: 'The reason provided for adding the individual or organization to the watchlist.
+
+            '
+        listingStart:
+          type: string
+          description: 'The date when the listing started. Will attempt to use ISO 8601 date format; otherwise, the format supplied by the source.
+
+            '
+        listingEnd:
+          type: string
+          description: 'The date when the listing ended (if available or known). Will attempt to use ISO 8601 date format; otherwise, the format supplied by the source.
+
+            '
+        imageUrl:
+          type: string
+          format: uri
+          description: 'Optional URL of an image of the person or company logo of the entity on this list.
+
+            '
+        referenceDocs:
+          type: array
+          items:
+            $ref: '#/components/schemas/Supplementary-Data-AML-ReferenceDocs'
+        additionalData:
+          type: array
+          items:
+            $ref: '#/components/schemas/Supplementary-Data-AML-AdditionalData'
+    Issue:
+      type: object
+      properties:
+        issue:
+          type: string
+          description: Description of the issue.
+        issueLocation:
+          type: string
+          description: The location or context where the issue was identified.
+        issueType:
+          type: string
+          description: The type or category of the issue.
+    Process-Result-Manual-StatusEnum-Fraud:
+      type: string
+      enum:
+      - FALSE_POSITIVE_ACCEPT
+      - FALSE_POSITIVE_REJECT
+      - TRUE_POSITIVE_ACCEPT
+      - TRUE_POSITIVE_REJECT
+      description: 'The status that the fraud process result should be set to after the results have been reviewed.
+
+        - FALSE_POSITIVE_ACCEPT: When the result is determined to be false positive and it is an acceptable risk.
+
+        - FALSE_POSITIVE_REJECT: When the result is determined to be false positive and it is an unacceptable risk.
+
+        - TRUE_POSITIVE_ACCEPT: When the result is determined to be true positive and it is an acceptable risk.
+
+        - TRUE_POSITIVE_REJECT: When the result is determined to be true positive and it is an unacceptable risk.
+
+        '
+    Supplementary-Data-Activity-Result-Detail-Indicator:
+      type: object
+      properties:
+        indicatorId:
+          $ref: '#/components/schemas/Indicator-ID'
+        name:
+          type: string
+        value:
+          type: string
+        score:
+          type: string
+        rules:
+          type: array
+          items:
+            $ref: '#/components/schemas/Supplementary-Data-Activity-Result-Detail-Rule'
+    Supplementary-Data-Matchlist-Attribute:
+      type: object
+      description: 'Information about a matched attribute within a matched field.
+
+        '
+      required:
+      - type
+      - confidence
+      properties:
+        type:
+          $ref: '#/components/schemas/Matchlist-Entry-Attribute-Type'
+        confidence:
+          $ref: '#/components/schemas/Search-Confidence'
+          description: 'Confidence score for the attribute match.
+
+            '
+    Supplementary-Data-Fraud-Device-Data:
+      type: object
+      description: 'Provides details of a single fraud check for device and related device data.
+
+        '
+      properties:
+        device:
+          $ref: '#/components/schemas/Device'
+        session:
+          $ref: '#/components/schemas/Session-Data'
+        indicators:
+          type: array
+          items:
+            $ref: '#/components/schemas/Supplementary-Data-Activity-Result-Detail-Indicator'
+        riskLevel:
+          $ref: '#/components/schemas/Risk-Level'
+        reference:
+          $ref: '#/components/schemas/Result-Reference'
+    Request-ID:
+      type: string
+      example: 01HN9XHZN6MGXM9JXG50K59Q85
+      description: The unique request identifier for the API call made.
+    Supplementary-Data-KYC-Address-MatchStrengths:
+      type: object
+      properties:
+        fullAddress:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 100
+        streetNumber:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 100
+        streetName:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 100
+        streetType:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 100
+        streetAll:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 100
+        locality:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 100
+        district:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 100
+        subdivision:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 100
+        postalCode:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 100
+        country:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 100
+    Entity-ID:
+      type: string
+      description: 'Entities are assigned an auto-generated UUID to ensure global uniqueness, represented as entityId. The entityId allows for precise modification when required.
+
+        To modify an entity, set the entityId of the entity you wish to update in an update request.'
+      example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+      readOnly: true
+    Supplementary-Data-AML-ReferenceDocs:
+      type: object
+      description: 'Captures references to source documents or websites, including the URL and, where available, a description of the original source.
+
+        '
+      properties:
+        url:
+          type: string
+          format: uri
+          description: URL of any external reference document related to this matched entity.
+        description:
+          type: string
+          description: If a description of the document is provided, it will be included here.
+    Matchlist-Entry-Reason-Code:
+      type: string
+      description: The reason code for the matchlist entry. This code will be translated to a configured description string. Supported codes are 1 to 24 characters long, consisting only of uppercase letters (A-Z), digits (0-9), underscores (_), or hyphens (-), with no spaces or special characters.
+      pattern: ^[A-Z0-9_-]{1,24}$
+    Supplementary-Data-Fraud-Email-Address:
+      type: object
+      description: 'Defines the details of a single email fraud check.
+
+        '
+      allOf:
+      - $ref: '#/components/schemas/Supplementary-Data-Base'
+      - type: object
+        properties:
+          emailAddressId:
+            $ref: '#/components/schemas/Email-Address-ID'
+          riskLevel:
+            $ref: '#/components/schemas/Risk-Level'
+          reference:
+            $ref: '#/components/schemas/Result-Reference'
+          indicators:
+            type: array
+            items:
+              $ref: '#/components/schemas/Supplementary-Data-Activity-Result-Detail-Indicator'
+    Process-Result-Object:
+      type: object
+      properties:
+        processResultId:
+          $ref: '#/components/schemas/Process-Result-ID'
+        schemaVersion:
+          type: integer
+          readOnly: true
+        entityId:
+          type: string
+          readOnly: true
+        requestId:
+          $ref: '#/components/schemas/Request-ID'
+          readOnly: true
+        stepName:
+          type: string
+          readOnly: true
+        stepType:
+          type: string
+          readOnly: true
+        objectType:
+          type: string
+          readOnly: true
+        objectId:
+          type: string
+          readOnly: true
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        groupId:
+          type: string
+          readOnly: true
+        providerResult:
+          $ref: '#/components/schemas/Provider-Result'
+        result:
+          $ref: '#/components/schemas/Process-ResultEnum'
+        class:
+          $ref: '#/components/schemas/Process-Result-ClassEnum'
+        supplementaryData:
+          $ref: '#/components/schemas/Supplementary-Data'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Process-Result-Error'
+          readOnly: true
+        notes:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Custom-Attributes'
+        systemStatus:
+          $ref: '#/components/schemas/Process-Result-System-StatusEnum'
+        manualStatus:
+          $ref: '#/components/schemas/Process-Result-Manual-StatusEnum'
+        state:
+          $ref: '#/components/schemas/Process-Result-StateEnum'
+        riskFactors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Process-Risk-Factor-Value'
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+    ConfidenceLevel:
+      type: object
+      properties:
+        normalized:
+          description: 'The normalized confidence level, if set.
+
+            Note: This is a normalized value, NOT the one used by the service provider (see the "actual" field).
+
+            Assumes a scale of 0.0 (exact match) to 100.0 (match anything).
+
+            '
+          type: number
+          format: float
+          minimum: 0
+          maximum: 100
+        actual:
+          description: 'The actual confidence level as provided by the service provider, if set.
+
+            Note: This is not a normalized value, but the original value from the provider.
+
+            '
+          type: string
+    IP-Information:
+      type: object
+      description: IP information, typically in relation to a device
+      properties:
+        v4Address:
+          type: string
+          description: The IPv4 address
+          format: ipv4
+        v6Address:
+          type: string
+          description: The IPv6 address
+          format: ipv6
+        trueAddress:
+          type: string
+          description: The true IP address
+        asn:
+          type: string
+          description: The ASN of the IP address
+        connectionType:
+          type: string
+          description: The type of IP connection (if available)
+          example:
+          - Fixed Line ISP
+        location:
+          $ref: '#/components/schemas/Geolocation'
+    Supplementary-Data-Visa:
+      type: object
+      description: 'Defines the Visa details returned from VEVO.
+
+        Class and subclass values can be found on the VEVO website.
+
+        '
+      allOf:
+      - $ref: '#/components/schemas/Supplementary-Data-Base'
+      - type: object
+        properties:
+          country:
+            type: string
+            description: Country of origin (ISO-3166-alpha3 code).
+          class:
+            type: string
+            description: Visa class.
+          subClass:
+            type: string
+            description: Visa subclass.
+          entitlementStatus:
+            type: string
+            description: Status of the visa entitlement.
+          grantDate:
+            type: string
+            format: date
+            description: Date the visa was granted.
+          expiryDate:
+            type: string
+            format: date
+            description: Date the visa expires.
+          hasExpired:
+            type: boolean
+            description: Indicates if the visa has expired (sometimes expiry date is not returned).
+          noExpiry:
+            type: boolean
+            description: Indicates if this visa has no expiry.
+          entitlementConditionCode:
+            type: string
+            description: Code for the entitlement condition.
+          entitlementConditionDescription:
+            type: string
+            description: Description of the entitlement condition.
+          holderType:
+            type: string
+            enum:
+            - PRIMARY
+            - SECONDARY
+            description: "Indicates if this is the primary visa holder or a secondary holder (usually a spouse/partner or other family member).\nValues:\n  - PRIMARY\n  - SECONDARY\n"
+          lookupErrorCode:
+            type: string
+            description: If there was an error during the lookup, this is the code returned from VEVO.
+          fuzziness:
+            $ref: '#/components/schemas/FuzzinessLevel'
+    Supplementary-Data-AML-PEPData:
+      type: object
+      description: 'Contains Politically Exposed Person (PEP) information about a specific matched entity.
+
+        '
+      properties:
+        countryCode:
+          type: string
+          description: 'The ISO 3166-1 alpha-3 country code where the PEP entry was recorded.
+
+            '
+        countryName:
+          type: string
+          description: 'The ISO 3166 country name where the PEP entry was recorded.
+
+            '
+        sourceName:
+          type: string
+          description: 'The source of the PEP entry data.
+
+            '
+        level:
+          type: string
+          description: 'The PEP "level", generally represented by a number from 1 (heads of state, military, civil service, etc.) to 4 (local government, minor public servants, etc.).
+
+            '
+        sourceUrl:
+          type: string
+          format: uri
+          description: 'The URL where the original PEP information can be found.
+
+            '
+        sourcePosition:
+          deprecated: true
+          type: string
+          description: '(Deprecated) The position held that created the PEP entry.
+
+            '
+        position:
+          type: string
+          description: 'The position held that created the PEP entry.
+
+            '
+        positionDescription:
+          type: string
+          description: 'A description of the position held that created the PEP entry.
+
+            '
+        status:
+          type: string
+          description: 'The current PEP status.
+
+            '
+        listingStart:
+          type: string
+          description: 'The date when the listing started. Will attempt to use ISO 8601 date format; otherwise, the format supplied by the source.
+
+            '
+        listingEnd:
+          type: string
+          description: 'The date when the listing ended (if available or known). Will attempt to use ISO 8601 date format; otherwise, the format supplied by the source.
+
+            '
+        imageUrl:
+          type: string
+          format: uri
+          description: 'Optional URL of an image of the person associated with their role.
+
+            '
+        referenceDocs:
+          type: array
+          items:
+            $ref: '#/components/schemas/Supplementary-Data-AML-ReferenceDocs'
+        additionalData:
+          type: array
+          items:
+            $ref: '#/components/schemas/Supplementary-Data-AML-AdditionalData'
+    Activity-Result-ID:
+      type: string
+      readOnly: true
+      description: Activity Result ID that identifies a result from an evaluation of an activity
+      format: ulid
+    Activity-ID:
+      type: string
+      readOnly: true
+      description: Activity ID that identifies an activity within the Frankie platform
+      format: ulid
+    Supplementary-Data-KYB-Organization:
+      type: object
+      description: 'Defines OQRO (Ownership Query Result Object) at various stages in the KYB (Know Your Business) flow.
+
+        The ''oqro'' property temporarily stores the V1 OQRO and will be used until the V2 OQRO is defined.
+
+        '
+      allOf:
+      - $ref: '#/components/schemas/Supplementary-Data-Base'
+      - type: object
+        properties:
+          organization:
+            description: 'V2 OQRO; to be defined in the future.
+
+              '
+            properties:
+              entityId:
+                $ref: '#/components/schemas/Entity-ID'
+              entityType:
+                $ref: '#/components/schemas/Entity-Type'
+    Supplementary-Data-AML-AdditionalData:
+      type: object
+      description: 'Represents a simple key-value pair for AML data to capture any additional information not included in the main object.
+
+        '
+      properties:
+        key:
+          type: string
+          description: 'The key name, formatted in snake_case (e.g., key_in_snake_case), which can be converted to spaced title case for display.
+
+            '
+        value:
+          type: string
+          description: 'The value associated with the key, provided as a string for display purposes.
+
+            '
+    Supplementary-Data-IDV-Facial-Comparison:
+      type: object
+      description: 'Result of a facial comparison check, indicating how likely or accurate the presented face matches the ID document.
+
+
+        For resultMap keys, use the keys found in the enum: SupplementaryDataIDVEnumDataFacialComparison.
+
+        '
+      allOf:
+      - $ref: '#/components/schemas/Supplementary-Data-IDV-Base'
+      - type: object
+        properties:
+          comparedDocumentId:
+            type: string
+            format: uuid
+            description: The document ID of the ID document that was compared.
+          comparedDocumentAttachmentId:
+            type: string
+            format: uuid
+            description: The attachment ID of the ID document that was compared.
+          comparedSelfieId:
+            type: string
+            format: uuid
+            description: The document ID of the selfie that was compared.
+          comparedSelfieAttachmentId:
+            type: string
+            format: uuid
+            description: The attachment ID of the selfie that was compared.
+    Process-Result-Manual-StatusEnum-Matchlist:
+      type: string
+      enum:
+      - FALSE_POSITIVE
+      - TRUE_POSITIVE_REJECT
+      description: 'Any manual status set after the results have been reviewed.
+
+        - FALSE_POSITIVE: The result is determined to be a false positive, but you do not necessarily want to resolve it.
+
+        - TRUE_POSITIVE_REJECT: The result is determined to be a true positive and you want to resolve it. "Reject" infers you want to reject the activity.
+
+        '
+    Supplementary-Data-Duplicate:
+      type: object
+      description: 'Provides details of a single duplicate match, including the matching entity ID and a list of matched elements.
+
+        '
+      allOf:
+      - $ref: '#/components/schemas/Supplementary-Data-Base'
+      - type: object
+        properties:
+          duplicateEntityId:
+            $ref: '#/components/schemas/Entity-ID'
+            description: The entity ID of the entity that was matched by the matched fields.
+          matchedFields:
+            type: array
+            description: The list of fields that determined this is a duplicate of another entity.
+            items:
+              $ref: '#/components/schemas/Supplementary-Data-Duplicate-MatchField'
+          matchedRules:
+            type: array
+            description: The list of rules that were matched to determine this is a duplicate of another entity.
+            items:
+              $ref: '#/components/schemas/Supplementary-Data-Duplicate-MatchedRule'
+    Rule-ID:
+      type: string
+      readOnly: true
+      format: ulid
+      description: Rule ID that identifies an instance of a rule within the Frankie platform
+    Error-Base:
+      type: object
+      properties:
+        errorCode:
+          type: string
+        errorMsg:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/Issue'
+    Process-Result-ID:
+      type: string
+      description: When a process result object is first created, it is assigned an ID. When updating the process result object, set the processResultID to the ID of the process result object you are referring to.
+      readOnly: true
+    Supplementary-Data-Duplicate-MatchField:
+      type: object
+      description: 'Provides details of a match between entities, the objects they represent, and the match strength.
+
+        '
+      properties:
+        objectType:
+          $ref: '#/components/schemas/Object-Type'
+        duplicateObjectId:
+          type: string
+          format: uuid
+          description: The ID of the object that was found to be a duplicate.
+        objectId:
+          type: string
+          format: uuid
+          description: The ID of the object that originated the match.
+        matchStrength:
+          $ref: '#/components/schemas/Supplementary-Data-Base-MatchStrength'
+    Supplementary-Data-AML-MediaData:
+      type: object
+      required:
+      - title
+      - source
+      description: 'Contains adverse media information about a specific matched entity.
+
+        '
+      properties:
+        title:
+          type: string
+          description: 'The title of the article or media source.
+
+            '
+        snippet:
+          type: string
+          description: 'A short excerpt or snippet from the article.
+
+            '
+        source:
+          type: string
+          description: 'The source or publisher of the article or media.
+
+            '
+        sourceDate:
+          type: string
+          description: 'The publication date, as referenced and formatted by the source.
+
+            '
+        sourceCountry:
+          type: string
+          description: 'The country of origin for the article, if available.
+
+            '
+        url:
+          type: string
+          description: 'The URL to the original full article, if available.
+
+            '
+        isCurrent:
+          type: boolean
+          default: true
+          description: 'Indicates whether this article is still considered current.
+
+            '
+    Evaluation-ID:
+      type: string
+      description: The ID of the evaluation
+      readOnly: true
+      format: ulid
+    Supplementary-Data-Fraud-Device:
+      type: object
+      description: 'Provides details of a single device fraud check.
+
+        '
+      allOf:
+      - $ref: '#/components/schemas/Supplementary-Data-Base'
+      - $ref: '#/components/schemas/Supplementary-Data-Fraud-Device-Data'
+    Supplementary-Data-ID:
+      type: object
+      description: 'Provides the matching levels found for each ID element, where available.
+
+        Match strength is scaled from 0 (no match) to 100 (full match).
+
+        '
+      allOf:
+      - $ref: '#/components/schemas/Supplementary-Data-Base'
+      - type: object
+        properties:
+          matchStrengths:
+            $ref: '#/components/schemas/Supplementary-Data-ID-MatchStrengths'
+          fuzziness:
+            $ref: '#/components/schemas/FuzzinessLevel'
+    Indicator-ID:
+      type: string
+      readOnly: true
+      format: ulid
+      description: Indicator ID that identifies an indicator from a check on an activity
+    Supplementary-Data-AML-RelatedParties:
+      type: object
+      description: 'Defines the name and relationship of individuals or organizations related to the matched entity.
+
+        '
+      properties:
+        name:
+          type: string
+          description: The name of the related individual or organization.
+        relationship:
+          type: string
+          description: 'The nature of the relationship to the matched entity.
+
+            For example: "Sibling", "Director", "Known associate".
+
+            '
+    Process-Risk-Factor-Value:
+      type: object
+      description: Risk Factor Value
+      required:
+      - factor
+      - value
+      properties:
+        factor:
+          type: string
+          description: Name of the risk factor.
+        value:
+          type: string
+          description: Supplier/service provided value that Frankie will plug into the risk engine to determine a score.
+    Supplementary-Data-KYC-Gender:
+      type: object
+      description: 'Defines the matching results for a gender check. This is rarely used.
+
+        '
+      allOf:
+      - $ref: '#/components/schemas/Supplementary-Data-Base'
+      - type: object
+        properties:
+          matchStrengths:
+            $ref: '#/components/schemas/Supplementary-Data-KYC-Gender-MatchStrengths'
+          fuzziness:
+            $ref: '#/components/schemas/FuzzinessLevel'
+          wasNameMatchStrongEnough:
+            description: 'Indicates whether there was a sufficiently strong name match at the time this was checked, even if the gender was a perfect match.
+
+              This is only an indicator at the time the PRO was created. Subsequent checks that reuse this result may interpret this differently.
+
+              '
+            type: boolean
+    Device-ID:
+      type: string
+      description: ID of the device
+      readOnly: true
+      format: ulid
+    Supplementary-Data-Base:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          description: "The type of supplementary data. Possible values:\n  - AML\n  - KYC_ADDRESS\n  - KYC_DOB\n  - KYC_GENDER\n  - KYC_NAME\n  - ID\n  - VISA\n  - NAME_VALIDATION\n  - KYB_ORGANIZATION\n  - MATCHLIST\n  - DUPLICATE\n  - FRAUD_DEVICE\n  - FRAUD_EMAIL\n  - FRAUD_PHONE\n  - FRAUD_LOOKUP\n  - ACTIVITY_AML\n  - ACTIVITY_DEVICE\n  - ACTIVITY_FRAUD\n"
+          enum:
+          - AML
+          - KYC_ADDRESS
+          - KYC_DOB
+          - KYC_GENDER
+          - KYC_NAME
+          - ID
+          - VISA
+          - NAME_VALIDATION
+          - KYB_ORGANIZATION
+          - MATCHLIST
+          - DUPLICATE
+          - FRAUD_DEVICE
+          - FRAUD_EMAIL_ADDRESS
+          - FRAUD_PHONE_NUMBER
+          - FRAUD_IP_ADDRESS
+          - FRAUD_LOOKUP
+          - ACTIVITY_AML
+          - ACTIVITY_DEVICE
+          - ACTIVITY_FRAUD
+    individual_pro_fraud_res:
+      type: object
+      required:
+      - requestId
+      - processResults
+      properties:
+        requestId:
+          $ref: '#/components/schemas/Request-ID'
+        processResults:
+          type: array
+          items:
+            $ref: '#/components/schemas/Process-Result-Object'
+    Supplementary-Data-IDV-ElementMap:
+      type: object
+      description: 'A map of IDV report elements obtained from the requested IDV service provider.
+
+
+        The map keys are arbitrary strings, but where possible, should use a value from the predefined IDV Data Enums.
+
+        Service provider connections should map supplied values to existing enums where possible.
+
+        If there is no relevant existing match, it is acceptable to use the original service provider value as the key.
+
+        '
+      additionalProperties:
+        $ref: '#/components/schemas/Supplementary-Data-IDV-Data'
+    FuzzinessLevel:
+      type: object
+      properties:
+        normalized:
+          description: 'The normalized fuzziness level, if set.
+
+            Note: This is a normalized value, NOT the one used by the service provider (see the "actual" field).
+
+            Assumes a scale of 0.0 (exact match) to 100.0 (match anything).
+
+            '
+          type: number
+          format: float
+          minimum: 0
+          maximum: 100
+        actual:
+          description: 'The actual fuzziness level as provided by the service provider, if set.
+
+            Note: This is not a normalized value, but the original value from the provider.
+
+            '
+          type: string
+    Supplementary-Data-NameValidation:
+      type: object
+      description: 'Details on how the native language name was verified against a dictionary of anglicized translations.
+
+        '
+      allOf:
+      - $ref: '#/components/schemas/Supplementary-Data-Base'
+      - type: object
+        properties:
+          langCode:
+            type: string
+            description: Language code used for translation.
+          nameMatchOrder:
+            type: string
+            description: 'Depending on the name to be translated and how it is presented, the native language and anglicized version ordering might be mixed up. The service will try various orderings to find a match.
+
+              The order codes represent the actual order that matched.
+
+              Each letter combination represents *F*amily, *G*iven, and *O*ther names.
+
+              For example, FGO means that Family, Given, and Other names matched in that order.
+
+              '
+            enum:
+            - FGO
+            - OFG
+            - GOF
+            - FOG
+            - GFO
+            - OGF
+            - FG
+            - FO
+            - GF
+            - OF
+          fuzziness:
+            $ref: '#/components/schemas/FuzzinessLevel'
+    Supplementary-Data-KYC-Gender-MatchStrengths:
+      type: object
+      properties:
+        gender:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 100
+    Document-Type:
+      type: string
+      enum:
+      - OTHER
+      - DRIVERS_LICENSE
+      - PASSPORT
+      - VISA
+      - IMMIGRATION
+      - NATIONAL_ID
+      - TAX_ID
+      - NATIONAL_HEALTH_ID
+      - CONCESSION
+      - HEALTH_CONCESSION
+      - PENSION
+      - MILITARY_ID
+      - BIRTH_CERT
+      - CITIZENSHIP
+      - MARRIAGE_CERT
+      - DEATH_CERT
+      - NAME_CHANGE
+      - UTILITY_BILL
+      - BANK_STATEMENT
+      - BANK_ACCOUNT
+      - INTENT_PROOF
+      - ATTESTATION
+      - SELF_IMAGE
+      - DEVICE
+      - VEHICLE_REGISTRATION
+      - PROOF_OF_ADDRESS
+      - HOUSE_REGISTRATION
+      - YELLOW_HOUSE_REGISTRATION
+      - WORK_PERMIT
+      - EMPLOYMENT_CERTIFICATE
+      - NOTARY_PUBLIC_ID
+      - EXTERNAL_ADMIN
+      - CHARGES
+      - PRE_ASIC
+      - ANNUAL_RETURN
+      - REPORT
+      - TRUST_DEED
+      - PARTNERSHIP_AGREEMENT
+      - ADMIN_CHANGE
+      - COMPANY_REPORT
+      - CHECK_RESULTS
+      - AVIATION_SECURITY_ID
+      - MARITIME_SECURITY_ID
+      description: "Valid document ID types.\n\n  - \"OTHER\": Generic document type. Unspecified.\n  - \"DRIVERS_LICENSE\": Driver's license.\n  - \"PASSPORT\": Passport.\n  - \"VISA\": Visa document (not Visa payment card).\n  - \"IMMIGRATION\": Immigration card.\n  - \"NATIONAL_ID\": Any national ID card.\n  - \"TAX_ID\": Any national tax identifier.\n  - \"NATIONAL_HEALTH_ID\": Any national health program ID card (e.g., Medicare, NHS).\n  - \"CONCESSION\": State-issued concession card.\n  - \"HEALTH_CONCESSION\": State-issued health-specific concession card.\n  - \"PENSION\": State-issued pension ID.\n  - \"MILITARY_ID\": Military ID.\n  - \"BIRTH_CERT\": Birth certificate.\n  - \"CITIZENSHIP\": Citizenship certificate.\n  - \"MARRIAGE_CERT\": Marriage certificate.\n  - \"DEATH_CERT\": Death certificate.\n  - \"NAME_CHANGE\": Name change confirmation.\n  - \"UTILITY_BILL\": Regulated utility bill, such as electricity, gas, etc.\n  - \"BANK_STATEMENT\": Bank/card statement.\n  - \"BANK_ACCOUNT\": Bank account.\n  - \"INTENT_PROOF\": Proof of intent, generally a photo/video or a scanned letter.\n  - \"ATTESTATION\": Document of attestation (e.g., Statutory Declaration).\n\n  NOTE: These cannot be used as a supporting document:\n  - \"SELF_IMAGE\": A \"selfie\" used for comparisons.\n  - \"DEVICE\": Device ID.\n  - \"VEHICLE_REGISTRATION\": Vehicle registration number.\n  - \"PROOF_OF_ADDRESS\": Any document that provides proof of address.\n  - \"HOUSE_REGISTRATION\": House registration document.\n  - \"YELLOW_HOUSE_REGISTRATION\": Yellow House Registration Thor Ror 13.\n  - \"WORK_PERMIT\": Work permit.\n  - \"EMPLOYMENT_CERTIFICATE\": Certificate of employment.\n  - \"NOTARY_PUBLIC_ID\": Notary Public Identification.\n\n  Business-related documentation:\n\n  - \"EXTERNAL_ADMIN\": Details of appointed administrator.\n  - \"CHARGES\": Details of any charges laid against a company or director.\n  - \"PRE_ASIC\": Any documents that are Pre-ASIC.\n  - \"ANNUAL_RETURN\": Details of a company's annual return.\n  - \"REPORT\": Frankie-generated report.\n  - \"TRUST_DEED\": Corporate trust deed.\n  - \"PARTNERSHIP_AGREEMENT\": Partnership agreement documents.\n  - \"ADMIN_CHANGE\": Change of administrator.\n  - \"COMPANY_REPORT\": Registry-filed company reports.\n\n  Special document types:\n\n  - \"CHECK_RESULTS\": Special document type for specifying results of checks completed other than through Frankie.\n  - \"AVIATION_SECURITY_ID\": Aviation Security Identification Card.\n  - \"MARITIME_SECURITY_ID\": Maritime Security Identification Card."
+    Process-Result-Manual-StatusEnum-KYC:
+      type: string
+      enum:
+      - PASS
+      - FAIL
+      description: 'Any manual status set after the results have been reviewed.
+
+        - PASS: When the result is determined to be a pass and no further action is needed.
+
+        - FAIL: When the result is determined to be a fail and no further action is needed.
+
+        '
+    Device-Properties:
+      type: object
+      description: Device properties
+      properties:
+        deviceId:
+          $ref: '#/components/schemas/Device-ID'
+        sourceId:
+          type: string
+          description: The source from where a specific information was sourced from. This is a link to an informationSource object in the informationSources map.
+        providerName:
+          type: string
+          description: The name of the provider
+        externalIdentifiers:
+          type: array
+          items:
+            $ref: '#/components/schemas/External-Reference-Information'
+        os:
+          type: string
+          description: the device operating system
+        trueOs:
+          type: string
+          description: the true OS of the device
+        firstSeenAt:
+          type: string
+          format: date-time
+          description: the first time the device was seen in the provider network
+        browser:
+          type: string
+          description: the device browser (if relevant)
+        platform:
+          type: string
+          description: the device platform
+        model:
+          type: string
+          description: the device model
+        fingerprint:
+          type: string
+          description: the device fingerprint
+        fingerprintConfidence:
+          type: number
+          description: the confidence of the fingerprint
+    Process-Result-Manual-StatusEnum:
+      allOf:
+      - $ref: '#/components/schemas/Process-Result-Manual-StatusEnum-AML'
+      - $ref: '#/components/schemas/Process-Result-Manual-StatusEnum-KYC'
+      - $ref: '#/components/schemas/Process-Result-Manual-StatusEnum-IDV'
+      - $ref: '#/components/schemas/Process-Result-Manual-StatusEnum-Duplicate'
+      - $ref: '#/components/schemas/Process-Result-Manual-StatusEnum-Matchlist'
+    Supplementary-Data-IDV-Data:
+      type: object
+      description: 'Contains information about a specific matched IDV element.
+
+        '
+      properties:
+        originalName:
+          type: string
+          description: The name of the element as returned by the provider, before normalization (e.g., 'face', 'dob', 'name').
+        confidence:
+          type: number
+          format: float
+          description: Service provider's confidence in this value.
+        confidenceThreshold:
+          type: number
+          format: float
+          description: Configured confidence threshold for this value to be considered valid.
+        originalData:
+          type: string
+          description: The raw data returned by the provider.
+        reviewedData:
+          type: string
+          description: If the applicant was given a chance to correct the data, this is the reviewed data with any changes.
+        resultNormalized:
+          type: string
+          description: The final result after applying confidence and normalization (e.g., clear, suspected, rejected).
+        description:
+          type: string
+          description: A description of the data element returned in the rawData field.
+    Supplementary-Data-Base-MatchStrength:
+      type: integer
+      description: 'Represents the standard match strength, scaled from 0 (no match) to 100 (exact match).
+
+        In some cases, a value of 50 may be interpreted as a "partial" match.
+
+        '
+      format: int32
+      minimum: 0
+      maximum: 100
+    Supplementary-Data-Fraud-IP-Address-Data:
+      type: object
+      description: 'Defines the details of a single fraud check for IP address related data.
+
+        '
+      properties:
+        deviceId:
+          $ref: '#/components/schemas/Device-ID'
+        ipAddressInformation:
+          $ref: '#/components/schemas/IP-Information'
+        session:
+          $ref: '#/components/schemas/Session-Data'
+        indicators:
+          type: array
+          items:
+            $ref: '#/components/schemas/Supplementary-Data-Activity-Result-Detail-Indicator'
+        riskLevel:
+          $ref: '#/components/schemas/Risk-Level'
+        reference:
+          $ref: '#/components/schemas/Result-Reference'
+    Supplementary-Data-IDV-Document:
+      type: object
+      description: 'Result of a document check, indicating how likely or accurate the presented document is a valid ID document.
+
+
+        For resultMap keys, use the keys found in the enum: SupplementaryDataIDVEnumDataDocument.
+
+        '
+      allOf:
+      - $ref: '#/components/schemas/Supplementary-Data-IDV-Base'
+      - type: object
+        properties:
+          attachmentIds:
+            type: object
+            description: The IDs of the document images that were analyzed.
+            properties:
+              front:
+                type: string
+                format: uuid
+                description: The ID of the front image of the document.
+              back:
+                type: string
+                format: uuid
+                description: The ID of the back image of the document.
+          detectedDocumentType:
+            $ref: '#/components/schemas/Document-Type'
+          detectedDocumentCountry:
+            type: string
+            description: The ISO-3166-alpha3 country code of the document as detected.
+            example: AUS
+    Supplementary-Data-AML-MatchData-Country:
+      type: object
+      required:
+      - code
+      description: 'Represents the country code and match type for an AML (Anti-Money Laundering) country match.
+
+        '
+      properties:
+        code:
+          type: string
+          maxLength: 3
+          description: 'The ISO 3166-1 alpha-3 country code where a match was identified.
+
+            '
+        matchType:
+          type: string
+          description: "The type of match associated with this country. Possible values include:\n  - CITIZENSHIP\n  - RESIDENCE\n  - BIRTH\n  - NATIONALITY\n  - INCORPORATION (for organizations)\n  - OPERATION\n"
+    Error:
+      type: object
+      x-examples:
+        '400':
+          requestId: 0123456789ABCDEFGHIJKLMNOP
+          errorCode: API-0400
+          errorMsg: Parsing credentials from "<invalid>" failed, because invalid.
+          httpStatusCode: 400
+        '401':
+          requestId: 0123456789ABCDEFGHIJKLMNOP
+          errorCode: API-0401
+          errorMsg: Unauthenticated due to invalid credentials.
+          httpStatusCode: 401
+        '409':
+          requestId: 0123456789ABCDEFGHIJKLMNOP
+          errorCode: API-0409
+          errorMsg: Conflict.
+          httpStatusCode: 409
+      allOf:
+      - $ref: '#/components/schemas/Error-Base'
+      - type: object
+        properties:
+          requestId:
+            $ref: '#/components/schemas/Request-ID'
+    Supplementary-Data-IDV-OCR-Comparison-Enum-Comparison-Source:
+      type: string
+      description: 'Indicates the source of the data used for comparison with the OCR scan results.
+
+        The source can be either the original entity data or the updated data extracted from the OCR scan.
+
+        '
+      enum:
+      - ENTITY
+      - OCR_UPDATE
+    Supplementary-Data-KYC-Name-MatchStrengths:
+      type: object
+      properties:
+        fullName:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 100
+        familyName:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 100
+        givenName:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 100
+        otherNames:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 100
+        firstInitialFamilyName:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 100
+    Process-Result-StateEnum:
+      type: string
+      readOnly: true
+      description: Denotes the final disposition of this element's check result
+      enum:
+      - IN_PROGRESS
+      - COMPLETED
+      - TIMEOUT
+      - ERROR
+    Supplementary-Data-AML-MatchData-NationalId:
+      type: object
+      description: 'Provides details of a matched identification document, if supplied.
+
+        '
+      properties:
+        idNumber:
+          type: string
+          description: The matched identification number.
+        idType:
+          type: string
+          description: The type of identification matched (e.g., National ID, passport).
+        idExpiry:
+          type: string
+          description: The expiry date of the identification document (if known), using the format provided by the service provider.
+        issuingCountryCode:
+          type: string
+          description: The ISO 3166-1 alpha-3 country code of the issuing country.
+        documentId:
+          type: string
+          description: The document ID if this was matched to a FrankieOne document record.
+    Matchlist-Action:
+      type: string
+      description: "Default action recommended for a match. The action can be one of the following:\n  - `BLOCK`: Recommended action is to block the entity.\n  - `ALERT`: Recommended action is to create an alert for the entity.\n  - `ALLOW`: Recommended action is to allow the entity.\n  - `REVIEW`: Recommended action is to review the entity.\n  - `NONE`: No action; only use the `riskFactor` if any."
+      enum:
+      - BLOCK
+      - ALERT
+      - ALLOW
+      - REVIEW
+      - NONE
+    Search-Confidence:
+      type: number
+      format: float
+      minimum: 0
+      maximum: 1
+      description: 'Confidence level of the search result, represented as a number between 0 and 1.
+
+        A higher value indicates greater confidence in the accuracy of the search result.
+
+        '
+    Supplementary-Data-IDV-OCR:
+      type: object
+      description: 'Result of a document OCR comparison. This object represents the comparison between scanned data (via OCR) and updated or alternately supplied results.
+
+
+        For the resultMap keys, use the keys defined in the enum: SupplementaryDataIDVEnumDataOCR.
+
+        '
+      allOf:
+      - $ref: '#/components/schemas/Supplementary-Data-IDV-Base'
+      - type: object
+        properties:
+          scannedDocumentId:
+            type: string
+            format: uuid
+            description: 'The documentId of the ID document on which OCR extraction was performed.
+
+              '
+          scannedAttachmentFrontId:
+            type: string
+            format: uuid
+            description: 'The attachmentId of the front image of the ID document used for OCR extraction.
+
+              '
+          scannedAttachmentBackId:
+            type: string
+            format: uuid
+            description: 'The attachmentId of the back image of the ID document used for OCR extraction, if a back image was provided.
+
+              '
+    Supplementary-Data-IDV-Base:
+      type: object
+      description: 'A report from an IDV provider based on a photographic or video biometrics process.
+
+        '
+      allOf:
+      - $ref: '#/components/schemas/Supplementary-Data-Base'
+      - type: object
+        properties:
+          outcomeRaw:
+            type: string
+            description: The original outcome of the IDV process, as reported by the service provider.
+          resultMap:
+            $ref: '#/components/schemas/Supplementary-Data-IDV-ElementMap'
+          requiredElements:
+            type: array
+            description: List of elements required to have passed, as per the step configuration.
+            items:
+              type: string
+              description: The IDV report element name, e.g., 'face', 'dob', 'name'.
+    Device:
+      type: object
+      description: 'Device information associated with an activity, used for submitting device checks using an external service.
+
+        '
+      allOf:
+      - $ref: '#/components/schemas/Device-Detail'
+      - type: object
+        properties:
+          geolocation:
+            $ref: '#/components/schemas/Geolocation'
+          ipAddressInformation:
+            $ref: '#/components/schemas/IP-Information'
+          createdAt:
+            type: string
+            description: the time the device was created in UTC ISO8601 format
+            format: date-time
+            readOnly: true
+    Matchlist-Entry-Attribute-Type:
+      type: string
+      description: 'Entity attributes eligible for screening.
+
+
+        A matchlist entry may not contain both `ORG_*` and `IND_*` attributes, and they must match the `ENTITY_TYPE` if it is provided.'
+      enum:
+      - ENTITY_TYPE
+      - EMAIL_ADDRESS
+      - EMAIL_DOMAIN
+      - PHONE_NUMBER
+      - ADDR_STREET_NUMBER
+      - ADDR_STREET_NAME
+      - ADDR_STREET_TYPE
+      - ADDR_NEIGHBORHOOD
+      - ADDR_LOCALITY
+      - ADDR_DISTRICT
+      - ADDR_SUBDIVISION
+      - ADDR_COUNTRY
+      - ADDR_POSTAL_CODE
+      - ADDR_UNSTRUCTURED_LONG_FORM
+      - DOC_CLASS
+      - DOC_TYPE
+      - DOC_SUBTYPE
+      - DOC_PRIMARY_IDENTIFIER
+      - DOC_SECONDARY_IDENTIFIER
+      - IND_DISPLAY_NAME
+      - IND_GIVEN_NAME
+      - IND_FAMILY_NAME
+      - IND_MIDDLE_NAME
+      - IND_DATE_OF_BIRTH
+      - IND_NATIONALITY
+      - ORG_REGISTERED_SUBDIVISION
+      - ORG_REGISTERED_COUNTRY
+      - ORG_REGISTRATION_NUMBER
+      - ORG_REGISTRATION_NUMBER_TYPE
+      - ORG_NAME
+    individual_pro_fraud_req:
+      type: object
+      required:
+      - processResults
+      - manualStatus
+      properties:
+        processResults:
+          description: The process result IDs to update. These are the PROs created when a fraud has been found.
+          type: array
+          items:
+            type: string
+            format: UUID
+        manualStatus:
+          $ref: '#/components/schemas/Process-Result-Manual-StatusEnum-Fraud'
+        comment:
+          $ref: '#/components/schemas/Comment'
+    Supplementary-Data-Activity-Result-Detail-Rule:
+      type: object
+      properties:
+        ruleId:
+          $ref: '#/components/schemas/Rule-ID'
+        reference:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        isActive:
+          type: boolean
+    Supplementary-Data-KYC-DoB:
+      type: object
+      description: 'Defines the matching levels for each date of birth element, where available.
+
+        Provides a match strength score ranging from 0 (no match) to 100 (full match).
+
+        '
+      allOf:
+      - $ref: '#/components/schemas/Supplementary-Data-Base'
+      - type: object
+        properties:
+          matchStrengths:
+            $ref: '#/components/schemas/Supplementary-Data-KYC-DoB-MatchStrengths'
+          fuzziness:
+            $ref: '#/components/schemas/FuzzinessLevel'
+          wasNameMatchStrongEnough:
+            description: 'Indicates whether there was a sufficiently strong name match at the time this was checked, even if the date of birth was a perfect match.
+
+              This is only an indicator at the time the PRO was created. Subsequent checks that reuse this result may interpret this differently.
+
+              '
+            type: boolean
+    Attribute:
+      type: object
+      required:
+      - type
+      - value
+      properties:
+        type:
+          description: The attribute type.
+          type: string
+          maxLength: 64
+        value:
+          description: The value assigned to the attribute.
+          type: string
+    Result-Reference-Type:
+      type: string
+      description: The type of the reference (e.g. url)
+      enum:
+      - URL
+      - REFERENCE
+    Session-Data:
+      type: object
+      description: Session data for an activity, this is always scoped to a singular entity.
+      allOf:
+      - $ref: '#/components/schemas/Session'
+      - type: object
+        properties:
+          sessionId:
+            type: string
+            description: A Frankie ID for the session
+            format: ulid
+            readOnly: true
+          providerName:
+            type: string
+          entityId:
+            $ref: '#/components/schemas/Entity-ID'
+          createdAt:
+            type: string
+            description: the time the session was created in UTC ISO8601 format
+            format: date-time
+            readOnly: true
+          expiresAt:
+            type: string
+            description: the time the session expires in UTC ISO8601 format
+            format: date-time
+            readOnly: true
+    Behavior-Biometrics:
+      type: object
+      properties:
+        hesitationPercentileLongTermMemory:
+          type: number
+          description: 'The hesitation percentile for fields like address, name, etc which
+
+            are associated with long term memory.
+
+            '
+        hesitationPercentileNonLongTermMemory:
+          type: number
+          description: 'The hesitation percentile for fields like amount fields which
+
+            are not associated with long term memory.
+
+            '
+        numberDistractionEvents:
+          type: integer
+    Supplementary-Data-Fraud-Phone-Number:
+      type: object
+      description: 'Defines the details of a single phone number fraud check.
+
+        '
+      allOf:
+      - $ref: '#/components/schemas/Supplementary-Data-Base'
+      - type: object
+        properties:
+          phoneNumberId:
+            $ref: '#/components/schemas/Phone-Number-ID'
+          riskLevel:
+            $ref: '#/components/schemas/Risk-Level'
+          reference:
+            $ref: '#/components/schemas/Result-Reference'
+          indicators:
+            type: array
+            items:
+              $ref: '#/components/schemas/Supplementary-Data-Activity-Result-Detail-Indicator'
+    Supplementary-Data:
+      type: object
+      readOnly: true
+      oneOf:
+      - $ref: '#/components/schemas/Supplementary-Data-AML'
+      - $ref: '#/components/schemas/Supplementary-Data-KYC-Address'
+      - $ref: '#/components/schemas/Supplementary-Data-KYC-DoB'
+      - $ref: '#/components/schemas/Supplementary-Data-KYC-Gender'
+      - $ref: '#/components/schemas/Supplementary-Data-KYC-Name'
+      - $ref: '#/components/schemas/Supplementary-Data-ID'
+      - $ref: '#/components/schemas/Supplementary-Data-Visa'
+      - $ref: '#/components/schemas/Supplementary-Data-NameValidation'
+      - $ref: '#/components/schemas/Supplementary-Data-KYB-Organization'
+      - $ref: '#/components/schemas/Supplementary-Data-Duplicate'
+      - $ref: '#/components/schemas/Supplementary-Data-IDV-Document'
+      - $ref: '#/components/schemas/Supplementary-Data-IDV-Facial-Comparison'
+      - $ref: '#/components/schemas/Supplementary-Data-IDV-Facial-Liveness'
+      - $ref: '#/components/schemas/Supplementary-Data-IDV-OCR'
+      - $ref: '#/components/schemas/Supplementary-Data-IDV-OCR-Comparison'
+      - $ref: '#/components/schemas/Supplementary-Data-Matchlist'
+      - $ref: '#/components/schemas/Supplementary-Data-Activity-AML'
+      - $ref: '#/components/schemas/Supplementary-Data-Activity-Fraud'
+      - $ref: '#/components/schemas/Supplementary-Data-Activity-Device'
+      - $ref: '#/components/schemas/Supplementary-Data-Fraud-Device'
+      - $ref: '#/components/schemas/Supplementary-Data-Fraud-Email-Address'
+      - $ref: '#/components/schemas/Supplementary-Data-Fraud-IP-Address'
+      - $ref: '#/components/schemas/Supplementary-Data-Fraud-Phone-Number'
+      discriminator:
+        propertyName: type
+        mapping:
+          AML: '#/components/schemas/Supplementary-Data-AML'
+          KYC_ADDRESS: '#/components/schemas/Supplementary-Data-KYC-Address'
+          KYC_DOB: '#/components/schemas/Supplementary-Data-KYC-DoB'
+          KYC_GENDER: '#/components/schemas/Supplementary-Data-KYC-Gender'
+          KYC_NAME: '#/components/schemas/Supplementary-Data-KYC-Name'
+          ID: '#/components/schemas/Supplementary-Data-ID'
+          VISA: '#/components/schemas/Supplementary-Data-Visa'
+          NAME_VALIDATION: '#/components/schemas/Supplementary-Data-NameValidation'
+          KYB_ORGANIZATION: '#/components/schemas/Supplementary-Data-KYB-Organization'
+          DUPLICATE: '#/components/schemas/Supplementary-Data-Duplicate'
+          IDV_DOCUMENT: '#/components/schemas/Supplementary-Data-IDV-Document'
+          IDV_FACIAL_COMPARISON: '#/components/schemas/Supplementary-Data-IDV-Facial-Comparison'
+          IDV_FACIAL_LIVENESS: '#/components/schemas/Supplementary-Data-IDV-Facial-Liveness'
+          IDV_OCR: '#/components/schemas/Supplementary-Data-IDV-OCR'
+          IDV_OCR_COMPARISON: '#/components/schemas/Supplementary-Data-IDV-OCR-Comparison'
+          MATCHLIST: '#/components/schemas/Supplementary-Data-Matchlist'
+          ACTIVITY_AML: '#/components/schemas/Supplementary-Data-Activity-AML'
+          ACTIVITY_FRAUD: '#/components/schemas/Supplementary-Data-Activity-Fraud'
+          ACTIVITY_DEVICE: '#/components/schemas/Supplementary-Data-Activity-Device'
+          FRAUD_DEVICE: '#/components/schemas/Supplementary-Data-Fraud-Device'
+          FRAUD_EMAIL_ADDRESS: '#/components/schemas/Supplementary-Data-Fraud-Email-Address'
+          FRAUD_IP_ADDRESS: '#/components/schemas/Supplementary-Data-Fraud-IP-Address'
+          FRAUD_PHONE_NUMBER: '#/components/schemas/Supplementary-Data-Fraud-Phone-Number'
+    Device-Detail:
+      type: object
+      description: Device details
+      allOf:
+      - $ref: '#/components/schemas/Device-Indicators'
+      - $ref: '#/components/schemas/Device-Properties'
+    Supplementary-Data-ID-MatchStrengths:
+      type: object
+      properties:
+        primaryIdentifier:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 100
+        secondaryIdentifier:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 100
+        name:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 100
+          description: 'If the name verification result is known, record it here.
+
+
+            NOTE: This should not be used as a KYC result; informational only.
+
+            Please use a separate PRO for an actual KYC result if required.
+
+            '
+        dateOfBirth:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 100
+          description: 'If the date of birth verification result is known, record it here.
+
+
+            NOTE: This should not be used as a KYC result; informational only.
+
+            Please use a separate PRO for an actual KYC result if required.
+
+            '
+        expiryDate:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 100
+        isValid:
+          type: boolean
+          description: Indicates if the ID is valid (if known).
+        isExpired:
+          type: boolean
+          description: Indicates if the ID has expired (if known).
+        isBlocked:
+          type: boolean
+          description: Indicates if the ID has been blocked at the source.
+        blockingCode:
+          type: string
+          description: If the service provider returns a blocking code or reason, it will be recorded here.
+        attachmentId:
+          type: string
+          format: uuid
+          description: If a photo was sent to the service provider, the FrankieOne scanId is added for reference.
+        photoId:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 100
+          description: If a photo was supplied and checked, the match score is recorded here.
+        photoIssue:
+          type: string
+          description: If there was an issue checking the photo, any error details can be found here.
+    Supplementary-Data-KYC-Name:
+      type: object
+      description: 'Defines the matching levels for each name element, where available.
+
+        Provides a match strength score ranging from 0 (no match) to 100 (full match).
+
+        '
+      allOf:
+      - $ref: '#/components/schemas/Supplementary-Data-Base'
+      - type: object
+        properties:
+          matchStrengths:
+            $ref: '#/components/schemas/Supplementary-Data-KYC-Name-MatchStrengths'
+          fuzziness:
+            $ref: '#/components/schemas/FuzzinessLevel'
+    Process-Result-System-StatusEnum:
+      type: string
+      description: 'If there has been an additional system status applied to the process.
+
+        - VALID: The process result is valid and has not been marked for any special handling.
+
+        - EXPIRED: The process result has expired and is no longer valid.
+
+        - STALE: The process result is considered stale, meaning it may be outdated but not necessarily invalid.
+
+        - MARKED_INVALID: The process result has been explicitly marked as invalid.
+
+        - MARKED_IGNORE: The process result has been marked to be ignored, meaning it should not be considered in further processing.
+
+        '
+      enum:
+      - VALID
+      - EXPIRED
+      - STALE
+      - MARKED_INVALID
+      - MARKED_IGNORE
+      default: VALID
+      readOnly: true
+    Provider-Result:
+      type: object
+      properties:
+        name:
+          type: string
+        source:
+          type: string
+        sourceNormalized:
+          type: string
+        reference:
+          type: string
+        fuzziness:
+          $ref: '#/components/schemas/FuzzinessLevel'
+        confidence:
+          $ref: '#/components/schemas/ConfidenceLevel'
+        riskScore:
+          type: number
+          format: double
+        errorCode:
+          type: string
+        errorMessage:
+          type: string
+      readOnly: true
+    Custom-Attributes:
+      type: object
+      additionalProperties:
+        $ref: '#/components/schemas/Attribute'
+    Process-Result-Error:
+      type: object
+      properties:
+        code:
+          type: string
+          description: The error code associated with the process result.
+        description:
+          type: string
+          description: A description of the error.
+        location:
+          type: string
+          description: The location or context where the error occurred.
+    Supplementary-Data-AML-MatchData:
+      type: object
+      required:
+      - spReferenceId
+      - name
+      description: 'Contains information about this specific matched entity.
+
+        '
+      properties:
+        strength:
+          type: number
+          format: float
+          description: The match strength as determined by the service provider.
+        spReferenceId:
+          type: string
+          description: 'The internal identifier assigned by the service provider for the matched individual or business.
+
+            '
+        name:
+          type: string
+          description: 'The name matched by the service provider.
+
+            '
+        givenName:
+          type: string
+          description: 'The given name matched by the service provider (optional).
+
+            '
+        otherName:
+          type: string
+          description: 'The middle or other name(s) matched by the service provider (optional).
+
+            '
+        familyName:
+          type: string
+          description: 'The family name matched by the service provider (optional).
+
+            '
+        date:
+          type: string
+          description: 'The date matched in the system, formatted as provided by the service provider. May be only a year.
+
+            '
+        address:
+          type: string
+          description: 'The address matched by the service provider (optional).
+
+            '
+        countries:
+          type: array
+          items:
+            $ref: '#/components/schemas/Supplementary-Data-AML-MatchData-Country'
+        nationalId:
+          $ref: '#/components/schemas/Supplementary-Data-AML-MatchData-NationalId'
+        imageUrl:
+          type: string
+          format: uri
+          description: A URL to a displayable image of the matched individual or company logo.
+        isDeceased:
+          type: boolean
+          description: Indicates if this match is to a deceased individual.
+        isAlias:
+          type: boolean
+          description: Indicates if this match is an alias of the searched individual or organization.
+        isRelated:
+          type: boolean
+          description: Indicates if this match is a related party of the searched individual or organization.
+    Manual-KYC:
+      type: object
+      description: Provides a list of approved identity documents used in the manual KYC (mKYC) verification of this individual. The approved documents must be present on the entity for the mKYC process to be successful.
+      required:
+      - approvedBy
+      - approvedDocuments
+      properties:
+        approvedBy:
+          type: string
+          description: The person or system who approved the mKYC verification process.
+        approvedDocuments:
+          type: array
+          items:
+            type: string
+            format: uuid
+          description: The identity documents that were approved as part of the mKYC verification process.
+        comment:
+          $ref: '#/components/schemas/Comment'
+    Geolocation:
+      type: object
+      description: Geolocation details if it can be determined, typically related to a device during an activity
+      properties:
+        city:
+          type: string
+          description: The city
+          example:
+          - Melbourne
+          - San Francisco
+        country:
+          type: string
+          description: The country in alpha 3 ISO-3166-1 standard
+          example:
+          - AUS
+          - USA
+        subdivision:
+          type: string
+          description: The subdivision
+          example:
+          - Victoria
+          - California
+        latitude:
+          type: number
+          format: double
+          description: The latitude
+        longitude:
+          type: number
+          format: double
+          description: The longitude
+    Supplementary-Data-Activity-Fraud:
+      type: object
+      description: 'Defines the details of an activity fraud result.
+
+        '
+      allOf:
+      - $ref: '#/components/schemas/Supplementary-Data-Base'
+      - type: object
+        properties:
+          riskLevel:
+            type: string
+          activityResults:
+            type: array
+            items:
+              $ref: '#/components/schemas/Supplementary-Data-Activity-Result-Detail'
+    Email-Address-ID:
+      type: string
+      description: 'As email addresses are added to an entity, they are assigned a unique identifier to assist with modification and reference.
+
+        To modify an email, include the emailId in an update request.'
+      example: aa385f64-5717-4562-b3fc-2c963f66af21
+    External-Reference-Information:
+      type: object
+      x-examples:
+        Customer Reference:
+          name: CUSTOMER-REFERENCE
+          value: CUST-00001342
+          description: This is the customer id in the core banking system
+      required:
+      - name
+      - value
+      description: Used to store references and identifying information about an entity that is external to FrankieOne. If you wish to filter or search on customer information relevant to your business, that information should be added as an external reference.
+      properties:
+        name:
+          type: string
+          description: The name of the external reference.
+          example: CUSTOMER-REFERENCE
+        value:
+          type: string
+          description: The value of the external reference.
+          example: CUST-00001342
+        description:
+          type: string
+          description: A summary of what this external reference is and what it is used for.
+          example: This is the customer ID in the core banking system.
+    Device-Indicators:
+      type: object
+      properties:
+        riskScore:
+          type: integer
+          description: Risk score as determine by the device checking service
+        riskLevel:
+          $ref: '#/components/schemas/Risk-Level'
+        behaviorBiometrics:
+          $ref: '#/components/schemas/Behavior-Biometrics'
+        isRat:
+          type: boolean
+          description: Was the device user determined to be a rat?
+        isSupported:
+          type: boolean
+          description: Was the device supported or not?
+        isEmulated:
+          type: boolean
+          description: Was the device determined to be real or emulated?
+        isRooted:
+          type: boolean
+          description: Was the device determined to be rooted?
+        reputation:
+          type: string
+          description: The reputation of the device
+        vpnLikelihood:
+          $ref: '#/components/schemas/Likelihood'
+        proxyLikelihood:
+          $ref: '#/components/schemas/Likelihood'
+        botLikelihood:
+          $ref: '#/components/schemas/Likelihood'
+    Supplementary-Data-Activity-Result-Detail:
+      type: object
+      properties:
+        activityId:
+          $ref: '#/components/schemas/Activity-ID'
+        evaluationId:
+          $ref: '#/components/schemas/Evaluation-ID'
+        activityResultId:
+          $ref: '#/components/schemas/Activity-Result-ID'
+        reference:
+          $ref: '#/components/schemas/Result-Reference'
+        indicators:
+          type: array
+          items:
+            $ref: '#/components/schemas/Supplementary-Data-Activity-Result-Detail-Indicator'
+    Supplementary-Data-KYC-DoB-MatchStrengths:
+      type: object
+      properties:
+        fullDateOfBirth:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 100
+        year:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 100
+        month:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 100
+        day:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 100
+    Object-Type:
+      description: The type of object being annotated.
+      type: string
+      enum:
+      - ADDRESS
+      - NAME
+      - PHONE_NUMBER
+      - EMAIL
+      - DATE_OF_BIRTH
+      - WEBSITE
+      - SHAREHOLDER
+      - OFFICIAL
+      - UBO
+      - REGISTRATION
+      - SHAREHOLDING
+      - SHARECAPITAL
+      - DOCUMENT
+      - DOCUMENT_ATTACHMENT
+      - RESULT_PROCESS
+      - RESULT_STEP
+      - RESULT_WORKFLOW
+      - SERVICE_PROFILE
+      - AUDIT_EVENT
+      - EXTERNAL_REFERENCE
+      - RISK_ASSESSMENT
+      - MATCHLIST
+    Risk-Level:
+      type: string
+      enum:
+      - UNKNOWN
+      - LOW
+      - MEDIUM
+      - HIGH
+      - UNACCEPTABLE
+      description: "The risk level classification:\n  - UNKNOWN: Risk level is not determined.\n  - LOW: Low risk.\n  - MEDIUM: Medium risk.\n  - HIGH: High risk.\n  - UNACCEPTABLE: Risk level is unacceptable.\n"
+    Supplementary-Data-IDV-OCR-Comparison:
+      type: object
+      description: 'Result of an OCR and updated data comparison. This object represents the comparison between scanned data (via OCR) and updated or alternately supplied results.
+
+
+        When selecting data for comparison, preference is given to the entity details that have been or will be sent to service providers for verification, rather than the updated data provided in the OCR scan.
+
+
+        For the resultMap and mismatchMap keys, use the keys defined in the enum: SupplementaryDataIDVEnumDataOCRComparison.
+
+        '
+      allOf:
+      - $ref: '#/components/schemas/Supplementary-Data-IDV-Base'
+      - type: object
+        properties:
+          ocrResultId:
+            type: string
+            format: uuid
+            description: 'The proId of the OCR data PRO used for this comparison.
+
+              '
+          comparisonSource:
+            $ref: '#/components/schemas/Supplementary-Data-IDV-OCR-Comparison-Enum-Comparison-Source'
+          mismatchMap:
+            $ref: '#/components/schemas/Supplementary-Data-IDV-ElementMap'
+            description: 'Map of OCR mismatches between previously entered or expected values and the OCR result.
+
+
+              Actual matches should be recorded in resultMap.
+
+              '
+          nameId:
+            type: string
+            format: uuid
+            description: 'The nameId of the name object used in the comparison.
+
+              '
+          dobId:
+            type: string
+            format: uuid
+            description: 'The dobId of the date of birth object used in the comparison.
+
+              '
+    Process-Result-ClassEnum:
+      type: string
+      description: Provides additional clarity for the result class, especially for more generic element types like 'person'.
+      enum:
+      - KYC
+      - ID
+      - IDV
+      - AML
+      - FRAUDLIST
+      - FRAUDCHECK
+      - FRAUD
+      - DEVICE
+      - MOBILE
+      - EMAIL
+      - LOOKUP
+      - CREATE
+      - UPDATE
+      - DELETE
+      - KYB
+      - DUPLICATE
+      - BLOCKLIST
+      - SUPPORTING_DOC
+      - MATCHLIST
+      - VISA
+      - ACTIVITY
+      readOnly: true
+    Entity-Type:
+      type: string
+      enum:
+      - INDIVIDUAL
+      - ORGANIZATION
+      - UNKNOWN
+      description: The type of entity within Frankie. This can be "INDIVIDUAL", "ORGANIZATION", or "UNKNOWN".
+      readOnly: true
+    Process-Result-Manual-StatusEnum-Duplicate:
+      type: string
+      enum:
+      - FALSE_POSITIVE
+      - TRUE_POSITIVE_ACCEPT
+      - TRUE_POSITIVE_REJECT
+      description: 'Manual review status options for duplicate entity resolution. Used to indicate the outcome of a manual duplicate check between an existing entity (A) and an incoming entity (B):
+
+        - FALSE_POSITIVE: Entities are not duplicates. Both Entity A and Entity B are distinct and should be retained as separate records.
+
+        - TRUE_POSITIVE_ACCEPT: Entities are duplicates. Keep the incoming entity (Entity B) as the primary record and mark the existing entity (Entity A) as the duplicate. Use when the incoming record is more accurate or complete.
+
+        - TRUE_POSITIVE_REJECT: Entities are duplicates. Keep the existing entity (Entity A) as the primary record and mark the incoming entity (Entity B) as the duplicate. Use when the existing record is more trusted or complete.
+
+        '
+    Result-Reference:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The source of the result (e.g. sardine)
+        type:
+          $ref: '#/components/schemas/Result-Reference-Type'
+        reference:
+          type: string
+          description: "A link or reference to the source of the result. \nThe format will depend on the source and the reference type.\n"
+    Comment:
+      type: object
+      properties:
+        commentId:
+          type: string
+          description: Unique identifier for the comment.
+          example: 55fc5d54-46f7-49c8-bf78-e07ec79cd6e7
+          readOnly: true
+        text:
+          type: string
+          description: The text content of the comment.
+          example: Update after speaking to customer over the phone directly.
+    Supplementary-Data-IDV-Facial-Liveness:
+      type: object
+      description: 'Result of a facial liveness check, indicating how likely the facial photo or video is of a live person.
+
+
+        For resultMap keys, use the keys found in the enum: SupplementaryDataIDVEnumDataFacialLiveness.
+
+        '
+      allOf:
+      - $ref: '#/components/schemas/Supplementary-Data-IDV-Base'
+      - type: object
+        properties:
+          comparedSelfieId:
+            type: string
+            format: uuid
+            description: The document ID of the selfie that was compared.
+          comparedSelfieAttachmentId:
+            type: string
+            format: uuid
+            description: The attachment ID of the selfie that was compared.
+    Supplementary-Data-Matchlist-Field:
+      type: object
+      description: 'Entity data that resulted in a match at the time of execution.
+
+        '
+      required:
+      - objectId
+      - objectType
+      properties:
+        objectId:
+          type: string
+          description: Unique identifier of the matched object.
+        objectType:
+          $ref: '#/components/schemas/Object-Type'
+        matchedAttributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Supplementary-Data-Matchlist-Attribute'
+    Matchlist-Entry-Base:
+      type: object
+      description: Basic details about a matchlist entry, excluding metadata.
+      properties:
+        entryId:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Unique identifier for the matchlist entry.
+        entityId:
+          type: string
+          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+          description: The entity ID from which the attributes of this entry are derived. This is optional and can be used to link the matchlist entry to an entity.
+        entityType:
+          $ref: '#/components/schemas/Entity-Type'
+          description: The type of entity from which the attributes of this entry are derived. This is optional and can be used to link the matchlist entry to an entity.
+        reference:
+          type: string
+          description: Optional reference describing the context of this entry.
+          example: CERT-BAD-ACTOR-1234-5678
+        reasons:
+          description: The reasons for the matchlist entry. These codes will be translated to configured description strings.
+          type: array
+          items:
+            $ref: '#/components/schemas/Matchlist-Entry-Reason-Code'
+    Supplementary-Data-Duplicate-MatchedRule:
+      type: object
+      description: 'Provides details about the rule that was matched to classify the object as a duplicate.
+
+        '
+      properties:
+        name:
+          type: string
+          description: The name of the matched rule.
+        strength:
+          type: string
+          description: "The strength of the match. This is free-form, but it is recommended to use standard values for clarity, such as:\n  - \"VERY_LOW\"\n  - \"LOW\"\n  - \"MEDIUM\"\n  - \"HIGH\"\n  - \"VERY_HIGH\"\n"
+    Supplementary-Data-KYC-Address:
+      type: object
+      description: 'Defines the matching levels for each address element, where available.
+
+        Provides a match strength score ranging from 0 (no match) to 100 (full match).
+
+        '
+      allOf:
+      - $ref: '#/components/schemas/Supplementary-Data-Base'
+      - type: object
+        properties:
+          matchStrengths:
+            $ref: '#/components/schemas/Supplementary-Data-KYC-Address-MatchStrengths'
+          fuzziness:
+            $ref: '#/components/schemas/FuzzinessLevel'
+          wasNameMatchStrongEnough:
+            description: 'Indicates whether there was a sufficiently strong name match at the time this was checked, even if the address was a perfect match.
+
+              This is only an indicator at the time the PRO was created. Subsequent checks that reuse this result may interpret this differently.
+
+              '
+            type: boolean
+    Process-Result-Manual-StatusEnum-IDV:
+      type: string
+      enum:
+      - CLEAR
+      - REJECTED
+      description: 'Any manual status set after the results have been reviewed.
+
+        - CLEAR: When the result is determined to be clear and no further action is needed.
+
+        - REJECTED: When the result is determined to be rejected and no further action is needed.
+
+        '
+    List-Operation-Meta:
+      type: object
+      description: Meta information about the request and response returned during a list operation.
+      properties:
+        page:
+          type: integer
+          description: The current page number of the request.
+        total:
+          type: integer
+          description: The total number of items found for the search criteria.
+        limit:
+          type: integer
+          description: The limit applied to this response.
+        count:
+          type: integer
+          description: The number of items returned in this response.
+        sort:
+          type: string
+          enum:
+          - asc
+          - desc
+          description: The sort order applied to the items in the response.
+        sortFields:
+          type: array
+          items:
+            type: string
+            enum:
+            - createdAt
+            - updatedAt
+    Supplementary-Data-AML:
+      type: object
+      required:
+      - serviceProvider
+      description: 'Each AML match/hit generates a PRO, and this object describes the details of the matched individual or business.
+
+        '
+      allOf:
+      - $ref: '#/components/schemas/Supplementary-Data-Base'
+      - type: object
+        properties:
+          serviceProvider:
+            type: string
+            description: 'The name of the service provider from which this matched record was retrieved.
+
+              '
+          searchId:
+            type: string
+            description: 'The service provider''s search reference number, usually used to refer to an ongoing search.
+
+              '
+          caseId:
+            type: string
+            description: 'If the service provider has case management facilities, this is their case identifier. May be the same as the search ID.
+
+              '
+          referenceId:
+            type: string
+            description: 'An additional reference number provided by the service provider, or our own reference number.
+
+              '
+          originalStepSearchLevel:
+            type: string
+            description: 'Indicates if this was a simple PEP or PEP media check that found this match. Used to determine if more information is needed when re-using existing results.
+
+              '
+          groupingId:
+            type: string
+            description: 'Some matches can be grouped together as part of a collection of searches. This can be the searchId or a reference ID.
+
+              '
+          reportUrl:
+            type: string
+            format: uri
+            description: 'If the service provider supplies a pre-packaged report that can be downloaded independently, this is the URL to retrieve it.
+
+              '
+          fuzziness:
+            $ref: '#/components/schemas/FuzzinessLevel'
+          matchData:
+            $ref: '#/components/schemas/Supplementary-Data-AML-MatchData'
+          aliases:
+            type: array
+            items:
+              type: string
+              description: Alternative names, aliases, "AKA"s, or names as spelled in other languages, etc.
+          relatedParties:
+            type: array
+            items:
+              $ref: '#/components/schemas/Supplementary-Data-AML-RelatedParties'
+          referenceDocs:
+            type: array
+            items:
+              $ref: '#/components/schemas/Supplementary-Data-AML-ReferenceDocs'
+          notes:
+            $ref: '#/components/schemas/Custom-Attributes'
+          pepData:
+            type: array
+            items:
+              $ref: '#/components/schemas/Supplementary-Data-AML-PEPData'
+          sanctionData:
+            type: array
+            items:
+              $ref: '#/components/schemas/Supplementary-Data-AML-SanctionsData'
+          watchlistData:
+            type: array
+            items:
+              $ref: '#/components/schemas/Supplementary-Data-AML-WatchlistData'
+          mediaData:
+            type: array
+            items:
+              $ref: '#/components/schemas/Supplementary-Data-AML-MediaData'
+  securitySchemes:
+    Api-Key:
+      type: apiKey
+      in: header
+      name: api_key
+      description: ''
+    jwt:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

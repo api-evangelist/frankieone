@@ -1,0 +1,1108 @@
+openapi: 3.0.3
+info:
+  title: Core V2 Audit Search API
+  version: 2.0.0
+  description: This is the APIs for V2 Core. It allows you to do common operations, such as read audit entries or get workflow lists.
+  contact:
+    name: FrankieOne
+    url: https://www.frankieone.com/
+    email: help@frankieone.com
+servers:
+- url: https://api.uat.frankie.one
+security:
+- Api-Key: []
+tags:
+- name: Search
+paths:
+  /v2/search/serviceprofiles:
+    parameters:
+    - $ref: '#/components/parameters/sortFields'
+    - $ref: '#/components/parameters/sort'
+    - $ref: '#/components/parameters/page'
+    - $ref: '#/components/parameters/limit'
+    post:
+      summary: Search for profiles
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  meta:
+                    $ref: '#/components/schemas/List-Operation-Meta'
+                  requestId:
+                    $ref: '#/components/schemas/Request-ID'
+                  matches:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Search-Matches'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Invalid EntityId:
+                  value:
+                    errorCode: API-0400,
+                    errorMsg: 'Multiple Errors: See Issues list'
+                    details:
+                    - issue: 'entityId in path must be of type uuid: "test"'
+                      issueLocation: VALIDATE-entityId
+                    requestId: 01HM5XJ7VASZ3EJMB1VQGTBFJ4
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Invalid authentication:
+                  value:
+                    errorCode: AUTH-0002,
+                    errorMsg: Unauthorized
+                    details:
+                    - issue: Invalid Authentication provided. Access denied.
+                      issueLocation: request
+                    requestId: 00000000S6MNG7624K2TDXT1E3
+                No Api-Key:
+                  value:
+                    errorCode: AUTH-0401
+                    errorMsg: Unauthorized
+                    details:
+                    - issue: No api key provided. Access denied.
+                      issueLocation: request
+                    requestId: 00000001S6MNG7624K2TDXT1E3
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      operationId: searchProfiles
+      description: Search for Individuals and Organizations that match the provided search parameters.  Search parameters are supplied in the form of an entity object.
+      parameters:
+      - $ref: '#/components/parameters/Api-Key'
+      - $ref: '#/components/parameters/X-Frankie-CustomerID'
+      - $ref: '#/components/parameters/X-Frankie-CustomerChildID'
+      - $ref: '#/components/parameters/X-Frankie-Channel'
+      - $ref: '#/components/parameters/X-Frankie-Username'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Search-Profile'
+        description: Search for a profile
+      tags:
+      - Search
+      security:
+      - Api-Key: []
+      - jwt:
+        - kyc:api
+components:
+  schemas:
+    Status-Override-Type-Filter:
+      type: string
+      description: 'Filter on the status override type. Accepted values are:
+
+
+        - ONLY_OVERRIDDEN: Returns only profiles with manually overridden statuses.
+
+        - EXCLUDE_OVERRIDDEN: Excludes profiles with manually overridden statuses.
+
+        - ALL: Returns both profiles with and without manually overridden statuses.'
+      enum:
+      - ONLY_OVERRIDDEN
+      - EXCLUDE_OVERRIDDEN
+      - ALL
+      default: ALL
+    Error-Base:
+      type: object
+      properties:
+        errorCode:
+          type: string
+        errorMsg:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/Issue'
+    Service-Profile-Subscription:
+      type: object
+      properties:
+        serviceProfileId:
+          type: string
+          description: The unique identifier of the service profile.
+        status:
+          type: string
+          enum:
+          - ENABLED
+          - DISABLED
+          description: Indicates whether the subscription is currently active and operational.
+        type:
+          $ref: '#/components/schemas/Subscription-Type'
+        workflowName:
+          type: string
+          description: The name of the monitoring workflow executed when a monitoring alert occurs.
+        workflowId:
+          type: string
+          description: The unique identifier of the monitoring workflow.
+        enabledAt:
+          type: string
+          format: date-time
+          description: The date and time when the subscription was most recently enabled.
+        enabledRequestId:
+          type: string
+          description: The request identifier for the most recent enable action.
+        enabledBy:
+          type: string
+          description: The user who most recently enabled the subscription.
+        disabledAt:
+          type: string
+          format: date-time
+          description: The date and time when the subscription was most recently disabled.
+        disabledRequestId:
+          type: string
+          description: The request identifier for the most recent disable action.
+        disabledBy:
+          type: string
+          description: The user who most recently disabled the subscription.
+    Workflow-Execution-ScopeEnum:
+      type: string
+      enum:
+      - LAST
+      - ANY
+      description: "Determines how workflow status and name filters are applied:\n  - LAST: Applies filters only to the most recent workflow execution.\n  - ANY: Searches across all workflow executions.\n"
+      default: ANY
+      example: LAST
+    Workflow-Execution-StateEnum:
+      type: string
+      description: "Current state of the workflow execution. Possible values:\n  - COMPLETED: The workflow execution has completed successfully.\n  - CANCELED: The workflow execution was canceled.\n  - TERMINATED: The workflow execution was terminated before completion.\n  - ERROR: The workflow execution encountered an error.\n  - TIMEOUT: The workflow execution timed out.\n  - IN_PROGRESS: The workflow execution is currently in progress.\n"
+      enum:
+      - COMPLETED
+      - CANCELED
+      - TERMINATED
+      - ERROR
+      - TIMEOUT
+      - IN_PROGRESS
+    Risk-Assessment:
+      type: object
+      required:
+      - entityId
+      - serviceProfileId
+      - workflowId
+      - workflowExecutionId
+      properties:
+        serviceProfileId:
+          $ref: '#/components/schemas/Profile-ID'
+        riskAssessmentId:
+          $ref: '#/components/schemas/Risk-Assessment-ID'
+        workflowId:
+          type: string
+          description: Unique identifier of the workflow.
+        workflowExecutionId:
+          type: string
+          description: Unique identifier of the workflow execution.
+        entityId:
+          type: string
+          description: Unique identifier of the entity being assessed.
+        schemaVersion:
+          type: integer
+          description: Version of the risk assessment schema.
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp when the risk assessment was created.
+        updatedAt:
+          type: string
+          format: date-time
+          description: Timestamp when the risk assessment was last updated.
+        updatedBy:
+          type: string
+          description: Identifier of the user or system that updated this assessment.
+        updatedRequestId:
+          type: string
+          description: Identifier of the request that updated this assessment.
+        workflowRiskScore:
+          type: number
+          description: Risk score calculated for the workflow.
+        workflowRiskLevel:
+          $ref: '#/components/schemas/Risk-Level'
+          description: Risk level of the workflow execution associated with this risk assessment.
+        riskScore:
+          type: number
+          description: Risk score calculated for the entity.
+        riskLevel:
+          $ref: '#/components/schemas/Risk-Level'
+          description: Risk level of the entity.
+        isOutdated:
+          type: boolean
+          description: Indicates whether the assessment is out of date, either due to manual updates or changes to risk factors that were assessed.
+          default: false
+        riskFactors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Risk-Factor'
+          readOnly: true
+          description: List of risk factors considered in this assessment.
+    Risk-Level:
+      type: string
+      enum:
+      - UNKNOWN
+      - LOW
+      - MEDIUM
+      - HIGH
+      - UNACCEPTABLE
+      description: "The risk level classification:\n  - UNKNOWN: Risk level is not determined.\n  - LOW: Low risk.\n  - MEDIUM: Medium risk.\n  - HIGH: High risk.\n  - UNACCEPTABLE: Risk level is unacceptable.\n"
+    Subscription-Type:
+      type: string
+      description: Specifies the type of service profile subscription. This value determines the category of the service profile subscription.
+      enum:
+      - AML
+      - ACTIVITY
+    Service-Profile:
+      allOf:
+      - $ref: '#/components/schemas/Service-Profile-Base'
+      - type: object
+        properties:
+          state:
+            $ref: '#/components/schemas/Service-Profile-State'
+    Risk-Factor-Status:
+      type: string
+      enum:
+      - VALID
+      - STALE
+      - OVERRIDDEN
+      - DISCARDED
+      description: "The current status of the risk factor:\n  - VALID: The risk factor is applicable to the entity.\n  - STALE: The risk factor is no longer applicable to the entity. If this status is returned, it means that at the time of risk assessment, the risk factor was valid.\n  - OVERRIDDEN: The risk factor was manually overridden. If present, manualOverrideScore was used for risk score calculation in the risk assessment.\n  - DISCARDED: The risk factor was added during workflow execution but was discarded at a later stage in the same workflow. This factor was not used in the final risk assessment.\n"
+      default: VALID
+    Error:
+      type: object
+      x-examples:
+        '400':
+          requestId: 0123456789ABCDEFGHIJKLMNOP
+          errorCode: API-0400
+          errorMsg: Parsing credentials from "<invalid>" failed, because invalid.
+          httpStatusCode: 400
+        '401':
+          requestId: 0123456789ABCDEFGHIJKLMNOP
+          errorCode: API-0401
+          errorMsg: Unauthenticated due to invalid credentials.
+          httpStatusCode: 401
+        '409':
+          requestId: 0123456789ABCDEFGHIJKLMNOP
+          errorCode: API-0409
+          errorMsg: Conflict.
+          httpStatusCode: 409
+      allOf:
+      - $ref: '#/components/schemas/Error-Base'
+      - type: object
+        properties:
+          requestId:
+            $ref: '#/components/schemas/Request-ID'
+    Workflow-Execution-ResultEnum:
+      type: string
+      description: "Outcome of this workflow execution. Possible results:\n  - UNCHECKED: The workflow has not yet been run and has no result.\n  - IN_PROGRESS: The workflow is currently running and awaiting completion.\n  - REVIEW: The workflow produced results that require review. Check the risks and step results for more details.\n  - PASS: The workflow successfully completed with a PASS recommendation.\n  - FAIL: The workflow finished with a FAIL recommendation.\n  - COMPLETE: The workflow has finished and the results are considered complete. PASS/FAIL is not required.\n  - INCOMPLETE: The workflow has finished and the results are considered incomplete. PASS/FAIL is not required.\n  - NEEDS_APPROVAL: The workflow requires an approval process. Once approved, re-run the workflow.\n  - APPROVED: The workflow was approved, typically by an external source such as a human.\n  - REJECTED: The workflow was rejected, typically by an external source such as a human.\n  - BLOCKED: The workflow was blocked from completing. Manual review is required.\n  - CLEAR: The workflow completed with no issues raised. Often used for ongoing monitoring workflows.\n  - URGENT: The workflow completed with matters requiring urgent review. Often used for ongoing monitoring workflows that return sanctions or similarly critical items.\n  - MONITOR: The workflow completed and further monitoring is required. Should be manually reviewed.\n"
+      default: UNCHECKED
+      enum:
+      - UNCHECKED
+      - IN_PROGRESS
+      - REVIEW
+      - PASS
+      - FAIL
+      - COMPLETE
+      - INCOMPLETE
+      - NEEDS_APPROVAL
+      - APPROVED
+      - REJECTED
+      - BLOCKED
+      - CLEAR
+      - URGENT
+      - MONITOR
+    Search-Field-Match:
+      type: object
+      properties:
+        field:
+          $ref: '#/components/schemas/Search-Field'
+        confidence:
+          $ref: '#/components/schemas/Search-Confidence'
+    Service-Profile-Base:
+      type: object
+      properties:
+        serviceProfileId:
+          type: string
+          description: The unique identifier for the service profile.
+          example: 55fc5d54-46f7-49c8-bf78-e07ec79c42fd
+          readOnly: true
+        latestRiskAssessmentId:
+          $ref: '#/components/schemas/Risk-Assessment-ID'
+          description: 'The ID of the latest risk assessment in the most recent workflow with a valid assessment.
+
+            Omitted if no valid risk assessment exists.'
+        latestWorkflowExecutionId:
+          type: string
+          description: 'The ID of the most recent workflow execution.
+
+            Omitted if no workflows exist.'
+        entityId:
+          type: string
+          readOnly: true
+        entityName:
+          type: string
+          readOnly: true
+        entityType:
+          type: string
+          readOnly: true
+        organizationType:
+          type: string
+          example: SOLE TRADER
+          readOnly: true
+        country:
+          type: string
+          description: The ISO 3166 alpha-3 code representing the individual's country of residence or the business's country of registration.
+          example: AUS
+          readOnly: true
+        schemaVersion:
+          type: integer
+          description: The version number of the schema.
+          example: 2
+          readOnly: true
+        createdAt:
+          type: string
+          format: date-time
+          description: The UTC date and time when this service profile was created.
+          example: '2024-01-15T02:18:11.365Z'
+          readOnly: true
+        createdRequestId:
+          type: string
+          description: The unique ULID identifier of the request that created this service profile.
+          example: 01HMR2ERSKCYAVXKS1FKSRT2T4
+          readOnly: true
+        createdBy:
+          type: string
+          description: The user or client that created this profile.
+          example: Ryan Reynolds
+          readOnly: true
+        updatedAt:
+          type: string
+          format: date-time
+          description: The UTC date and time when this service profile was last updated, if applicable.
+          example: '2024-01-15T02:18:11.365Z'
+          readOnly: true
+        updatedBy:
+          type: string
+          description: The user or client that last updated this profile.
+          example: Ryan Reynolds
+          readOnly: true
+        updatedRequestId:
+          type: string
+          description: The unique ULID identifier of the request that last updated this service profile.
+          example: 01HMR2ERSKCYAVXKS1FKSRT2T4
+          readOnly: true
+        assignee:
+          type: string
+          description: The name of the officer assigned to approve this profile.
+          example: Ryan Gosling
+        reviewer:
+          type: string
+          description: The name of the officer assigned to review this profile.
+          example: Ryan Trahan
+        currentWorkflowId:
+          type: string
+          readOnly: true
+        currentWorkflowName:
+          type: string
+          description: The name of the current workflow, if applicable.
+        workflowSummaries:
+          type: array
+          items:
+            $ref: '#/components/schemas/Workflow-Execution-Summary'
+          readOnly: true
+        serviceName:
+          type: string
+          description: The name of the service associated with this profile.
+          readOnly: true
+        customerReference:
+          type: string
+          readOnly: true
+          description: Customer-specific identifier(s).
+        subscriptions:
+          type: array
+          description: 'The list of subscriptions associated with the service profile.
+
+            A subscription determines if the service profile is subscribed to a particular ongoing process.'
+          items:
+            $ref: '#/components/schemas/Service-Profile-Subscription'
+          readOnly: true
+    Search-Filters:
+      type: object
+      properties:
+        entityIds:
+          type: array
+          items:
+            type: string
+          description: Entity IDs to filter the Service Profiles by.
+        createdAtBefore:
+          type: string
+          format: date-time
+          description: Filter Service Profiles created on or before this date and time (inclusive).
+        createdAtAfter:
+          type: string
+          format: date-time
+          description: Filter Service Profiles created on or after this date and time (inclusive).
+        updatedAtAfter:
+          type: string
+          format: date-time
+          description: Filter Service Profiles updated on or after this date and time (inclusive).
+        updatedAtBefore:
+          type: string
+          format: date-time
+          description: Filter Service Profiles updated on or before this date and time (inclusive).
+        assignees:
+          type: array
+          items:
+            type: string
+          description: Filter Service Profiles by assignee(s).
+        reviewers:
+          type: array
+          items:
+            type: string
+          description: Filter Service Profiles by reviewer(s).
+        states:
+          description: List of Service Profile state values to filter Service Profiles.
+          type: array
+          items:
+            $ref: '#/components/schemas/Service-Profile-State'
+        workflowNames:
+          type: array
+          items:
+            type: string
+          description: Filter by workflow execution summary workflow names.
+        workflowExecutionStatuses:
+          description: 'Filter by combinations of workflowStatus and statusOverrideType.
+
+            If this filter is used, the deprecated statusOverrideType and workflowStatuses filters are ignored.'
+          type: array
+          items:
+            $ref: '#/components/schemas/Workflow-Execution-Statuses'
+        statusOverrideType:
+          type: string
+          description: "Filter by status override type. Accepted values are:\n  - ONLY_OVERRIDDEN: Returns only profiles with manually overridden statuses.\n  - EXCLUDE_OVERRIDDEN: Excludes profiles with manually overridden statuses.\n  - ALL: Returns both profiles with and without manually overridden statuses.\nIf not provided, the default behavior is ALL."
+          enum:
+          - ONLY_OVERRIDDEN
+          - EXCLUDE_OVERRIDDEN
+          - ALL
+          default: ALL
+          deprecated: true
+        workflowStatuses:
+          deprecated: true
+          description: List of workflowStatus values to filter Service Profiles.
+          type: array
+          items:
+            $ref: '#/components/schemas/Workflow-Execution-ResultEnum'
+        issueCategories:
+          type: array
+          items:
+            $ref: '#/components/schemas/Workflow-Issue-Category'
+          description: List of issue categories to filter Service Profiles.
+        issueSeverities:
+          type: array
+          items:
+            $ref: '#/components/schemas/Workflow-Issue-Severity'
+          description: List of issue severities to filter Service Profiles.
+        riskLevels:
+          type: array
+          items:
+            $ref: '#/components/schemas/Risk-Level'
+          description: Filter by workflow execution summary risk levels. If workflow name is not provided, all execution summaries are searched.
+        issues:
+          type: array
+          items:
+            $ref: '#/components/schemas/Workflow-Issue-Type'
+            description: "Filter for issues. Should match categories being filtered for. For each category, this provides the actual issue.\nVERIFY:\n  NOT_FOUND (was 404)\n  BAD_DATA_NAME\n  BAD_DATA_DOB\n  BAD_DATA_ADDRESS\n  BAD_DATA_ID\n  BAD_DATA_EMAIL\n  BAD_DATA_MOBILE\nDECEASED:\n  DECEASED\nEXPIRY:\n  REQUIRES_KYC\n  REQUIRES_IDV\n  REQUIRES_AML\nINFORMATIONAL:\n  CREDIT_HEADER\nAML:\n  PEP\n  SANCTION\n  MEDIA\n  WATCHLIST\nFRAUD:\n  FRAUD_LIST  \n  FRAUD_CHECK\nDEVICE:\n  DEVICE_FRAUD_MATCH\n  DEVICE_INVALID\nTRANSACTION:\n  AML_ISSUE\n  FRAUD_ISSUE\n  BLOCKED\nWATCHLIST:\n  INTERNAL_MATCH\nDUPLICATE:\n  DUPLICATE\nBLOCKLISTED:\n  MATCHED_INTERNAL\n  MATCHED_SHARED\n  MATCHED_EXTERNAL\nSYSTEM:\n  SERVICE_TIMEOUT\n  SERVICE_ERROR"
+        workflowExecutionScope:
+          $ref: '#/components/schemas/Workflow-Execution-ScopeEnum'
+    Search-Criteria:
+      type: object
+      required:
+      - type
+      - terms
+      properties:
+        type:
+          $ref: '#/components/schemas/Search-Type'
+        terms:
+          type: array
+          items:
+            $ref: '#/components/schemas/Search-Term'
+          description: List of search terms to be used as criteria.
+    Workflow-Execution-Statuses:
+      type: object
+      required:
+      - status
+      - overrideType
+      properties:
+        overrideType:
+          $ref: '#/components/schemas/Status-Override-Type-Filter'
+        status:
+          description: List of workflowStatus value that the Service Profiles will be filter with
+          type: array
+          items:
+            $ref: '#/components/schemas/Workflow-Execution-ResultEnum'
+    Issue:
+      type: object
+      properties:
+        issue:
+          type: string
+          description: Description of the issue.
+        issueLocation:
+          type: string
+          description: The location or context where the issue was identified.
+        issueType:
+          type: string
+          description: The type or category of the issue.
+    Search-Confidence:
+      type: number
+      format: float
+      minimum: 0
+      maximum: 1
+      description: 'Confidence level of the search result, represented as a number between 0 and 1.
+
+        A higher value indicates greater confidence in the accuracy of the search result.
+
+        '
+    Risk-Factor:
+      type: object
+      properties:
+        riskFactorId:
+          $ref: '#/components/schemas/Risk-Factor-ID'
+        factor:
+          type: string
+          description: Name of the Frankie risk factor.
+          readOnly: true
+        value:
+          type: string
+          description: Value assigned to the risk factor.
+          readOnly: true
+        score:
+          type: number
+          description: Risk score assigned to the factor (based on customer configuration).
+          readOnly: true
+        description:
+          type: string
+          description: Description of the risk factor.
+          readOnly: true
+        workflowExecutionId:
+          type: string
+          description: Unique identifier of the workflow execution in which the risk factor was generated.
+          readOnly: true
+        stepResultId:
+          type: string
+          description: Unique identifier of the step result if the factor originated from a step.
+          readOnly: true
+        manualOverrideScore:
+          type: number
+          description: If present, this score overrides all others and is used as the final score in risk assessment.
+        status:
+          $ref: '#/components/schemas/Risk-Factor-Status'
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp when the risk factor was created.
+          readOnly: true
+        updatedAt:
+          type: string
+          format: date-time
+          description: Timestamp when the risk factor was last updated.
+          readOnly: true
+        updatedBy:
+          type: string
+          description: Identifier of the user or system that updated this risk factor (e.g., System:<service_name>; or User:<user_name>).
+          readOnly: true
+        updatedRequestId:
+          type: string
+          description: Identifier of the request that updated this risk factor.
+          readOnly: true
+        createdServiceProfileId:
+          type: string
+          format: uuid
+          description: Identifier of the service profile associated with this risk factor when it was created.
+        createdWorkflowExecutionId:
+          type: string
+          description: Identifier of the workflow execution that originally created the risk factor.
+        createdStepResultId:
+          type: string
+          description: Identifier of the step result that originally created the risk factor.
+    Monitoring-Type:
+      type: string
+      description: The type of workflow subscription. This determines which types are subscribing to a workflow.
+      allOf:
+      - $ref: '#/components/schemas/Subscription-Type'
+    Workflow-LifecyclePhaseEnum:
+      type: string
+      description: "Specifies the lifecycle phase of the customer in which this workflow is executed:\n  - ONBOARDING: Workflow is in the onboarding stage.\n  - MONITORING: Workflow is in the monitoring stage.\n  - OTHER: Workflow is in another stage.\n"
+      enum:
+      - ONBOARDING
+      - MONITORING
+      - OTHER
+      default: OTHER
+    Search-Field:
+      type: string
+      description: "List of fields that can be searched.\n\n  - \"NAME\": Searches all name parts of the profile.\n  - \"GIVEN_NAME\": Searches the given name of the individual linked to the profile.\n  - \"FAMILY_NAME\": Searches the family name of the individual linked to the profile.\n  - \"MIDDLE_NAME\": Searches the middle name of the individual linked to the profile.\n  - \"DISPLAY_NAME\": Searches the preferred display name. By default, this is the combined given, middle, and family names.\n  - \"OTHER_NAME\": Searches other names of the individual linked to the profile.\n  - \"EXTERNAL_REFERENCE\": Searches the external reference of the entity linked to the profile.\n\nPlanned for future implementation:\n  - \"ALL\": Searches all fields.\n  - \"ADDRESS\": Searches the address of the entity linked to the profile.\n  - \"EMAIL_ADDRESS\": Searches the email address of the entity linked to the profile.\n  - \"PHONE_NUMBER\": Searches the phone number of the entity linked to the profile.\n  - \"DOCUMENT_IDENTIFIER\": Searches primary and secondary identifiers in documents linked to the profile."
+      enum:
+      - ALL
+      - NAME
+      - GIVEN_NAME
+      - FAMILY_NAME
+      - MIDDLE_NAME
+      - DISPLAY_NAME
+      - OTHER_NAME
+      - ADDRESS
+      - EMAIL_ADDRESS
+      - PHONE_NUMBER
+      - DOCUMENT_IDENTIFIER
+      - EXTERNAL_REFERENCE
+    Request-ID:
+      type: string
+      example: 01HN9XHZN6MGXM9JXG50K59Q85
+      description: The unique request identifier for the API call made.
+    Workflow-Issue-Type:
+      type: string
+      enum:
+      - AML_ISSUE
+      - BAD_DATA_ADDRESS
+      - BAD_DATA_DOB
+      - BAD_DATA_EMAIL
+      - BAD_DATA_ID
+      - BAD_DATA_MOBILE
+      - BAD_DATA_NAME
+      - BLOCKED
+      - COMPROMISED_DOCUMENT
+      - CREDIT_HEADER
+      - DATA_COMPARISON
+      - DATA_CONSISTENCY
+      - DATA_VALIDATION
+      - DENY_LIST
+      - DECEASED
+      - DEVICE_FRAUD_MATCH
+      - DEVICE_INVALID
+      - DOCUMENT_COMPARISON
+      - DUPLICATE
+      - FRAUD_CHECK
+      - FRAUD_DEVICE
+      - FRAUD_IP_ADDRESS
+      - FRAUD_EMAIL_ADDRESS
+      - FRAUD_PHONE_NUMBER
+      - FRAUD_ISSUE
+      - FRAUD_LIST
+      - IMAGE_INTEGRITY
+      - INTERNAL_MATCH
+      - LIVENESS_DETECTION
+      - MATCHED_EXTERNAL
+      - MATCHED_INTERNAL
+      - MATCHED_SHARED
+      - MEDIA
+      - NOT_FOUND
+      - OCR
+      - PARTIAL
+      - PEP
+      - REQUIRES_AML
+      - REQUIRES_IDV
+      - REQUIRES_KYC
+      - REQUIRES_VISA
+      - SANCTION
+      - SERVICE_ERROR
+      - SERVICE_TIMEOUT
+      - VISA_FAILED
+      - VISUAL_AUTHENTICITY
+      - WATCHLIST
+      - ACTIVITY_AML
+      - ACTIVITY_FRAUD
+      - ACTIVITY_DEVICE
+      description: "For each category, this provides the specific issue type.\n\nAML:\n  - PEP: The entity has Politically Exposed Person (PEP) hits.\n  - SANCTION: The entity has sanction hits.\n  - MEDIA: The entity has adverse media hits.\n  - WATCHLIST: The entity has watchlist hits.\n\nBAD_DATA:\n  - BAD_DATA_NAME: Name is required for verification but is missing or unusable due to data quality issues.\n  - BAD_DATA_DOB: Date of Birth is required for verification but is missing or unusable due to data quality issues.\n  - BAD_DATA_ADDRESS: Address is required for verification but is missing or unusable due to data quality issues.\n  - BAD_DATA_ID: ID is required for verification but is missing or unusable due to data quality issues.\n  - BAD_DATA_EMAIL: Email is required for verification but is missing or unusable due to data quality issues.\n  - BAD_DATA_MOBILE: Mobile is required for verification but is missing or unusable due to data quality issues.\n\nBLOCKLISTED:\n  - MATCHED_INTERNAL: The entity matched an internal blocklist.\n  - MATCHED_SHARED: The entity matched a shared blocklist.\n  - MATCHED_EXTERNAL: The entity matched an external blocklist.\n\nDECEASED:\n  - DECEASED: The person whose data is being verified is deceased.\n\nDEVICE:\n  - DEVICE_FRAUD_MATCH: Fraud detected on the device.\n  - DEVICE_INVALID: The device is invalid.\n\nDUPLICATE:\n  - DUPLICATE: The entity is a duplicate of another entity.\n\nEXPIRY:\n  - REQUIRES_KYC: KYC process needs to be re-initiated.\n  - REQUIRES_IDV: IDV process needs to be re-initiated.\n  - REQUIRES_AML: AML process needs to be re-initiated.\n  - REQUIRES_VISA: Visa process needs to be re-initiated.\n\nFRAUD:\n  - FRAUD_LIST: The entity is on a fraud list.\n  - FRAUD_CHECK: Fraud detected during checks.\n  - FRAUD_DEVICE: Device fraud detected.\n  - FRAUD_IP_ADDRESS: IP address fraud detected.\n  - FRAUD_EMAIL_ADDRESS: Email address fraud detected.\n  - FRAUD_PHONE_NUMBER: Phone number fraud detected.\n\nIDV:\n  - DATA_COMPARISON: Data comparison issue.\n  - DATA_VALIDATION: Data validation issue.\n  - DATA_CONSISTENCY: Data consistency issue.\n  - VISUAL_AUTHENTICITY: Visual authenticity issue.\n  - IMAGE_INTEGRITY: Image integrity issue.\n  - COMPROMISED_DOCUMENT: Document is compromised.\n  - LIVENESS_DETECTION: Liveness detection failed.\n  - DOCUMENT_COMPARISON: Document comparison issue.\n\nINFORMATIONAL:\n  - CREDIT_HEADER: Credit header information was returned as part of a credit agency check.\n\nKYC:\n  - PARTIAL: The KYC check was only partially successful.\n  - NOT_FOUND: No match was found for the given data.\n\nOCR:\n  - OCR: The OCR data does not match what was entered by the user.\n\nSYSTEM:\n  - SERVICE_TIMEOUT: All providers have timed out.\n  - SERVICE_ERROR: All providers have returned an error or an internal error has occurred.\n\nVISA:\n  - DENY_LIST: The entity matched a visa deny list.\n  - VISA_FAILED: Visa check failed from the provider.\n\nWATCHLIST:\n  - INTERNAL_MATCH: The entity matched an internal watchlist.\n\nACTIVITY:\n  - ACTIVITY_AML: AML-related activity issue.\n  - ACTIVITY_FRAUD: Fraud-related activity issue.\n  - ACTIVITY_DEVICE: Device-related activity issue."
+    Search-Match:
+      type: object
+      properties:
+        serviceProfile:
+          $ref: '#/components/schemas/Service-Profile'
+        confidence:
+          $ref: '#/components/schemas/Search-Confidence'
+        fieldsMatched:
+          type: array
+          items:
+            $ref: '#/components/schemas/Search-Field-Match'
+    Workflow-Issue-Severity:
+      type: string
+      enum:
+      - INFO
+      - REVIEW
+      - BLOCK
+      - WARNING
+      - CRITICAL
+      - ERROR
+      description: "The severity level of the issue. Possible values:\n  - INFO: Informational only.\n  - REVIEW: Requires review.\n  - BLOCK: Blocks further processing.\n  - WARNING: Warning, but not blocking.\n  - CRITICAL: Critical issue.\n  - ERROR: Error encountered.\n"
+    Workflow-Issue-Category:
+      type: string
+      enum:
+      - AML
+      - BAD_DATA
+      - BIOMETRICS
+      - BLOCKLISTED
+      - DECEASED
+      - DEVICE
+      - DOCUMENT
+      - DUPLICATE
+      - EXPIRY
+      - FRAUD
+      - IDV
+      - INFORMATIONAL
+      - KYC
+      - SYSTEM
+      - VERIFY
+      - VISA
+      - WATCHLIST
+      - ACTIVITY
+      description: "General category of issue found:\n  - AML: Anti-Money Laundering issues.\n  - BAD_DATA: Indicates that the data provided is invalid or incorrect.\n  - BIOMETRICS: Issues found during a biometrics check.\n  - BLOCKLISTED: The entity has a hit on a blocklist.\n  - DECEASED: Indicates that the entity is deceased.\n  - DEVICE: Issues found during device checks.\n  - DOCUMENT: Issues found during a document check.\n  - DUPLICATE: Indicates that the entity has duplicates.\n  - EXPIRY: Indicates that a process or document for the entity has expired.\n  - FRAUD: Possible fraud detected.\n  - IDV: Issues found during an Identity Verification (IDV) process.\n  - INFORMATIONAL: Informational messages that are not issues but are required to be returned.\n  - KYC: Issues found during a Know Your Customer (KYC) process.\n  - SYSTEM: System-level issues.\n  - VERIFY: Issues found during a verification process.\n  - VISA: Issues found during a visa check.\n  - WATCHLIST: Issues found during a watchlist check.\n  - ACTIVITY: Issues found during an activity process."
+    Issue-ID:
+      type: string
+      description: Unique identifier for the risk issue.
+      readOnly: true
+    Search-Matches:
+      type: array
+      items:
+        $ref: '#/components/schemas/Search-Match'
+    Service-Profile-State:
+      type: string
+      description: 'Current state of the Service Profile
+
+        - INIT: Initial state when the profile is created.
+
+        - AUTO: Automatically assigned state, typically after initial processing.
+
+        - ACTIVE: The profile is active and in use.
+
+        - ARCHIVED: The profile has been archived and is no longer active.
+
+        - BLOCKLISTED: The profile is blocked from further actions.
+
+        - INACTIVE: The profile is inactive, not currently in use.
+
+        - DELETED: The profile has been deleted.
+
+        - DUPLICATE: The profile is a duplicate of another existing profile.'
+      enum:
+      - INIT
+      - AUTO
+      - ACTIVE
+      - ARCHIVED
+      - BLOCKLISTED
+      - INACTIVE
+      - DELETED
+      - DUPLICATE
+    Workflow-Execution-Summary:
+      type: object
+      description: "Summary of the workflow execution.\n\n### Using and interpreting the status field\n\nThe result of the workflow is represented in the **status** field. Users can manually override this status with a different value to change the outcome of the workflow.\nWhen the **status** field is overridden, the **statusOverrideRequestId** field is populated with the request ID of the override request.\nIf the **statusOverrideRequestId** field is present and non-empty, it indicates that the status has been manually changed.\n\n  1. Initial State:\n     - When a workflow completes, its result is set in the **status** field.\n  2. Status Override:\n     - Users may override the **status** field with a different value (e.g., change FAIL to PASS).\n  3. Identifying Overrides:\n     - To determine if a status has been overridden, check for the presence of the **statusOverrideRequestId** field.\n     - If present, it indicates that the status has been manually changed.\n  4. Additional Override Information:\n     - **statusOverrideBy**: Identifies the user who performed the override (may not always be present).\n     - **statusOverrideAt**: Timestamp of when the override occurred.\n  5. Interpretation:\n     - If **statusOverrideRequestId** is empty or absent, no override has occurred.\n     - If **statusOverrideRequestId** is present, then a manual override has occurred.\n"
+      properties:
+        schemaVersion:
+          type: integer
+          description: Version of the schema used for this workflow execution.
+        workflowName:
+          type: string
+          description: Name of the workflow.
+        workflowExecutionId:
+          type: string
+          description: Unique identifier for the workflow execution.
+        workflowExecutionState:
+          $ref: '#/components/schemas/Workflow-Execution-StateEnum'
+          description: Current state of the workflow execution.
+        status:
+          $ref: '#/components/schemas/Workflow-Execution-ResultEnum'
+          description: Current status/result of the workflow execution.
+        statusOverrideAt:
+          type: string
+          format: date-time
+          description: Timestamp when the status override occurred.
+        statusOverrideRequestId:
+          type: string
+          description: Request ID associated with the status override.
+        statusOverrideBy:
+          type: string
+          description: Identifier of the user who performed the status override.
+        riskAssessment:
+          $ref: '#/components/schemas/Risk-Assessment'
+          description: Risk assessment for the workflow execution.
+        isManual:
+          type: boolean
+          description: Indicates if the workflow was executed manually.
+        steps:
+          $ref: '#/components/schemas/Workflow-Execution-Steps'
+          description: Steps executed as part of the workflow.
+        startedAt:
+          type: string
+          format: date-time
+          description: The timestamp when the workflow execution started.
+        endedAt:
+          type: string
+          format: date-time
+          description: The timestamp when the workflow execution ended.
+        issues:
+          type: array
+          description: List of issues encountered during the workflow execution.
+          items:
+            $ref: '#/components/schemas/Workflow-Issue'
+        lifecyclePhase:
+          $ref: '#/components/schemas/Workflow-LifecyclePhaseEnum'
+          description: Current lifecycle phase of the workflow.
+        monitoringTypes:
+          description: 'The types of monitoring that subscribe to the workflow.
+
+            '
+          type: array
+          items:
+            $ref: '#/components/schemas/Monitoring-Type'
+    Search-Type:
+      type: string
+      description: 'Specifies the type of search to perform.
+
+
+        - "EXACT": Returns only results that exactly match the search term.
+
+        - "FUZZY": Returns results that are similar to the search term.'
+      enum:
+      - EXACT
+      - FUZZY
+    Risk-Factor-ID:
+      type: string
+      description: Unique identifier of the risk factor.
+      readOnly: true
+    Risk-Assessment-ID:
+      type: string
+      description: Unique identifier of the risk assessment.
+      readOnly: true
+    Search-Term:
+      type: object
+      required:
+      - term
+      - field
+      properties:
+        term:
+          description: The value to search for in profiles. This term will be matched against the specified field.
+          type: string
+        field:
+          $ref: '#/components/schemas/Search-Field'
+    Search-Profile:
+      type: object
+      properties:
+        search:
+          $ref: '#/components/schemas/Search-Criteria'
+        filters:
+          $ref: '#/components/schemas/Search-Filters'
+    List-Operation-Meta:
+      type: object
+      description: Meta information about the request and response returned during a list operation.
+      properties:
+        page:
+          type: integer
+          description: The current page number of the request.
+        total:
+          type: integer
+          description: The total number of items found for the search criteria.
+        limit:
+          type: integer
+          description: The limit applied to this response.
+        count:
+          type: integer
+          description: The number of items returned in this response.
+        sort:
+          type: string
+          enum:
+          - asc
+          - desc
+          description: The sort order applied to the items in the response.
+        sortFields:
+          type: array
+          items:
+            type: string
+            enum:
+            - createdAt
+            - updatedAt
+    Workflow-Execution-Steps:
+      type: object
+      properties:
+        order:
+          type: array
+          items:
+            type: string
+        passed:
+          type: array
+          items:
+            type: string
+        failed:
+          type: array
+          items:
+            type: string
+        incomplete:
+          type: array
+          items:
+            type: string
+        notApplicable:
+          type: array
+          items:
+            type: string
+    Workflow-Issue:
+      type: object
+      required:
+      - category
+      - issue
+      - severity
+      properties:
+        issueId:
+          allOf:
+          - $ref: '#/components/schemas/Issue-ID'
+          readOnly: true
+        category:
+          $ref: '#/components/schemas/Workflow-Issue-Category'
+        issue:
+          $ref: '#/components/schemas/Workflow-Issue-Type'
+        workflowExecutionId:
+          type: string
+          description: Identifier of the workflow execution in which this issue was generated.
+        stepResultId:
+          type: string
+          description: Identifier of the step from which this issue originated, if applicable.
+        isCleared:
+          type: boolean
+          description: Indicates if this specific issue has been manually flagged as addressed.
+        createdBy:
+          type: string
+          description: User or system that created this issue.
+          readOnly: true
+        createdAt:
+          type: string
+          format: date-time
+          description: The timestamp when the issue was created.
+          readOnly: true
+        updatedAt:
+          type: string
+          format: date-time
+          description: The timestamp when the issue was last updated.
+          readOnly: true
+        updatedBy:
+          type: string
+          description: User or system that last updated this issue (e.g., System:<service_name> or User:<user_name>).
+          readOnly: true
+        updatedRequestId:
+          type: string
+          description: Identifier of the request that updated this issue.
+          readOnly: true
+        severity:
+          $ref: '#/components/schemas/Workflow-Issue-Severity'
+    Profile-ID:
+      type: string
+      description: Unique identifier of the Service Profile.
+  parameters:
+    X-Frankie-Username:
+      name: X-Frankie-Username
+      in: header
+      description: Username provided by API caller
+      required: false
+      schema:
+        type: string
+        example: fred.flintstone@frankieone.com
+    sort:
+      in: query
+      name: sort
+      schema:
+        type: string
+        enum:
+        - asc
+        - desc
+      description: Order of the sort fields will be sorted upon
+    page:
+      in: query
+      name: page
+      example: 2
+      schema:
+        type: integer
+      description: The page number that you want to retrieve for the list query
+    X-Frankie-CustomerChildID:
+      name: X-Frankie-CustomerChildID
+      in: header
+      required: false
+      schema:
+        type: string
+        example: 87654321-4321-4321-4321-210987654321
+      description: Your Customer Child ID provided by FrankieOne
+    sortFields:
+      name: sortFields
+      in: query
+      style: form
+      explode: false
+      schema:
+        type: array
+        items:
+          type: string
+      description: 'List of fields that the Process Results will be filtered with
+
+        Available values : createdAt, updatedAt'
+    Api-Key:
+      name: api_key
+      in: header
+      schema:
+        type: string
+        example: 245c765b124a098d09ef8765....
+      description: Your API key provided by FrankieOne
+      required: true
+    limit:
+      in: query
+      name: limit
+      schema:
+        type: integer
+        minimum: 1
+        default: 20
+      example: 20
+      description: Limit the number of items that will be returned as part of the request
+    X-Frankie-Channel:
+      name: X-Frankie-Channel
+      in: header
+      required: false
+      schema:
+        type: string
+      description: 'Open string that can be used to define the "channel" the request comes in from. It can potentially be used in routing and risk calculations upon request. Default values that can be used are:  api portal smartui Any alphanumeric string is supported though. Anything over 64 characters will be truncated.'
+    X-Frankie-CustomerID:
+      name: X-Frankie-CustomerID
+      in: header
+      required: true
+      schema:
+        type: string
+        example: 12345678-1234-1234-1234-123456789012
+      description: Your Customer ID provided by FrankieOne
+  securitySchemes:
+    Api-Key:
+      type: apiKey
+      in: header
+      name: api_key
+      description: ''
+    jwt:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

@@ -1,0 +1,414 @@
+openapi: 3.0.3
+info:
+  title: Core V2 Audit Individual Risks API
+  version: 2.0.0
+  description: This is the APIs for V2 Core. It allows you to do common operations, such as read audit entries or get workflow lists.
+  contact:
+    name: FrankieOne
+    url: https://www.frankieone.com/
+    email: help@frankieone.com
+servers:
+- url: https://api.uat.frankie.one
+security:
+- Api-Key: []
+tags:
+- name: Individual Risks
+  description: Manage risks associated with an individual
+paths:
+  /v2/individuals/{entityId}/serviceprofiles/{serviceName}/risk:
+    parameters:
+    - $ref: '#/components/parameters/entityId'
+    - $ref: '#/components/parameters/serviceName'
+    patch:
+      summary: Update an individual entity's risk level for a service profile.
+      description: 'This endpoint allows you to override the calculated risk level for the last completed workflow of an individual entity''s service profile.
+
+
+        Note:
+
+        - This operation will not trigger a new workflow but will be used in the next workflow execution unless risk factors change or results are invalidated.
+
+        - To execute the workflow, use the endpoint `POST /v2/individuals/{entityId}/serviceprofiles/{serviceName}/workflows/{workflowName}/execute`.'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  requestId:
+                    $ref: '#/components/schemas/Request-ID'
+                  riskAssessment:
+                    $ref: '#/components/schemas/Risk-Assessment'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Invalid EntityId:
+                  value:
+                    errorCode: API-0400,
+                    errorMsg: 'Multiple Errors: See Issues list'
+                    details:
+                    - issue: 'entityId in path must be of type uuid: "test"'
+                      issueLocation: VALIDATE-entityId
+                    requestId: 01HM5XJ7VASZ3EJMB1VQGTBFJ4
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Invalid authentication:
+                  value:
+                    errorCode: AUTH-0002,
+                    errorMsg: Unauthorized
+                    details:
+                    - issue: Invalid Authentication provided. Access denied.
+                      issueLocation: request
+                    requestId: 00000000S6MNG7624K2TDXT1E3
+                No Api-Key:
+                  value:
+                    errorCode: AUTH-0401
+                    errorMsg: Unauthorized
+                    details:
+                    - issue: No api key provided. Access denied.
+                      issueLocation: request
+                    requestId: 00000001S6MNG7624K2TDXT1E3
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      operationId: updateIndividualRiskLevel
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                comment:
+                  $ref: '#/components/schemas/Comment'
+                riskLevel:
+                  $ref: '#/components/schemas/Risk-Level'
+      parameters:
+      - $ref: '#/components/parameters/Api-Key'
+      - $ref: '#/components/parameters/X-Frankie-CustomerID'
+      - $ref: '#/components/parameters/X-Frankie-CustomerChildID'
+      - $ref: '#/components/parameters/X-Frankie-Channel'
+      - $ref: '#/components/parameters/X-Frankie-Username'
+      tags:
+      - Individual Risks
+      security:
+      - Api-Key: []
+      - jwt:
+        - kyc:api
+components:
+  schemas:
+    Error-Base:
+      type: object
+      properties:
+        errorCode:
+          type: string
+        errorMsg:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/Issue'
+    Risk-Assessment:
+      type: object
+      required:
+      - entityId
+      - serviceProfileId
+      - workflowId
+      - workflowExecutionId
+      properties:
+        serviceProfileId:
+          $ref: '#/components/schemas/Profile-ID'
+        riskAssessmentId:
+          $ref: '#/components/schemas/Risk-Assessment-ID'
+        workflowId:
+          type: string
+          description: Unique identifier of the workflow.
+        workflowExecutionId:
+          type: string
+          description: Unique identifier of the workflow execution.
+        entityId:
+          type: string
+          description: Unique identifier of the entity being assessed.
+        schemaVersion:
+          type: integer
+          description: Version of the risk assessment schema.
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp when the risk assessment was created.
+        updatedAt:
+          type: string
+          format: date-time
+          description: Timestamp when the risk assessment was last updated.
+        updatedBy:
+          type: string
+          description: Identifier of the user or system that updated this assessment.
+        updatedRequestId:
+          type: string
+          description: Identifier of the request that updated this assessment.
+        workflowRiskScore:
+          type: number
+          description: Risk score calculated for the workflow.
+        workflowRiskLevel:
+          $ref: '#/components/schemas/Risk-Level'
+          description: Risk level of the workflow execution associated with this risk assessment.
+        riskScore:
+          type: number
+          description: Risk score calculated for the entity.
+        riskLevel:
+          $ref: '#/components/schemas/Risk-Level'
+          description: Risk level of the entity.
+        isOutdated:
+          type: boolean
+          description: Indicates whether the assessment is out of date, either due to manual updates or changes to risk factors that were assessed.
+          default: false
+        riskFactors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Risk-Factor'
+          readOnly: true
+          description: List of risk factors considered in this assessment.
+    Risk-Level:
+      type: string
+      enum:
+      - UNKNOWN
+      - LOW
+      - MEDIUM
+      - HIGH
+      - UNACCEPTABLE
+      description: "The risk level classification:\n  - UNKNOWN: Risk level is not determined.\n  - LOW: Low risk.\n  - MEDIUM: Medium risk.\n  - HIGH: High risk.\n  - UNACCEPTABLE: Risk level is unacceptable.\n"
+    Error:
+      type: object
+      x-examples:
+        '400':
+          requestId: 0123456789ABCDEFGHIJKLMNOP
+          errorCode: API-0400
+          errorMsg: Parsing credentials from "<invalid>" failed, because invalid.
+          httpStatusCode: 400
+        '401':
+          requestId: 0123456789ABCDEFGHIJKLMNOP
+          errorCode: API-0401
+          errorMsg: Unauthenticated due to invalid credentials.
+          httpStatusCode: 401
+        '409':
+          requestId: 0123456789ABCDEFGHIJKLMNOP
+          errorCode: API-0409
+          errorMsg: Conflict.
+          httpStatusCode: 409
+      allOf:
+      - $ref: '#/components/schemas/Error-Base'
+      - type: object
+        properties:
+          requestId:
+            $ref: '#/components/schemas/Request-ID'
+    Risk-Factor-Status:
+      type: string
+      enum:
+      - VALID
+      - STALE
+      - OVERRIDDEN
+      - DISCARDED
+      description: "The current status of the risk factor:\n  - VALID: The risk factor is applicable to the entity.\n  - STALE: The risk factor is no longer applicable to the entity. If this status is returned, it means that at the time of risk assessment, the risk factor was valid.\n  - OVERRIDDEN: The risk factor was manually overridden. If present, manualOverrideScore was used for risk score calculation in the risk assessment.\n  - DISCARDED: The risk factor was added during workflow execution but was discarded at a later stage in the same workflow. This factor was not used in the final risk assessment.\n"
+      default: VALID
+    Issue:
+      type: object
+      properties:
+        issue:
+          type: string
+          description: Description of the issue.
+        issueLocation:
+          type: string
+          description: The location or context where the issue was identified.
+        issueType:
+          type: string
+          description: The type or category of the issue.
+    Risk-Factor:
+      type: object
+      properties:
+        riskFactorId:
+          $ref: '#/components/schemas/Risk-Factor-ID'
+        factor:
+          type: string
+          description: Name of the Frankie risk factor.
+          readOnly: true
+        value:
+          type: string
+          description: Value assigned to the risk factor.
+          readOnly: true
+        score:
+          type: number
+          description: Risk score assigned to the factor (based on customer configuration).
+          readOnly: true
+        description:
+          type: string
+          description: Description of the risk factor.
+          readOnly: true
+        workflowExecutionId:
+          type: string
+          description: Unique identifier of the workflow execution in which the risk factor was generated.
+          readOnly: true
+        stepResultId:
+          type: string
+          description: Unique identifier of the step result if the factor originated from a step.
+          readOnly: true
+        manualOverrideScore:
+          type: number
+          description: If present, this score overrides all others and is used as the final score in risk assessment.
+        status:
+          $ref: '#/components/schemas/Risk-Factor-Status'
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp when the risk factor was created.
+          readOnly: true
+        updatedAt:
+          type: string
+          format: date-time
+          description: Timestamp when the risk factor was last updated.
+          readOnly: true
+        updatedBy:
+          type: string
+          description: Identifier of the user or system that updated this risk factor (e.g., System:<service_name>; or User:<user_name>).
+          readOnly: true
+        updatedRequestId:
+          type: string
+          description: Identifier of the request that updated this risk factor.
+          readOnly: true
+        createdServiceProfileId:
+          type: string
+          format: uuid
+          description: Identifier of the service profile associated with this risk factor when it was created.
+        createdWorkflowExecutionId:
+          type: string
+          description: Identifier of the workflow execution that originally created the risk factor.
+        createdStepResultId:
+          type: string
+          description: Identifier of the step result that originally created the risk factor.
+    Comment:
+      type: object
+      properties:
+        commentId:
+          type: string
+          description: Unique identifier for the comment.
+          example: 55fc5d54-46f7-49c8-bf78-e07ec79cd6e7
+          readOnly: true
+        text:
+          type: string
+          description: The text content of the comment.
+          example: Update after speaking to customer over the phone directly.
+    Request-ID:
+      type: string
+      example: 01HN9XHZN6MGXM9JXG50K59Q85
+      description: The unique request identifier for the API call made.
+    Risk-Factor-ID:
+      type: string
+      description: Unique identifier of the risk factor.
+      readOnly: true
+    Risk-Assessment-ID:
+      type: string
+      description: Unique identifier of the risk assessment.
+      readOnly: true
+    Profile-ID:
+      type: string
+      description: Unique identifier of the Service Profile.
+  parameters:
+    entityId:
+      name: entityId
+      in: path
+      schema:
+        type: string
+      description: Unique FrankieOne identifier for an entity
+      required: true
+    X-Frankie-Username:
+      name: X-Frankie-Username
+      in: header
+      description: Username provided by API caller
+      required: false
+      schema:
+        type: string
+        example: fred.flintstone@frankieone.com
+    X-Frankie-CustomerChildID:
+      name: X-Frankie-CustomerChildID
+      in: header
+      required: false
+      schema:
+        type: string
+        example: 87654321-4321-4321-4321-210987654321
+      description: Your Customer Child ID provided by FrankieOne
+    serviceName:
+      name: serviceName
+      in: path
+      schema:
+        type: string
+      description: The unique name of the service profile
+      required: true
+    Api-Key:
+      name: api_key
+      in: header
+      schema:
+        type: string
+        example: 245c765b124a098d09ef8765....
+      description: Your API key provided by FrankieOne
+      required: true
+    X-Frankie-CustomerID:
+      name: X-Frankie-CustomerID
+      in: header
+      required: true
+      schema:
+        type: string
+        example: 12345678-1234-1234-1234-123456789012
+      description: Your Customer ID provided by FrankieOne
+    X-Frankie-Channel:
+      name: X-Frankie-Channel
+      in: header
+      required: false
+      schema:
+        type: string
+      description: 'Open string that can be used to define the "channel" the request comes in from. It can potentially be used in routing and risk calculations upon request. Default values that can be used are:  api portal smartui Any alphanumeric string is supported though. Anything over 64 characters will be truncated.'
+  securitySchemes:
+    Api-Key:
+      type: apiKey
+      in: header
+      name: api_key
+      description: ''
+    jwt:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

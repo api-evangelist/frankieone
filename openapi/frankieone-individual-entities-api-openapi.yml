@@ -1,0 +1,2405 @@
+openapi: 3.0.3
+info:
+  title: Core V2 Audit Individual Entities API
+  version: 2.0.0
+  description: This is the APIs for V2 Core. It allows you to do common operations, such as read audit entries or get workflow lists.
+  contact:
+    name: FrankieOne
+    url: https://www.frankieone.com/
+    email: help@frankieone.com
+servers:
+- url: https://api.uat.frankie.one
+security:
+- Api-Key: []
+tags:
+- name: Individual Entities
+  description: Manage individual entity records
+paths:
+  /v2/individuals:
+    parameters:
+    - $ref: '#/components/parameters/levelQuery'
+    post:
+      summary: Create an individual entity
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/individuals_entity_response'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Invalid authentication:
+                  value:
+                    errorCode: AUTH-0002,
+                    errorMsg: Unauthorized
+                    details:
+                    - issue: Invalid Authentication provided. Access denied.
+                      issueLocation: request
+                    requestId: 00000000S6MNG7624K2TDXT1E3
+                No Api-Key:
+                  value:
+                    errorCode: AUTH-0401
+                    errorMsg: Unauthorized
+                    details:
+                    - issue: No api key provided. Access denied.
+                      issueLocation: request
+                    requestId: 00000001S6MNG7624K2TDXT1E3
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Internal Server Error:
+                  value:
+                    errorCode: SYS-1063,
+                    errorMsg: Failed to generate KYC report
+                    requestId: 01HM5EM2QNNSC9K0PX9VC06HX3
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      operationId: createIndividuals
+      description: 'Creates an Individual entity object which can be used to store data about an individual. You can optionally include documents, attachments, references etc. to the entity.
+
+        Information stored in an entity object can be used to verify the individual against external data sources for the purposes of eKYC, or in other verifications supported by FrankieOne.'
+      parameters:
+      - $ref: '#/components/parameters/Api-Key'
+      - $ref: '#/components/parameters/X-Frankie-CustomerID'
+      - $ref: '#/components/parameters/X-Frankie-CustomerChildID'
+      - $ref: '#/components/parameters/X-Frankie-Channel'
+      - $ref: '#/components/parameters/X-Frankie-Username'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/individuals_create'
+        description: Create an individual
+      tags:
+      - Individual Entities
+      security:
+      - Api-Key: []
+      - jwt:
+        - kyc:api
+  /v2/individuals/{entityId}:
+    parameters:
+    - $ref: '#/components/parameters/entityId'
+    - $ref: '#/components/parameters/levelNoIdQuery'
+    patch:
+      summary: Update an individual entity
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/individuals_update'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/individuals_entity_response'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Invalid EntityId:
+                  value:
+                    errorCode: API-0400,
+                    errorMsg: 'Multiple Errors: See Issues list'
+                    details:
+                    - issue: 'entityId in path must be of type uuid: "test"'
+                      issueLocation: VALIDATE-entityId
+                    requestId: 01HM5XJ7VASZ3EJMB1VQGTBFJ4
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Invalid authentication:
+                  value:
+                    errorCode: AUTH-0002,
+                    errorMsg: Unauthorized
+                    details:
+                    - issue: Invalid Authentication provided. Access denied.
+                      issueLocation: request
+                    requestId: 00000000S6MNG7624K2TDXT1E3
+                No Api-Key:
+                  value:
+                    errorCode: AUTH-0401
+                    errorMsg: Unauthorized
+                    details:
+                    - issue: No api key provided. Access denied.
+                      issueLocation: request
+                    requestId: 00000001S6MNG7624K2TDXT1E3
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      operationId: updateIndividual
+      description: Update any of the information of the Individual Entity with the matching entity ID.
+      parameters:
+      - $ref: '#/components/parameters/Api-Key'
+      - $ref: '#/components/parameters/X-Frankie-CustomerID'
+      - $ref: '#/components/parameters/X-Frankie-CustomerChildID'
+      - $ref: '#/components/parameters/X-Frankie-Channel'
+      - $ref: '#/components/parameters/X-Frankie-Username'
+      tags:
+      - Individual Entities
+      security:
+      - Api-Key: []
+      - jwt:
+        - kyc:api
+    get:
+      summary: Get an individual entity
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/individuals_entity_response'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Invalid EntityId:
+                  value:
+                    errorCode: API-0400,
+                    errorMsg: 'Multiple Errors: See Issues list'
+                    details:
+                    - issue: 'entityId in path must be of type uuid: "test"'
+                      issueLocation: VALIDATE-entityId
+                    requestId: 01HM5XJ7VASZ3EJMB1VQGTBFJ4
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Invalid authentication:
+                  value:
+                    errorCode: AUTH-0002,
+                    errorMsg: Unauthorized
+                    details:
+                    - issue: Invalid Authentication provided. Access denied.
+                      issueLocation: request
+                    requestId: 00000000S6MNG7624K2TDXT1E3
+                No Api-Key:
+                  value:
+                    errorCode: AUTH-0401
+                    errorMsg: Unauthorized
+                    details:
+                    - issue: No api key provided. Access denied.
+                      issueLocation: request
+                    requestId: 00000001S6MNG7624K2TDXT1E3
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Unable to retrieve entity:
+                  value:
+                    errorCode: ENT-1010,
+                    errorMsg: Unable to retrieve requested entity
+                    details:
+                    - issue: entityId
+                      issueLocation: Cannot retrieve entityId (027d1e3d-95af-f19a-313a-3b869da9ce10)
+                    requestId: 01HM5EM2QNNSC9K0PX9VC06HX3
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      operationId: getIndividual
+      description: Retrieve all the information of the Individual Entity with the matching entity ID.
+      parameters:
+      - $ref: '#/components/parameters/Api-Key'
+      - $ref: '#/components/parameters/X-Frankie-CustomerID'
+      - $ref: '#/components/parameters/X-Frankie-CustomerChildID'
+      - $ref: '#/components/parameters/X-Frankie-Channel'
+      - $ref: '#/components/parameters/X-Frankie-Username'
+      tags:
+      - Individual Entities
+      security:
+      - Api-Key: []
+      - jwt:
+        - kyc:api
+    delete:
+      summary: Delete an individual entity
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  requestId:
+                    $ref: '#/components/schemas/Request-ID'
+                  entityId:
+                    $ref: '#/components/schemas/Entity-ID'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Invalid EntityId:
+                  value:
+                    errorCode: API-0400,
+                    errorMsg: 'Multiple Errors: See Issues list'
+                    details:
+                    - issue: 'entityId in path must be of type uuid: "test"'
+                      issueLocation: VALIDATE-entityId
+                    requestId: 01HM5XJ7VASZ3EJMB1VQGTBFJ4
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Invalid authentication:
+                  value:
+                    errorCode: AUTH-0002,
+                    errorMsg: Unauthorized
+                    details:
+                    - issue: Invalid Authentication provided. Access denied.
+                      issueLocation: request
+                    requestId: 00000000S6MNG7624K2TDXT1E3
+                No Api-Key:
+                  value:
+                    errorCode: AUTH-0401
+                    errorMsg: Unauthorized
+                    details:
+                    - issue: No api key provided. Access denied.
+                      issueLocation: request
+                    requestId: 00000001S6MNG7624K2TDXT1E3
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      operationId: deleteIndividual
+      description: Delete Individual Entity with the matching entity ID.
+      parameters:
+      - $ref: '#/components/parameters/Api-Key'
+      - $ref: '#/components/parameters/X-Frankie-CustomerID'
+      - $ref: '#/components/parameters/X-Frankie-CustomerChildID'
+      - $ref: '#/components/parameters/X-Frankie-Channel'
+      - $ref: '#/components/parameters/X-Frankie-Background'
+      - $ref: '#/components/parameters/X-Frankie-Username'
+      tags:
+      - Individual Entities
+      security:
+      - Api-Key: []
+      - jwt:
+        - kyc:api
+components:
+  schemas:
+    Phone-Number-ID:
+      type: string
+      description: 'As phone numbers are added to an entity, they are assigned an ID to assist with tracking.
+
+        If you are adjusting phone numbers, you will need to include the ID to reference it correctly in the list.'
+      example: ad165f64-5717-4562-b3fc-2c963f66bfa9
+    Document-Supplementary-Data-National-ID:
+      type: object
+      description: Supplementary information relevant to a national ID.
+      allOf:
+      - $ref: '#/components/schemas/Document-Supplementary-Data-Base'
+      - type: object
+        properties:
+          homeCountryFullName:
+            type: string
+            description: The original full name from the individual's home country national ID.
+            example: 张伟明
+          paternalFamilyName:
+            type: string
+            description: The individual's family name inherited from the father's side.
+            example: MENDOZA
+          maternalFamilyName:
+            type: string
+            description: The individual's family name inherited from the mother's side.
+            example: GARCIA
+    Individual-Name:
+      type: object
+      required:
+      - familyName
+      x-examples:
+        Example 1:
+          givenName: John
+          middleName: Jacob
+          familyName: Smith
+      properties:
+        nameId:
+          type: string
+          example: 87654321-4321-4321-4321-210987654321
+          description: Include the nameId of an existing name for this individual to modify it
+          readOnly: true
+        language:
+          type: string
+          example: eng
+          description: The ISO-639-3 standard code that best represents the language and character set of the individual's name
+          default: eng
+        givenName:
+          type: string
+          example: John
+          description: First name or given name
+        middleName:
+          type: string
+          example: R
+          description: Middle name(s) or middle initial(s)
+        familyName:
+          type: string
+          example: Doe
+          description: Last name, family name, or surname.
+        otherName:
+          type: string
+          example: null
+          description: Another name that this person may be known as, e.g., "Bob" as an alternative to "Robert".
+        prefix:
+          type: string
+          example: Dr.
+          description: Letters or words that come before an individual's full name (e.g., title or honorific).
+        suffix:
+          type: string
+          example: Jr.
+          description: Letters or words that come after an individual's full name (e.g., generational suffix).
+        sourceId:
+          type: string
+          example: 87654321-4321-4321-4321-210987654322
+          description: The source from where a specific information was sourced from. This is a link to an informationSource object in the informationSources map
+          readOnly: true
+        displayName:
+          type: string
+          example: John Doe
+          description: Long format of the individual's full name, including any prefix, suffix, middle, or other names. Best used when the proper structure of the individual's name is unknown.
+    Relationship:
+      type: object
+      properties:
+        entityId:
+          $ref: '#/components/schemas/Entity-ID'
+        entityType:
+          $ref: '#/components/schemas/Entity-Type'
+        origin:
+          $ref: '#/components/schemas/Relationship-Origin'
+    Service-Profile-Base:
+      type: object
+      properties:
+        serviceProfileId:
+          type: string
+          description: The unique identifier for the service profile.
+          example: 55fc5d54-46f7-49c8-bf78-e07ec79c42fd
+          readOnly: true
+        latestRiskAssessmentId:
+          $ref: '#/components/schemas/Risk-Assessment-ID'
+          description: 'The ID of the latest risk assessment in the most recent workflow with a valid assessment.
+
+            Omitted if no valid risk assessment exists.'
+        latestWorkflowExecutionId:
+          type: string
+          description: 'The ID of the most recent workflow execution.
+
+            Omitted if no workflows exist.'
+        entityId:
+          type: string
+          readOnly: true
+        entityName:
+          type: string
+          readOnly: true
+        entityType:
+          type: string
+          readOnly: true
+        organizationType:
+          type: string
+          example: SOLE TRADER
+          readOnly: true
+        country:
+          type: string
+          description: The ISO 3166 alpha-3 code representing the individual's country of residence or the business's country of registration.
+          example: AUS
+          readOnly: true
+        schemaVersion:
+          type: integer
+          description: The version number of the schema.
+          example: 2
+          readOnly: true
+        createdAt:
+          type: string
+          format: date-time
+          description: The UTC date and time when this service profile was created.
+          example: '2024-01-15T02:18:11.365Z'
+          readOnly: true
+        createdRequestId:
+          type: string
+          description: The unique ULID identifier of the request that created this service profile.
+          example: 01HMR2ERSKCYAVXKS1FKSRT2T4
+          readOnly: true
+        createdBy:
+          type: string
+          description: The user or client that created this profile.
+          example: Ryan Reynolds
+          readOnly: true
+        updatedAt:
+          type: string
+          format: date-time
+          description: The UTC date and time when this service profile was last updated, if applicable.
+          example: '2024-01-15T02:18:11.365Z'
+          readOnly: true
+        updatedBy:
+          type: string
+          description: The user or client that last updated this profile.
+          example: Ryan Reynolds
+          readOnly: true
+        updatedRequestId:
+          type: string
+          description: The unique ULID identifier of the request that last updated this service profile.
+          example: 01HMR2ERSKCYAVXKS1FKSRT2T4
+          readOnly: true
+        assignee:
+          type: string
+          description: The name of the officer assigned to approve this profile.
+          example: Ryan Gosling
+        reviewer:
+          type: string
+          description: The name of the officer assigned to review this profile.
+          example: Ryan Trahan
+        currentWorkflowId:
+          type: string
+          readOnly: true
+        currentWorkflowName:
+          type: string
+          description: The name of the current workflow, if applicable.
+        workflowSummaries:
+          type: array
+          items:
+            $ref: '#/components/schemas/Workflow-Execution-Summary'
+          readOnly: true
+        serviceName:
+          type: string
+          description: The name of the service associated with this profile.
+          readOnly: true
+        customerReference:
+          type: string
+          readOnly: true
+          description: Customer-specific identifier(s).
+        subscriptions:
+          type: array
+          description: 'The list of subscriptions associated with the service profile.
+
+            A subscription determines if the service profile is subscribed to a particular ongoing process.'
+          items:
+            $ref: '#/components/schemas/Service-Profile-Subscription'
+          readOnly: true
+    Issue:
+      type: object
+      properties:
+        issue:
+          type: string
+          description: Description of the issue.
+        issueLocation:
+          type: string
+          description: The location or context where the issue was identified.
+        issueType:
+          type: string
+          description: The type or category of the issue.
+    Document-Supplementary-Data-Marriage-Certificate:
+      type: object
+      description: Supplementary information relevant to a marriage certificate.
+      allOf:
+      - $ref: '#/components/schemas/Document-Supplementary-Data-Base'
+      - type: object
+        description: Supplementary information relevant to a marriage certificate.
+        properties:
+          partner1GivenName:
+            type: string
+            description: The given name of partner 1.
+            example: Harry
+          partner1FamilyName:
+            type: string
+            description: The family name of partner 1.
+            example: Versailles
+          partner1OtherName:
+            type: string
+            description: The other name of partner 1.
+            example: S.
+          partner2GivenName:
+            type: string
+            description: The given name of partner 2.
+            example: Harry
+          partner2FamilyName:
+            type: string
+            description: The family name of partner 2.
+            example: Versailles
+          partner2OtherName:
+            type: string
+            description: The other name of partner 2.
+            example: S.
+          registrationDate:
+            type: string
+            description: The date the marriage was registered.
+            example: '2023'
+          marriageDate:
+            type: string
+            description: The date the marriage was held.
+            example: '2023-10-01'
+          dateOfPrint:
+            type: string
+            description: The date the birth certificate was printed.
+            example: '2023-10-01'
+    Risk-Factor:
+      type: object
+      properties:
+        riskFactorId:
+          $ref: '#/components/schemas/Risk-Factor-ID'
+        factor:
+          type: string
+          description: Name of the Frankie risk factor.
+          readOnly: true
+        value:
+          type: string
+          description: Value assigned to the risk factor.
+          readOnly: true
+        score:
+          type: number
+          description: Risk score assigned to the factor (based on customer configuration).
+          readOnly: true
+        description:
+          type: string
+          description: Description of the risk factor.
+          readOnly: true
+        workflowExecutionId:
+          type: string
+          description: Unique identifier of the workflow execution in which the risk factor was generated.
+          readOnly: true
+        stepResultId:
+          type: string
+          description: Unique identifier of the step result if the factor originated from a step.
+          readOnly: true
+        manualOverrideScore:
+          type: number
+          description: If present, this score overrides all others and is used as the final score in risk assessment.
+        status:
+          $ref: '#/components/schemas/Risk-Factor-Status'
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp when the risk factor was created.
+          readOnly: true
+        updatedAt:
+          type: string
+          format: date-time
+          description: Timestamp when the risk factor was last updated.
+          readOnly: true
+        updatedBy:
+          type: string
+          description: Identifier of the user or system that updated this risk factor (e.g., System:<service_name>; or User:<user_name>).
+          readOnly: true
+        updatedRequestId:
+          type: string
+          description: Identifier of the request that updated this risk factor.
+          readOnly: true
+        createdServiceProfileId:
+          type: string
+          format: uuid
+          description: Identifier of the service profile associated with this risk factor when it was created.
+        createdWorkflowExecutionId:
+          type: string
+          description: Identifier of the workflow execution that originally created the risk factor.
+        createdStepResultId:
+          type: string
+          description: Identifier of the step result that originally created the risk factor.
+    Monitoring-Type:
+      type: string
+      description: The type of workflow subscription. This determines which types are subscribing to a workflow.
+      allOf:
+      - $ref: '#/components/schemas/Subscription-Type'
+    Request-ID:
+      type: string
+      example: 01HN9XHZN6MGXM9JXG50K59Q85
+      description: The unique request identifier for the API call made.
+    Entity-Documents:
+      type: object
+      properties:
+        REPORT:
+          type: array
+          items:
+            $ref: '#/components/schemas/Document-Information'
+        SUPPORTING:
+          type: array
+          items:
+            $ref: '#/components/schemas/Document-Information'
+        IDENTITY:
+          type: array
+          items:
+            $ref: '#/components/schemas/Document-Information'
+        OTHER:
+          type: array
+          items:
+            $ref: '#/components/schemas/Document-Information'
+    Issue-ID:
+      type: string
+      description: Unique identifier for the risk issue.
+      readOnly: true
+    Entity-ID:
+      type: string
+      description: 'Entities are assigned an auto-generated UUID to ensure global uniqueness, represented as entityId. The entityId allows for precise modification when required.
+
+        To modify an entity, set the entityId of the entity you wish to update in an update request.'
+      example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+      readOnly: true
+    Date-Base:
+      type: object
+      properties:
+        year:
+          type: string
+          description: Year in "YYYY" format.
+          example: '1990'
+        month:
+          type: string
+          description: Month in "MM" format.
+          example: '03'
+        day:
+          type: string
+          description: Day in "DD" format.
+          example: '27'
+        unstructured:
+          type: string
+          description: 'Raw date format without normalization or standardization to the Gregorian calendar.
+
+            This can be used to provide non-Gregorian dates (e.g., Islamic dates).'
+          example: 12 Rajab 1445 AH
+        type:
+          $ref: '#/components/schemas/Date-Type'
+    Risk-Factor-ID:
+      type: string
+      description: Unique identifier of the risk factor.
+      readOnly: true
+    Document-Information:
+      type: object
+      required:
+      - type
+      - country
+      properties:
+        documentId:
+          $ref: '#/components/schemas/Document-ID'
+        entityId:
+          $ref: '#/components/schemas/Entity-ID'
+        expiryDate:
+          $ref: '#/components/schemas/Date'
+          description: The expiry date of the document in YYYY-MM-DD format.
+        issueDate:
+          $ref: '#/components/schemas/Date'
+          description: The issue date of the document in YYYY-MM-DD format.
+        primaryIdentifier:
+          type: string
+          description: The primary ID number of the document, e.g., the ID number on a driver licence.
+          example: '000734130'
+        secondaryIdentifier:
+          type: string
+          description: The secondary ID number of the document, e.g., the card number on a driver licence.
+          example: P0001975
+        type:
+          $ref: '#/components/schemas/Document-Type'
+        subtype:
+          type: string
+          description: The sub-type of the document, if relevant. This can include specific report or attestation types, e.g., FACIAL_COMPARISON (attestation) or KYC (report).
+          example: Photo Comparison
+        subdivision:
+          type: string
+          description: The abbreviated ISO 3166 subdivision/region where the ID was issued, e.g., "VIC" for the Australian state of Victoria or "MA" for the US state of Massachusetts.
+          example: VIC
+        country:
+          type: string
+          maxLength: 3
+          description: 'The ISO 3166 alpha-3 country code where the document was issued, if relevant.
+
+            For more information, please refer to: https://en.wikipedia.org/wiki/List_of_ISO_3166_country_codes'
+          example: AUS
+        createdAt:
+          type: string
+          format: date-time
+          description: The date and time when the document record was created, in ISO 8601 format.
+          example: '2024-01-15T02:18:11.365Z'
+          readOnly: true
+        updatedAt:
+          type: string
+          format: date-time
+          description: The date and time when the document record was last updated, in ISO 8601 format.
+          example: '2025-01-16T02:18:11.365Z'
+          readOnly: true
+        validFrom:
+          $ref: '#/components/schemas/Date'
+          description: The date when the validity period for this document began, if applicable.
+        validTo:
+          $ref: '#/components/schemas/Date'
+          description: The date when the validity period for this document ended, if applicable.
+        sourceId:
+          type: string
+          description: The source from which specific information was sourced. This is a link to an informationSource object in the informationSources map.
+          example: 324f15f64-5717-4562-b3fc-2c963f66ffa1
+          readOnly: true
+        supplementaryData:
+          $ref: '#/components/schemas/Document-Supplementary-Data'
+        customAttributes:
+          $ref: '#/components/schemas/Custom-Attributes'
+        attachments:
+          type: array
+          description: 'List of scans, pages, or files for a single document, e.g., front and back images of a driver licence, or page 1, 2, and 3 of a supporting document.
+
+
+            Attachments can be uploaded in a single call or in multiple calls. To upload attachments over multiple calls, include the documentId in the request.'
+          items:
+            $ref: '#/components/schemas/Document-Attachment'
+    Document-Supplementary-Data-Citizenship:
+      type: object
+      description: Supplementary information relevant to a citizenship certificate.
+      allOf:
+      - $ref: '#/components/schemas/Document-Supplementary-Data-Base'
+      - type: object
+        description: Supplementary information relevant to a citizenship certificate.
+        properties:
+          acquisitionDate:
+            type: string
+            description: The date citizenship was acquired.
+            example: 2000/01/01
+          primaryCountry:
+            type: string
+            description: The primary country of citizenship, represented by its three-letter ISO 3166-1 alpha-3 code.
+            example: USA
+          secondaryCountry:
+            type: string
+            description: The secondary country of citizenship, if applicable, represented by its three-letter ISO 3166-1 alpha-3 code.
+            example: CAN
+    Risk-Assessment-ID:
+      type: string
+      description: Unique identifier of the risk assessment.
+      readOnly: true
+    Date-Of-Birth-Alternate:
+      type: object
+      allOf:
+      - type: object
+        properties:
+          dateOfBirthId:
+            type: string
+            description: 'As dates of birth are added to an entity, they are assigned a unique identifier to assist with modification and reference.
+
+              To modify a date of birth, include the dateOfBirthId in an update request for the individual.'
+          sourceId:
+            type: string
+            description: The source from which specific information was sourced. This is a link to an informationSource object in the informationSources map.
+            readOnly: true
+      - $ref: '#/components/schemas/Date'
+    Email:
+      type: object
+      properties:
+        emailAddressId:
+          $ref: '#/components/schemas/Email-Address-ID'
+        type:
+          type: string
+          enum:
+          - OTHER
+          - WORK
+          - PERSONAL
+          - BUSINESS
+          example: WORK
+          description: The type of email address, if known.
+        sourceId:
+          type: string
+          description: The source from which specific information was sourced. This is a link to an informationSource object in the informationSources map.
+          example: 31dd15f64-5717-4562-b3fc-2c963f66234d
+          readOnly: true
+        email:
+          type: string
+          description: The individual's email address. This email can be used to notify the individual of any verification requirements.
+          example: leonardo_dc@outlook.com
+        isPreferred:
+          type: boolean
+          description: Indicates whether this email address is the individual's preferred email. The preferred email will be used to send notifications at the client's request.
+          default: true
+        linkedAddresses:
+          type: array
+          readOnly: true
+          description: If the email is attached to one or more addresses, the address IDs of those addresses will be present.
+          items:
+            type: object
+            properties:
+              addressId:
+                description: The addressId of the linked address.
+                type: string
+                example: adc215f64-5717-4562-b3fc-2c963f66222a
+    Error-Base:
+      type: object
+      properties:
+        errorCode:
+          type: string
+        errorMsg:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/Issue'
+    Workflow-Execution-StateEnum:
+      type: string
+      description: "Current state of the workflow execution. Possible values:\n  - COMPLETED: The workflow execution has completed successfully.\n  - CANCELED: The workflow execution was canceled.\n  - TERMINATED: The workflow execution was terminated before completion.\n  - ERROR: The workflow execution encountered an error.\n  - TIMEOUT: The workflow execution timed out.\n  - IN_PROGRESS: The workflow execution is currently in progress.\n"
+      enum:
+      - COMPLETED
+      - CANCELED
+      - TERMINATED
+      - ERROR
+      - TIMEOUT
+      - IN_PROGRESS
+    Process-Result-ID:
+      type: string
+      description: When a process result object is first created, it is assigned an ID. When updating the process result object, set the processResultID to the ID of the process result object you are referring to.
+      readOnly: true
+    Subscription-Type:
+      type: string
+      description: Specifies the type of service profile subscription. This value determines the category of the service profile subscription.
+      enum:
+      - AML
+      - ACTIVITY
+    Document-Supplementary-Data-Base:
+      type: object
+      description: Supplementary data associated with a document.
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          description: The document type that defines the type of supplementary data returned.
+          enum:
+          - NATIONAL_HEALTH_ID
+          - BIRTH_CERT
+          - NATIONAL_ID
+          - CITIZENSHIP
+          - PASSPORT
+          - MARRIAGE_CERT
+    Document-Supplementary-Data:
+      type: object
+      description: Supplementary information relevant to a specific document or report type.
+      oneOf:
+      - $ref: '#/components/schemas/Document-Supplementary-Data-National-Health-ID'
+      - $ref: '#/components/schemas/Document-Supplementary-Data-Birth-Certificate'
+      - $ref: '#/components/schemas/Document-Supplementary-Data-National-ID'
+      - $ref: '#/components/schemas/Document-Supplementary-Data-Citizenship'
+      - $ref: '#/components/schemas/Document-Supplementary-Data-Passport'
+      - $ref: '#/components/schemas/Document-Supplementary-Data-Marriage-Certificate'
+      discriminator:
+        propertyName: type
+        mapping:
+          NATIONAL_HEALTH_ID: '#/components/schemas/Document-Supplementary-Data-National-Health-ID'
+          BIRTH_CERT: '#/components/schemas/Document-Supplementary-Data-Birth-Certificate'
+          NATIONAL_ID: '#/components/schemas/Document-Supplementary-Data-National-ID'
+          CITIZENSHIP: '#/components/schemas/Document-Supplementary-Data-Citizenship'
+          PASSPORT: '#/components/schemas/Document-Supplementary-Data-Passport'
+          MARRIAGE_CERT: '#/components/schemas/Document-Supplementary-Data-Marriage-Certificate'
+    Individual:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/Base-Individual'
+      - type: object
+        properties:
+          informationSources:
+            type: object
+            description: Map of information sources used across the response.
+            additionalProperties:
+              $ref: '#/components/schemas/Information-Source'
+            readOnly: true
+          relationships:
+            $ref: '#/components/schemas/Individual-Relationships'
+    Entity:
+      type: object
+      properties:
+        entityId:
+          $ref: '#/components/schemas/Entity-ID'
+        entityType:
+          $ref: '#/components/schemas/Entity-Type'
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        schemaVersion:
+          type: integer
+          description: The schema version of this entity.
+          example: 2
+          readOnly: true
+        addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/Address'
+          description: A list of all address information associated with the entity.
+        phoneNumbers:
+          type: array
+          items:
+            $ref: '#/components/schemas/Phone-Number'
+          description: A list of all phone numbers associated with the entity.
+        emailAddresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/Email'
+          description: A list of all email addresses associated with the entity.
+        customAttributes:
+          $ref: '#/components/schemas/Custom-Attributes'
+        externalReferences:
+          type: array
+          items:
+            $ref: '#/components/schemas/External-Reference'
+          description: A list of all external references associated with the entity.
+        documents:
+          $ref: '#/components/schemas/Entity-Documents'
+        sourceId:
+          type: string
+          description: The source from which specific information was sourced. This is a link to an informationSource object in the informationSources map.
+          readOnly: true
+    Individual-Name-Alternate:
+      type: object
+      required:
+      - familyName
+      x-examples:
+        Example 1:
+          givenName: John
+          middleName: Jacob
+          familyName: Smith
+      properties:
+        nameId:
+          type: string
+          example: 87654321-4321-4321-4321-210987654321
+          description: Include the nameId of an existing name for this individual to modify it.
+        language:
+          type: string
+          example: eng
+          description: The ISO-639-3 standard code that best represents the language and character set of the individual's name.
+          default: eng
+        givenName:
+          type: string
+          example: John
+          description: First name or given name.
+        middleName:
+          type: string
+          example: R
+          description: Middle name(s) or middle initial(s).
+        familyName:
+          type: string
+          example: Doe
+          description: Last name, family name, or surname.
+        otherName:
+          type: string
+          example: null
+          description: Other names to be stored with the entity.
+        prefix:
+          type: string
+          example: Dr.
+          description: Element or series of letters that precede the individual's full name (e.g., title or honorific).
+        suffix:
+          type: string
+          example: Jr.
+          description: Element or series of letters that follow the individual's full name (e.g., generational suffix).
+        sourceId:
+          type: string
+          example: 87654321-4321-4321-4321-210987654322
+          description: The source from which specific information was sourced. This is a link to an informationSource object in the informationSources map.
+          readOnly: true
+        displayName:
+          type: string
+          example: John Doe
+          description: Long format of the individual's full name, including any prefix, suffix, middle, or other names. Best used when the proper structure of the individual's name is unknown.
+        type:
+          type: string
+          example: OTHER
+          enum:
+          - OTHER
+          - ALIAS
+          - PREVIOUS
+          description: Classification of the individual's name in relation to any of their alternative names.
+    individuals_create:
+      type: object
+      allOf:
+      - type: object
+        properties:
+          individual:
+            $ref: '#/components/schemas/Individual'
+          serviceName:
+            type: string
+          workflowName:
+            type: string
+          comment:
+            $ref: '#/components/schemas/Comment'
+    Workflow-Issue-Type:
+      type: string
+      enum:
+      - AML_ISSUE
+      - BAD_DATA_ADDRESS
+      - BAD_DATA_DOB
+      - BAD_DATA_EMAIL
+      - BAD_DATA_ID
+      - BAD_DATA_MOBILE
+      - BAD_DATA_NAME
+      - BLOCKED
+      - COMPROMISED_DOCUMENT
+      - CREDIT_HEADER
+      - DATA_COMPARISON
+      - DATA_CONSISTENCY
+      - DATA_VALIDATION
+      - DENY_LIST
+      - DECEASED
+      - DEVICE_FRAUD_MATCH
+      - DEVICE_INVALID
+      - DOCUMENT_COMPARISON
+      - DUPLICATE
+      - FRAUD_CHECK
+      - FRAUD_DEVICE
+      - FRAUD_IP_ADDRESS
+      - FRAUD_EMAIL_ADDRESS
+      - FRAUD_PHONE_NUMBER
+      - FRAUD_ISSUE
+      - FRAUD_LIST
+      - IMAGE_INTEGRITY
+      - INTERNAL_MATCH
+      - LIVENESS_DETECTION
+      - MATCHED_EXTERNAL
+      - MATCHED_INTERNAL
+      - MATCHED_SHARED
+      - MEDIA
+      - NOT_FOUND
+      - OCR
+      - PARTIAL
+      - PEP
+      - REQUIRES_AML
+      - REQUIRES_IDV
+      - REQUIRES_KYC
+      - REQUIRES_VISA
+      - SANCTION
+      - SERVICE_ERROR
+      - SERVICE_TIMEOUT
+      - VISA_FAILED
+      - VISUAL_AUTHENTICITY
+      - WATCHLIST
+      - ACTIVITY_AML
+      - ACTIVITY_FRAUD
+      - ACTIVITY_DEVICE
+      description: "For each category, this provides the specific issue type.\n\nAML:\n  - PEP: The entity has Politically Exposed Person (PEP) hits.\n  - SANCTION: The entity has sanction hits.\n  - MEDIA: The entity has adverse media hits.\n  - WATCHLIST: The entity has watchlist hits.\n\nBAD_DATA:\n  - BAD_DATA_NAME: Name is required for verification but is missing or unusable due to data quality issues.\n  - BAD_DATA_DOB: Date of Birth is required for verification but is missing or unusable due to data quality issues.\n  - BAD_DATA_ADDRESS: Address is required for verification but is missing or unusable due to data quality issues.\n  - BAD_DATA_ID: ID is required for verification but is missing or unusable due to data quality issues.\n  - BAD_DATA_EMAIL: Email is required for verification but is missing or unusable due to data quality issues.\n  - BAD_DATA_MOBILE: Mobile is required for verification but is missing or unusable due to data quality issues.\n\nBLOCKLISTED:\n  - MATCHED_INTERNAL: The entity matched an internal blocklist.\n  - MATCHED_SHARED: The entity matched a shared blocklist.\n  - MATCHED_EXTERNAL: The entity matched an external blocklist.\n\nDECEASED:\n  - DECEASED: The person whose data is being verified is deceased.\n\nDEVICE:\n  - DEVICE_FRAUD_MATCH: Fraud detected on the device.\n  - DEVICE_INVALID: The device is invalid.\n\nDUPLICATE:\n  - DUPLICATE: The entity is a duplicate of another entity.\n\nEXPIRY:\n  - REQUIRES_KYC: KYC process needs to be re-initiated.\n  - REQUIRES_IDV: IDV process needs to be re-initiated.\n  - REQUIRES_AML: AML process needs to be re-initiated.\n  - REQUIRES_VISA: Visa process needs to be re-initiated.\n\nFRAUD:\n  - FRAUD_LIST: The entity is on a fraud list.\n  - FRAUD_CHECK: Fraud detected during checks.\n  - FRAUD_DEVICE: Device fraud detected.\n  - FRAUD_IP_ADDRESS: IP address fraud detected.\n  - FRAUD_EMAIL_ADDRESS: Email address fraud detected.\n  - FRAUD_PHONE_NUMBER: Phone number fraud detected.\n\nIDV:\n  - DATA_COMPARISON: Data comparison issue.\n  - DATA_VALIDATION: Data validation issue.\n  - DATA_CONSISTENCY: Data consistency issue.\n  - VISUAL_AUTHENTICITY: Visual authenticity issue.\n  - IMAGE_INTEGRITY: Image integrity issue.\n  - COMPROMISED_DOCUMENT: Document is compromised.\n  - LIVENESS_DETECTION: Liveness detection failed.\n  - DOCUMENT_COMPARISON: Document comparison issue.\n\nINFORMATIONAL:\n  - CREDIT_HEADER: Credit header information was returned as part of a credit agency check.\n\nKYC:\n  - PARTIAL: The KYC check was only partially successful.\n  - NOT_FOUND: No match was found for the given data.\n\nOCR:\n  - OCR: The OCR data does not match what was entered by the user.\n\nSYSTEM:\n  - SERVICE_TIMEOUT: All providers have timed out.\n  - SERVICE_ERROR: All providers have returned an error or an internal error has occurred.\n\nVISA:\n  - DENY_LIST: The entity matched a visa deny list.\n  - VISA_FAILED: Visa check failed from the provider.\n\nWATCHLIST:\n  - INTERNAL_MATCH: The entity matched an internal watchlist.\n\nACTIVITY:\n  - ACTIVITY_AML: AML-related activity issue.\n  - ACTIVITY_FRAUD: Fraud-related activity issue.\n  - ACTIVITY_DEVICE: Device-related activity issue."
+    individuals_entity_response:
+      type: object
+      required:
+      - requestId
+      properties:
+        individual:
+          $ref: '#/components/schemas/Individual'
+        serviceProfiles:
+          type: array
+          items:
+            $ref: '#/components/schemas/Service-Profile'
+        requestId:
+          $ref: '#/components/schemas/Request-ID'
+    individuals_update:
+      type: object
+      allOf:
+      - type: object
+        properties:
+          individual:
+            $ref: '#/components/schemas/Individual'
+          comment:
+            $ref: '#/components/schemas/Comment'
+    Date-Type:
+      type: string
+      default: GREGORIAN
+      enum:
+      - BUDDHIST
+      - DISCORDIAN
+      - GREGORIAN
+      - HEBREW
+      - ISLAMIC
+      - JULIAN
+      - LUNAR
+      - MESO_AMERICAN
+      - PERSIAN
+      - OTHER
+      description: The calendar system used for the date, e.g., BUDDHIST, DISCORDIAN, GREGORIAN, HEBREW, ISLAMIC, JULIAN, LUNAR, MESO_AMERICAN, PERSIAN, or OTHER.
+    Phone-Number:
+      type: object
+      properties:
+        phoneNumberId:
+          $ref: '#/components/schemas/Phone-Number-ID'
+        isPreferred:
+          type: boolean
+          example: true
+          description: Indicates whether this is the individual's preferred phone number.
+        type:
+          type: string
+          enum:
+          - OTHER
+          - WORK
+          - HOME
+          - MOBILE
+          - BUSINESS
+          - FAX
+          description: The type of phone number.
+          example: MOBILE
+        sourceId:
+          type: string
+          description: The source from which specific information was sourced. This is a link to an informationSource object in the informationSources map.
+          example: 14fd5f64-5717-4562-b3fc-2c963f66ba34
+          readOnly: true
+        country:
+          type: string
+          description: ISO-3166-1 alpha-3 country code.
+          example: AUS
+        number:
+          type: string
+          description: The phone number.
+          example: 0426192340
+        linkedAddresses:
+          type: array
+          readOnly: true
+          description: If the phone number is attached to one or more addresses, the address IDs of those addresses will be present.
+          items:
+            type: object
+            properties:
+              addressId:
+                description: The addressId of the linked address.
+                type: string
+                example: fa335f64-5717-4562-b3fc-2c963f66cf41
+        unstructuredLongForm:
+          type: string
+          description: Used to capture free-form phone numbers or to store numbers that could not be normalized.
+    Relationship-Origin:
+      type: object
+      description: Details about the process that originated the relationship.
+      properties:
+        entityId:
+          $ref: '#/components/schemas/Entity-ID'
+        entityType:
+          $ref: '#/components/schemas/Entity-Type'
+        processResultId:
+          $ref: '#/components/schemas/Process-Result-ID'
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+          description: The date and time when the relationship origin record was created.
+    Document-Type:
+      type: string
+      enum:
+      - OTHER
+      - DRIVERS_LICENSE
+      - PASSPORT
+      - VISA
+      - IMMIGRATION
+      - NATIONAL_ID
+      - TAX_ID
+      - NATIONAL_HEALTH_ID
+      - CONCESSION
+      - HEALTH_CONCESSION
+      - PENSION
+      - MILITARY_ID
+      - BIRTH_CERT
+      - CITIZENSHIP
+      - MARRIAGE_CERT
+      - DEATH_CERT
+      - NAME_CHANGE
+      - UTILITY_BILL
+      - BANK_STATEMENT
+      - BANK_ACCOUNT
+      - INTENT_PROOF
+      - ATTESTATION
+      - SELF_IMAGE
+      - DEVICE
+      - VEHICLE_REGISTRATION
+      - PROOF_OF_ADDRESS
+      - HOUSE_REGISTRATION
+      - YELLOW_HOUSE_REGISTRATION
+      - WORK_PERMIT
+      - EMPLOYMENT_CERTIFICATE
+      - NOTARY_PUBLIC_ID
+      - EXTERNAL_ADMIN
+      - CHARGES
+      - PRE_ASIC
+      - ANNUAL_RETURN
+      - REPORT
+      - TRUST_DEED
+      - PARTNERSHIP_AGREEMENT
+      - ADMIN_CHANGE
+      - COMPANY_REPORT
+      - CHECK_RESULTS
+      - AVIATION_SECURITY_ID
+      - MARITIME_SECURITY_ID
+      description: "Valid document ID types.\n\n  - \"OTHER\": Generic document type. Unspecified.\n  - \"DRIVERS_LICENSE\": Driver's license.\n  - \"PASSPORT\": Passport.\n  - \"VISA\": Visa document (not Visa payment card).\n  - \"IMMIGRATION\": Immigration card.\n  - \"NATIONAL_ID\": Any national ID card.\n  - \"TAX_ID\": Any national tax identifier.\n  - \"NATIONAL_HEALTH_ID\": Any national health program ID card (e.g., Medicare, NHS).\n  - \"CONCESSION\": State-issued concession card.\n  - \"HEALTH_CONCESSION\": State-issued health-specific concession card.\n  - \"PENSION\": State-issued pension ID.\n  - \"MILITARY_ID\": Military ID.\n  - \"BIRTH_CERT\": Birth certificate.\n  - \"CITIZENSHIP\": Citizenship certificate.\n  - \"MARRIAGE_CERT\": Marriage certificate.\n  - \"DEATH_CERT\": Death certificate.\n  - \"NAME_CHANGE\": Name change confirmation.\n  - \"UTILITY_BILL\": Regulated utility bill, such as electricity, gas, etc.\n  - \"BANK_STATEMENT\": Bank/card statement.\n  - \"BANK_ACCOUNT\": Bank account.\n  - \"INTENT_PROOF\": Proof of intent, generally a photo/video or a scanned letter.\n  - \"ATTESTATION\": Document of attestation (e.g., Statutory Declaration).\n\n  NOTE: These cannot be used as a supporting document:\n  - \"SELF_IMAGE\": A \"selfie\" used for comparisons.\n  - \"DEVICE\": Device ID.\n  - \"VEHICLE_REGISTRATION\": Vehicle registration number.\n  - \"PROOF_OF_ADDRESS\": Any document that provides proof of address.\n  - \"HOUSE_REGISTRATION\": House registration document.\n  - \"YELLOW_HOUSE_REGISTRATION\": Yellow House Registration Thor Ror 13.\n  - \"WORK_PERMIT\": Work permit.\n  - \"EMPLOYMENT_CERTIFICATE\": Certificate of employment.\n  - \"NOTARY_PUBLIC_ID\": Notary Public Identification.\n\n  Business-related documentation:\n\n  - \"EXTERNAL_ADMIN\": Details of appointed administrator.\n  - \"CHARGES\": Details of any charges laid against a company or director.\n  - \"PRE_ASIC\": Any documents that are Pre-ASIC.\n  - \"ANNUAL_RETURN\": Details of a company's annual return.\n  - \"REPORT\": Frankie-generated report.\n  - \"TRUST_DEED\": Corporate trust deed.\n  - \"PARTNERSHIP_AGREEMENT\": Partnership agreement documents.\n  - \"ADMIN_CHANGE\": Change of administrator.\n  - \"COMPANY_REPORT\": Registry-filed company reports.\n\n  Special document types:\n\n  - \"CHECK_RESULTS\": Special document type for specifying results of checks completed other than through Frankie.\n  - \"AVIATION_SECURITY_ID\": Aviation Security Identification Card.\n  - \"MARITIME_SECURITY_ID\": Maritime Security Identification Card."
+    Document-Attachment-Side:
+      type: string
+      enum:
+      - FRONT
+      - BACK
+      description: Indicates whether the attachment is the front or back side of a document.
+    Document-Attachment-ID:
+      type: string
+      format: uuid
+      description: When a document attachment is created or uploaded, it is assigned an attachmentId. This identifier will appear in a successful response or accepted response. It can be referenced in subsequent calls if you are uploading additional or updated data.
+    Gender:
+      type: object
+      properties:
+        genderId:
+          type: string
+          readOnly: true
+          deprecated: true
+        gender:
+          $ref: '#/components/schemas/GenderEnum'
+        sourceId:
+          type: string
+          readOnly: true
+          description: The source from which specific information was sourced. This is a link to an informationSource object in the informationSources map.
+    Address:
+      type: object
+      description: Address information in all available formats
+      allOf:
+      - $ref: '#/components/schemas/Address-Base'
+      - type: object
+        properties:
+          unstructuredLongForm:
+            type: string
+            description: Raw, unformatted address as provided by the source. Not normalized or standardized.
+            readOnly: true
+    Address-Base:
+      type: object
+      required:
+      - country
+      description: Address information in all available formats
+      properties:
+        addressId:
+          type: string
+          description: As addresses are added to an entity, they are assigned an ID to assist with tracking.
+        sourceId:
+          type: string
+          readOnly: true
+          description: The source from which specific information was sourced. This is a link to an informationSource object in the informationSources map.
+        type:
+          $ref: '#/components/schemas/Address-TypeEnum'
+          description: Used to indicate what sort of address this is, such as residential, business, postal, etc. Should be used in conjunction with the status field to indicate the current status of the address and provide more context.
+        typeDescription:
+          type: string
+          description: Description for the type or the address type as fetched from an authoritative source like a company registry.
+        validFrom:
+          $ref: '#/components/schemas/Date'
+          description: The date this address first became active. Used mostly with business addresses.
+        validTo:
+          $ref: '#/components/schemas/Date'
+          description: The date this address was no longer used (if available). Used mostly with business addresses.
+        longForm:
+          type: string
+          description: 'In some cases, the address will need to be supplied in "long form", such as when it is determined from a document scan, or is unparsable in some way.
+
+            The service will attempt to convert it to its constituent parts where possible.
+
+            WARNING: Use of longForm is not guaranteed to produce perfect results, due to the variety of potential formats. You have been warned.
+
+            Failure to break down or disambiguate the address will result in an error.'
+        unitNumber:
+          type: string
+          description: Unit/Apartment/Flat/Suite/etc. number
+        buildingName:
+          type: string
+          description: The name of the building, apartment block, condominium, etc.
+        streetName:
+          type: string
+          description: 'The name of the street.
+
+            This field should ideally contain only the street name, without the street number or street type. In some cases, especially when auto-populated by external services (e.g., Google), it may include additional address components.
+
+            For best results, keep the street name separate from the street number and street type. See https://apidocs.frankiefinancial.com/docs/working-with-addresses for more details.'
+        streetNumber:
+          type: string
+          description: The number assigned to the property on the street. Typically a number, but can also be alphanumeric (e.g., 3A).
+        streetType:
+          type: string
+          description: The street type, such as Road, Street, Avenue, Circuit, etc.
+        neighborhood:
+          type: string
+          description: The neighborhood or suburb within the town or city. Use this only if you require both a suburb and a locality/town/city; otherwise, use the "locality" parameter.
+        locality:
+          type: string
+          description: The locality, town, village, suburb, or city.
+        district:
+          type: string
+          description: The district, region, county, province, or cantonment.
+        subdivision:
+          type: string
+          description: The administrative area, state, or sub-division. Use local abbreviations, such as VIC (Victoria) or TX (Texas).
+        country:
+          type: string
+          description: 'The ISO-3166-1 country code. You must use the alpha-3 country code (e.g., AUS, USA, IDR, KOR, etc). Conversion will be handled as needed.
+
+            For more details, refer to: https://en.wikipedia.org/wiki/ISO_3166-1'
+        postalCode:
+          type: string
+          description: The postal code of the address.
+        careOf:
+          type: string
+          description: The individual or business name at this address, if different from the name of the entity to which this address belongs.
+        status:
+          $ref: '#/components/schemas/Address-StatusEnum'
+          description: The status of the address information, such as current, previous, or future. Should be used in conjunction with the `type` field to indicate the type of the address and provide more context.
+    Error:
+      type: object
+      x-examples:
+        '400':
+          requestId: 0123456789ABCDEFGHIJKLMNOP
+          errorCode: API-0400
+          errorMsg: Parsing credentials from "<invalid>" failed, because invalid.
+          httpStatusCode: 400
+        '401':
+          requestId: 0123456789ABCDEFGHIJKLMNOP
+          errorCode: API-0401
+          errorMsg: Unauthenticated due to invalid credentials.
+          httpStatusCode: 401
+        '409':
+          requestId: 0123456789ABCDEFGHIJKLMNOP
+          errorCode: API-0409
+          errorMsg: Conflict.
+          httpStatusCode: 409
+      allOf:
+      - $ref: '#/components/schemas/Error-Base'
+      - type: object
+        properties:
+          requestId:
+            $ref: '#/components/schemas/Request-ID'
+    Service-Profile:
+      allOf:
+      - $ref: '#/components/schemas/Service-Profile-Base'
+      - type: object
+        properties:
+          state:
+            $ref: '#/components/schemas/Service-Profile-State'
+    Risk-Factor-Status:
+      type: string
+      enum:
+      - VALID
+      - STALE
+      - OVERRIDDEN
+      - DISCARDED
+      description: "The current status of the risk factor:\n  - VALID: The risk factor is applicable to the entity.\n  - STALE: The risk factor is no longer applicable to the entity. If this status is returned, it means that at the time of risk assessment, the risk factor was valid.\n  - OVERRIDDEN: The risk factor was manually overridden. If present, manualOverrideScore was used for risk score calculation in the risk assessment.\n  - DISCARDED: The risk factor was added during workflow execution but was discarded at a later stage in the same workflow. This factor was not used in the final risk assessment.\n"
+      default: VALID
+    Consent:
+      type: object
+      properties:
+        type:
+          type: string
+          description: The type of consent given by an entity
+          example: UNDER18
+          enum:
+          - GENERAL
+          - DOCS
+          - CREDITHEADER
+          - UNDER18
+          - PAYROLL
+          - INSURANCE
+          - SUPERANNUATION
+        schemaVersion:
+          type: integer
+          readOnly: true
+        sourceId:
+          type: string
+          description: The source from which specific information was obtained. This is a link to an informationSource object in the informationSources map.
+          example: 93da15f64-5717-4562-b3fc-2c963f6663fe
+          readOnly: true
+    Information-Source:
+      type: object
+      properties:
+        sourceId:
+          type: string
+          description: 'As sources are added to an entity, they''re assigned a unique identifier to assist with modification and reference.
+
+            To modify a source, include the sourceId in an update request call.'
+        type:
+          description: The type of source information e.g. "ID number"
+          type: string
+          example: ID number
+          deprecated: true
+        source:
+          description: The source of information like document number, website, etc.
+          type: string
+          example: Client
+        description:
+          description: The type or details of the source of information.
+          type: string
+          example: ''
+        provider:
+          description: The provider of the information, e.g., Equifax.
+          type: string
+          example: equifax-au
+        providerReference:
+          description: Reference linking to the provider for this information.
+          type: string
+          example: ''
+        createdAt:
+          type: string
+          format: date-time
+          description: The date and time this information was first created in the system.
+          example: '2024-01-15T02:18:11.365Z'
+        requestedAt:
+          type: string
+          format: date-time
+          description: The date and time FrankieOne requested this information from the external source provider.
+          example: '2024-01-15T02:18:11.365Z'
+        generatedAt:
+          type: string
+          format: date-time
+          description: The date and time FrankieOne generated this information, if applicable.
+          example: '2024-01-15T02:18:11.365Z'
+        retrievedAt:
+          type: string
+          format: date-time
+          description: The date and time FrankieOne retrieved this information from the external source provider.
+          example: '2024-01-15T02:18:11.365Z'
+        updatedAt:
+          type: string
+          format: date-time
+          description: The date and time this information was last updated in the system.
+          example: '2024-01-15T02:18:11.365Z'
+        isAuthoritative:
+          type: boolean
+          description: Indicates whether this information is from an authoritative source, e.g., a company registry.
+          example: false
+        isManual:
+          description: Indicates whether this information was added manually by the client rather than by a system or source provider.
+          type: boolean
+          example: true
+          deprecated: true
+      readOnly: true
+    Document-Supplementary-Data-Birth-Certificate:
+      type: object
+      description: Supplementary information relevant to a birth certificate.
+      allOf:
+      - $ref: '#/components/schemas/Document-Supplementary-Data-Base'
+      - type: object
+        description: Supplementary information relevant to a birth certificate.
+        properties:
+          registrationDate:
+            type: string
+            description: The date the birth was registered.
+            example: '2000'
+          registrationDistrict:
+            type: string
+            description: The district where the birth was registered.
+            example: Sydney
+          dateOfPrint:
+            type: string
+            description: The date the birth certificate was printed.
+            example: '2000'
+          givenName:
+            type: string
+            description: The given name as printed on the certificate.
+          otherNames:
+            type: string
+            description: Other name(s) as printed on the certificate.
+          familyName:
+            type: string
+            description: The family name as printed on the certificate.
+    Document-Supplementary-Data-National-Health-ID:
+      type: object
+      description: Supplementary information relevant to a national health id.
+      allOf:
+      - $ref: '#/components/schemas/Document-Supplementary-Data-Base'
+      - type: object
+        properties:
+          reference:
+            type: string
+            description: The individual reference number used to identify the position of the applicant's name on the health card. Required for Australian Medicare cards (this is the number to the left of the name on the card).
+            example: '1'
+          nameOnCardLine1:
+            type: string
+            description: The individual's name as it appears on the card.
+          nameOnCardLine2:
+            type: string
+            description: If the individual's name spans more than one line, this is the part of the name that appears on line 2.
+          nameOnCardLine3:
+            type: string
+            description: If the individual's name spans more than two lines, this is the part of the name that appears on line 3.
+          nameOnCardLine4:
+            type: string
+            description: If the individual's name spans more than three lines, this is the part of the name that appears on line 4.
+          middleNameOnCard:
+            type: string
+            description: The individual's middle name or initial as it appears on the card.
+    Date:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/Date-Base'
+      - type: object
+        properties:
+          normalized:
+            type: string
+            format: date
+            description: Full date in ISO 8601 format ("YYYY-MM-DD"). This is a read-only field.
+            example: '1990-03-31'
+            readOnly: true
+    Attribute:
+      type: object
+      required:
+      - type
+      - value
+      properties:
+        type:
+          description: The attribute type.
+          type: string
+          maxLength: 64
+        value:
+          description: The value assigned to the attribute.
+          type: string
+    Workflow-LifecyclePhaseEnum:
+      type: string
+      description: "Specifies the lifecycle phase of the customer in which this workflow is executed:\n  - ONBOARDING: Workflow is in the onboarding stage.\n  - MONITORING: Workflow is in the monitoring stage.\n  - OTHER: Workflow is in another stage.\n"
+      enum:
+      - ONBOARDING
+      - MONITORING
+      - OTHER
+      default: OTHER
+    External-Reference:
+      type: object
+      description: Reference information used to identify the individual in systems external to FrankieOne.
+      allOf:
+      - type: object
+        properties:
+          referenceId:
+            type: string
+            description: 'As external references are added to an entity, they are assigned a unique identifier to assist with modification and reference.
+
+              To modify an external reference, include the referenceId in an update request for the individual.'
+            example: 24de15f64-5717-4562-b3fc-2c963f66e23e
+            readOnly: true
+          type:
+            type: string
+            enum:
+            - SYSTEM
+            - CUSTOMER
+            - OTHER
+            default: CUSTOMER
+          sourceId:
+            type: string
+            description: The source from which specific information was sourced. This is a link to an informationSource object in the informationSources map.
+            example: 93da15f64-5717-4562-b3fc-2c963f6663fe
+            readOnly: true
+      - $ref: '#/components/schemas/External-Reference-Information'
+    Workflow-Issue-Category:
+      type: string
+      enum:
+      - AML
+      - BAD_DATA
+      - BIOMETRICS
+      - BLOCKLISTED
+      - DECEASED
+      - DEVICE
+      - DOCUMENT
+      - DUPLICATE
+      - EXPIRY
+      - FRAUD
+      - IDV
+      - INFORMATIONAL
+      - KYC
+      - SYSTEM
+      - VERIFY
+      - VISA
+      - WATCHLIST
+      - ACTIVITY
+      description: "General category of issue found:\n  - AML: Anti-Money Laundering issues.\n  - BAD_DATA: Indicates that the data provided is invalid or incorrect.\n  - BIOMETRICS: Issues found during a biometrics check.\n  - BLOCKLISTED: The entity has a hit on a blocklist.\n  - DECEASED: Indicates that the entity is deceased.\n  - DEVICE: Issues found during device checks.\n  - DOCUMENT: Issues found during a document check.\n  - DUPLICATE: Indicates that the entity has duplicates.\n  - EXPIRY: Indicates that a process or document for the entity has expired.\n  - FRAUD: Possible fraud detected.\n  - IDV: Issues found during an Identity Verification (IDV) process.\n  - INFORMATIONAL: Informational messages that are not issues but are required to be returned.\n  - KYC: Issues found during a Know Your Customer (KYC) process.\n  - SYSTEM: System-level issues.\n  - VERIFY: Issues found during a verification process.\n  - VISA: Issues found during a visa check.\n  - WATCHLIST: Issues found during a watchlist check.\n  - ACTIVITY: Issues found during an activity process."
+    Document-Attachment-Type:
+      type: string
+      description: "General types of valid document attachments.\n  - \"PHOTO\": Any photo.\n  - \"VIDEO\": Any video.\n  - \"AUDIO\": Any audio.\n  - \"PDF\": PDF or PS file (may contain text, images, or both).\n  - \"DOC\": Word document, RTF, etc.\n  - \"ZIP\": Any compressed file(s)."
+    Workflow-Execution-Summary:
+      type: object
+      description: "Summary of the workflow execution.\n\n### Using and interpreting the status field\n\nThe result of the workflow is represented in the **status** field. Users can manually override this status with a different value to change the outcome of the workflow.\nWhen the **status** field is overridden, the **statusOverrideRequestId** field is populated with the request ID of the override request.\nIf the **statusOverrideRequestId** field is present and non-empty, it indicates that the status has been manually changed.\n\n  1. Initial State:\n     - When a workflow completes, its result is set in the **status** field.\n  2. Status Override:\n     - Users may override the **status** field with a different value (e.g., change FAIL to PASS).\n  3. Identifying Overrides:\n     - To determine if a status has been overridden, check for the presence of the **statusOverrideRequestId** field.\n     - If present, it indicates that the status has been manually changed.\n  4. Additional Override Information:\n     - **statusOverrideBy**: Identifies the user who performed the override (may not always be present).\n     - **statusOverrideAt**: Timestamp of when the override occurred.\n  5. Interpretation:\n     - If **statusOverrideRequestId** is empty or absent, no override has occurred.\n     - If **statusOverrideRequestId** is present, then a manual override has occurred.\n"
+      properties:
+        schemaVersion:
+          type: integer
+          description: Version of the schema used for this workflow execution.
+        workflowName:
+          type: string
+          description: Name of the workflow.
+        workflowExecutionId:
+          type: string
+          description: Unique identifier for the workflow execution.
+        workflowExecutionState:
+          $ref: '#/components/schemas/Workflow-Execution-StateEnum'
+          description: Current state of the workflow execution.
+        status:
+          $ref: '#/components/schemas/Workflow-Execution-ResultEnum'
+          description: Current status/result of the workflow execution.
+        statusOverrideAt:
+          type: string
+          format: date-time
+          description: Timestamp when the status override occurred.
+        statusOverrideRequestId:
+          type: string
+          description: Request ID associated with the status override.
+        statusOverrideBy:
+          type: string
+          description: Identifier of the user who performed the status override.
+        riskAssessment:
+          $ref: '#/components/schemas/Risk-Assessment'
+          description: Risk assessment for the workflow execution.
+        isManual:
+          type: boolean
+          description: Indicates if the workflow was executed manually.
+        steps:
+          $ref: '#/components/schemas/Workflow-Execution-Steps'
+          description: Steps executed as part of the workflow.
+        startedAt:
+          type: string
+          format: date-time
+          description: The timestamp when the workflow execution started.
+        endedAt:
+          type: string
+          format: date-time
+          description: The timestamp when the workflow execution ended.
+        issues:
+          type: array
+          description: List of issues encountered during the workflow execution.
+          items:
+            $ref: '#/components/schemas/Workflow-Issue'
+        lifecyclePhase:
+          $ref: '#/components/schemas/Workflow-LifecyclePhaseEnum'
+          description: Current lifecycle phase of the workflow.
+        monitoringTypes:
+          description: 'The types of monitoring that subscribe to the workflow.
+
+            '
+          type: array
+          items:
+            $ref: '#/components/schemas/Monitoring-Type'
+    Service-Profile-State:
+      type: string
+      description: 'Current state of the Service Profile
+
+        - INIT: Initial state when the profile is created.
+
+        - AUTO: Automatically assigned state, typically after initial processing.
+
+        - ACTIVE: The profile is active and in use.
+
+        - ARCHIVED: The profile has been archived and is no longer active.
+
+        - BLOCKLISTED: The profile is blocked from further actions.
+
+        - INACTIVE: The profile is inactive, not currently in use.
+
+        - DELETED: The profile has been deleted.
+
+        - DUPLICATE: The profile is a duplicate of another existing profile.'
+      enum:
+      - INIT
+      - AUTO
+      - ACTIVE
+      - ARCHIVED
+      - BLOCKLISTED
+      - INACTIVE
+      - DELETED
+      - DUPLICATE
+    Date-Of-Birth:
+      type: object
+      allOf:
+      - type: object
+        properties:
+          dateOfBirthId:
+            type: string
+            description: 'As dates of birth are added to an entity, they are assigned a unique identifier to assist with modification and reference.
+
+              To modify a date of birth, include the dateOfBirthId in an update request for the individual.'
+            readOnly: true
+          sourceId:
+            type: string
+            description: The source from which specific information was sourced. This is a link to an informationSource object in the informationSources map.
+            readOnly: true
+      - $ref: '#/components/schemas/Date'
+    Custom-Attributes:
+      type: object
+      additionalProperties:
+        $ref: '#/components/schemas/Attribute'
+    Document-Attachment:
+      type: object
+      required:
+      - data
+      description: Document attachment details.
+      properties:
+        attachmentId:
+          $ref: '#/components/schemas/Document-Attachment-ID'
+        sourceId:
+          type: string
+          readOnly: true
+          description: The source from which specific information was sourced. This is a link to an informationSource object in the informationSources map.
+        createdAt:
+          type: string
+          readOnly: true
+          format: date-time
+          description: The date and time the attachment was created. This is not the date of the attached document, which should be in the idIssued attribute of the document that owns this attachment.
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+          description: The date and time the attachment was last updated. This is not the date of the attached document, which should be in the idIssued attribute of the document that owns this attachment.
+        filename:
+          type: string
+          description: If you are uploading a file where it is important to keep the original filename, you can provide it here. Otherwise, the Frankie service will assign an arbitrary name based on the attachmentId and an extension based on the MIME type.
+        mimeType:
+          type: string
+          description: The standard MIME type of the file being uploaded. This will be verified, but providing it can help speed up processing.
+        pageNumber:
+          type: integer
+          description: If uploading multiple pages, this can be used to track page numbers. There is no enforcement of these numbers. You can have multiple page 1's or a page 29 if you wish.
+        side:
+          $ref: '#/components/schemas/Document-Attachment-Side'
+        type:
+          $ref: '#/components/schemas/Document-Attachment-Type'
+        location:
+          description: Reference to where the data can be retrieved from.
+          type: string
+        data:
+          $ref: '#/components/schemas/Data-URI-Base64'
+        lastMalwareScanAt:
+          type: string
+          format: date-time
+        retrievalStatus:
+          $ref: '#/components/schemas/Document-Attachment-Retrieval-Status'
+    Email-Address-ID:
+      type: string
+      description: 'As email addresses are added to an entity, they are assigned a unique identifier to assist with modification and reference.
+
+        To modify an email, include the emailId in an update request.'
+      example: aa385f64-5717-4562-b3fc-2c963f66af21
+    External-Reference-Information:
+      type: object
+      x-examples:
+        Customer Reference:
+          name: CUSTOMER-REFERENCE
+          value: CUST-00001342
+          description: This is the customer id in the core banking system
+      required:
+      - name
+      - value
+      description: Used to store references and identifying information about an entity that is external to FrankieOne. If you wish to filter or search on customer information relevant to your business, that information should be added as an external reference.
+      properties:
+        name:
+          type: string
+          description: The name of the external reference.
+          example: CUSTOMER-REFERENCE
+        value:
+          type: string
+          description: The value of the external reference.
+          example: CUST-00001342
+        description:
+          type: string
+          description: A summary of what this external reference is and what it is used for.
+          example: This is the customer ID in the core banking system.
+    Base-Individual:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/Entity'
+      - type: object
+        properties:
+          name:
+            $ref: '#/components/schemas/Individual-Name'
+          alternateNames:
+            type: array
+            items:
+              $ref: '#/components/schemas/Individual-Name-Alternate'
+            description: Other names that are legally registered or otherwise recorded, differing from the individual's primary English name (e.g., "李小龍"). Non-English names may be created as a conversion from the original format to complete the verification process.
+          dateOfBirth:
+            $ref: '#/components/schemas/Date-Of-Birth'
+          alternateDatesOfBirth:
+            type: array
+            items:
+              $ref: '#/components/schemas/Date-Of-Birth-Alternate'
+            description: Other dates that are registered or otherwise recorded, differing from the individual's primary Gregorian date of birth (e.g., Islamic dates like "29 Jumada Al-Akhirah 1445"). Non-Gregorian date formats will be maintained; however, additional Gregorian dates of birth may be created as a conversion from the original format to complete the verification process.
+          gender:
+            $ref: '#/components/schemas/Gender'
+          placeOfBirth:
+            $ref: '#/components/schemas/Address-Place-Of-Birth'
+            description: The address where the individual was born.
+          nationality:
+            type: string
+            description: ISO-3166-1 alpha-3 code of the individual's legal membership or affiliation with a nation.
+            example: AUS
+          consents:
+            type: array
+            items:
+              $ref: '#/components/schemas/Consent'
+            description: List of consent types that have been given for this entity.
+    Data-URI-Base64:
+      description: A Base64-encoded string or URI representing the data.
+      oneOf:
+      - type: object
+        readOnly: true
+        required:
+        - uri
+        properties:
+          uri:
+            type: string
+            description: URI identifying the resource location.
+            example: https://s3.amazonaws.com/dev/41963bc5feff322020137de233c3be0fac6/croppedFrontID/38d54232-b840-431d-b248-152345fe214.jpg
+      - type: object
+        required:
+        - base64
+        properties:
+          base64:
+            type: string
+            description: Base64-encoded string of the raw attachment data.
+            example: ZG9jdW1lbnQgaW1hZ2UgZ29lcyBoZXJl
+    Profile-ID:
+      type: string
+      description: Unique identifier of the Service Profile.
+    Service-Profile-Subscription:
+      type: object
+      properties:
+        serviceProfileId:
+          type: string
+          description: The unique identifier of the service profile.
+        status:
+          type: string
+          enum:
+          - ENABLED
+          - DISABLED
+          description: Indicates whether the subscription is currently active and operational.
+        type:
+          $ref: '#/components/schemas/Subscription-Type'
+        workflowName:
+          type: string
+          description: The name of the monitoring workflow executed when a monitoring alert occurs.
+        workflowId:
+          type: string
+          description: The unique identifier of the monitoring workflow.
+        enabledAt:
+          type: string
+          format: date-time
+          description: The date and time when the subscription was most recently enabled.
+        enabledRequestId:
+          type: string
+          description: The request identifier for the most recent enable action.
+        enabledBy:
+          type: string
+          description: The user who most recently enabled the subscription.
+        disabledAt:
+          type: string
+          format: date-time
+          description: The date and time when the subscription was most recently disabled.
+        disabledRequestId:
+          type: string
+          description: The request identifier for the most recent disable action.
+        disabledBy:
+          type: string
+          description: The user who most recently disabled the subscription.
+    Document-ID:
+      type: string
+      format: uuid
+      description: 'As documents are added to an entity, they are assigned a unique identifier to assist with modification and reference.
+
+        To modify a document, include the documentId in an update request.'
+      example: 92de15f64-5717-4562-b3fc-2c963f6665a7
+    Address-StatusEnum:
+      type: string
+      default: CURRENT
+      enum:
+      - CURRENT
+      - PREVIOUS
+      - FUTURE
+    Risk-Assessment:
+      type: object
+      required:
+      - entityId
+      - serviceProfileId
+      - workflowId
+      - workflowExecutionId
+      properties:
+        serviceProfileId:
+          $ref: '#/components/schemas/Profile-ID'
+        riskAssessmentId:
+          $ref: '#/components/schemas/Risk-Assessment-ID'
+        workflowId:
+          type: string
+          description: Unique identifier of the workflow.
+        workflowExecutionId:
+          type: string
+          description: Unique identifier of the workflow execution.
+        entityId:
+          type: string
+          description: Unique identifier of the entity being assessed.
+        schemaVersion:
+          type: integer
+          description: Version of the risk assessment schema.
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp when the risk assessment was created.
+        updatedAt:
+          type: string
+          format: date-time
+          description: Timestamp when the risk assessment was last updated.
+        updatedBy:
+          type: string
+          description: Identifier of the user or system that updated this assessment.
+        updatedRequestId:
+          type: string
+          description: Identifier of the request that updated this assessment.
+        workflowRiskScore:
+          type: number
+          description: Risk score calculated for the workflow.
+        workflowRiskLevel:
+          $ref: '#/components/schemas/Risk-Level'
+          description: Risk level of the workflow execution associated with this risk assessment.
+        riskScore:
+          type: number
+          description: Risk score calculated for the entity.
+        riskLevel:
+          $ref: '#/components/schemas/Risk-Level'
+          description: Risk level of the entity.
+        isOutdated:
+          type: boolean
+          description: Indicates whether the assessment is out of date, either due to manual updates or changes to risk factors that were assessed.
+          default: false
+        riskFactors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Risk-Factor'
+          readOnly: true
+          description: List of risk factors considered in this assessment.
+    Risk-Level:
+      type: string
+      enum:
+      - UNKNOWN
+      - LOW
+      - MEDIUM
+      - HIGH
+      - UNACCEPTABLE
+      description: "The risk level classification:\n  - UNKNOWN: Risk level is not determined.\n  - LOW: Low risk.\n  - MEDIUM: Medium risk.\n  - HIGH: High risk.\n  - UNACCEPTABLE: Risk level is unacceptable.\n"
+    Individual-Relationships:
+      type: object
+      readOnly: true
+      properties:
+        duplicates:
+          type: array
+          description: 'List of duplicates for this individual. To determine which entity was marked as a duplicate,
+
+            refer to the entity state of the relevant duplicate or reconcile using the process results.
+
+            '
+          items:
+            $ref: '#/components/schemas/Relationship'
+    GenderEnum:
+      type: string
+      enum:
+      - MALE
+      - FEMALE
+      - NON_BINARY
+      - OTHER
+      - UNSPECIFIED
+    Workflow-Execution-ResultEnum:
+      type: string
+      description: "Outcome of this workflow execution. Possible results:\n  - UNCHECKED: The workflow has not yet been run and has no result.\n  - IN_PROGRESS: The workflow is currently running and awaiting completion.\n  - REVIEW: The workflow produced results that require review. Check the risks and step results for more details.\n  - PASS: The workflow successfully completed with a PASS recommendation.\n  - FAIL: The workflow finished with a FAIL recommendation.\n  - COMPLETE: The workflow has finished and the results are considered complete. PASS/FAIL is not required.\n  - INCOMPLETE: The workflow has finished and the results are considered incomplete. PASS/FAIL is not required.\n  - NEEDS_APPROVAL: The workflow requires an approval process. Once approved, re-run the workflow.\n  - APPROVED: The workflow was approved, typically by an external source such as a human.\n  - REJECTED: The workflow was rejected, typically by an external source such as a human.\n  - BLOCKED: The workflow was blocked from completing. Manual review is required.\n  - CLEAR: The workflow completed with no issues raised. Often used for ongoing monitoring workflows.\n  - URGENT: The workflow completed with matters requiring urgent review. Often used for ongoing monitoring workflows that return sanctions or similarly critical items.\n  - MONITOR: The workflow completed and further monitoring is required. Should be manually reviewed.\n"
+      default: UNCHECKED
+      enum:
+      - UNCHECKED
+      - IN_PROGRESS
+      - REVIEW
+      - PASS
+      - FAIL
+      - COMPLETE
+      - INCOMPLETE
+      - NEEDS_APPROVAL
+      - APPROVED
+      - REJECTED
+      - BLOCKED
+      - CLEAR
+      - URGENT
+      - MONITOR
+    Entity-Type:
+      type: string
+      enum:
+      - INDIVIDUAL
+      - ORGANIZATION
+      - UNKNOWN
+      description: The type of entity within Frankie. This can be "INDIVIDUAL", "ORGANIZATION", or "UNKNOWN".
+      readOnly: true
+    Document-Supplementary-Data-Passport:
+      type: object
+      description: Supplementary information relevant to a national health id.
+      allOf:
+      - $ref: '#/components/schemas/Document-Supplementary-Data-Base'
+      - type: object
+        properties:
+          homeCountryFullName:
+            type: string
+            description: The original name from the home country of passport.
+            example: 张伟明
+    Document-Attachment-Retrieval-Status:
+      type: string
+      readOnly: true
+      enum:
+      - NORMAL
+      - EXCLUDED
+      - FAILED
+      description: "The reason why the data in a response is missing.\n\n- \"NORMAL\": The data was retrieved and is included. If it is empty, then\n  it was never provided or was provided empty.\n\n- \"EXCLUDED\": The retrieval request was not for 'full' data, or the object\n  has been deleted, so the data is not included.\n\n- \"FAILED\": The data could not be retrieved from the secure document\n  store.\n\nThe retrievalStatus enum will not usually be set in a request. If an\nattachment in a response has a 'FAILED' retrieval state, then\nthat object should not be sent back in a future update. It should\neither be omitted or the original data should be resent if it is available\nfrom another source. However, it is safe to send the object in an update\nwith the state received in a response. Any state other than 'NORMAL' (or\n'') will cause the blank data to be ignored, but other fields in the\nobject will be updated if needed."
+    Comment:
+      type: object
+      properties:
+        commentId:
+          type: string
+          description: Unique identifier for the comment.
+          example: 55fc5d54-46f7-49c8-bf78-e07ec79cd6e7
+          readOnly: true
+        text:
+          type: string
+          description: The text content of the comment.
+          example: Update after speaking to customer over the phone directly.
+    Address-TypeEnum:
+      type: string
+      default: OTHER
+      enum:
+      - OTHER
+      - RESIDENTIAL
+      - BUSINESS
+      - POSTAL
+      - REGISTERED_OFFICE
+      - PLACE_OF_BUSINESS
+      - OFFICIAL_CORRESPONDANCE
+      - PLACE_OF_BIRTH
+      - OFFICE_LOCALITY
+    Workflow-Issue-Severity:
+      type: string
+      enum:
+      - INFO
+      - REVIEW
+      - BLOCK
+      - WARNING
+      - CRITICAL
+      - ERROR
+      description: "The severity level of the issue. Possible values:\n  - INFO: Informational only.\n  - REVIEW: Requires review.\n  - BLOCK: Blocks further processing.\n  - WARNING: Warning, but not blocking.\n  - CRITICAL: Critical issue.\n  - ERROR: Error encountered.\n"
+    Address-Place-Of-Birth:
+      type: object
+      required:
+      - country
+      description: The country or address where the individual was born.
+      properties:
+        addressId:
+          type: string
+          description: As addresses are added to an entity, they are assigned an ID to assist with tracking.
+          example: 6ad15f64-5717-4562-b3fc-2c963f66abf9
+          readOnly: true
+        sourceId:
+          type: string
+          readOnly: true
+          description: The source from which specific information was sourced. This is a link to an informationSource object in the informationSources map.
+          example: 1da65f64-5717-4562-b3fc-2c963f669fba
+        longForm:
+          type: string
+          description: 'In some cases, the address will need to be supplied in "long form", such as when it is determined from a document scan, or is unparsable in some way.
+
+            The service will attempt to convert it to its constituent parts where possible.
+
+            WARNING: Use of longForm is not guaranteed to produce perfect results, due to the variety of potential formats. You have been warned.
+
+            Failure to break down or disambiguate the address will result in an error.'
+          example: 525 Kent Dr, Harlem NY 10037, USA
+        unstructuredLongForm:
+          type: string
+          readOnly: true
+          description: Raw, unformatted address as provided by the source. Not normalized or standardized.
+          example: 3A/525 KENT DRIVE HARLEM NEW YORK 10036 USA
+        unitNumber:
+          type: string
+          description: Unit/Apartment/Flat/Suite/etc. number
+          example: 3A
+        buildingName:
+          type: string
+          description: The name of the building, apartment block, condominium, etc.
+          example: EQ Tower
+        streetName:
+          type: string
+          description: 'The name of the street.
+
+            This field should ideally contain only the street name, without the street number or street type. In some cases, especially when auto-populated by external services (e.g., Google), it may include additional address components.
+
+            For best results, keep the street name separate from the street number and street type. See https://apidocs.frankiefinancial.com/docs/working-with-addresses for more details.'
+          example: Kent
+        streetNumber:
+          type: string
+          description: The number assigned to the property on the street. Typically a number, but can also be alphanumeric (e.g., 3A).
+          example: '525'
+        streetType:
+          type: string
+          description: The street type, such as Road, Street, Avenue, Circuit, etc.
+          example: Dr
+        neighborhood:
+          type: string
+          description: The neighborhood or suburb within the town or city. Use this only if you require both a suburb and a locality/town/city; otherwise, use the "locality" parameter.
+          example: Harlem
+        locality:
+          type: string
+          description: The locality, borough, town, village, or city.
+          example: Manhattan
+        district:
+          type: string
+          description: The district, region, county, province, or cantonment.
+          example: New York County
+        subdivision:
+          type: string
+          description: The ISO 3166-2 alphanumeric code of the administrative area/state/sub-division, minus the country code, e.g., VIC (Victoria) or TX (Texas).
+          example: NY
+        country:
+          type: string
+          description: 'The ISO 3166-1 alphanumeric three-letter code of the country, e.g., AUS, USA, IDR, KOR, etc.
+
+            For more details, refer to: https://en.wikipedia.org/wiki/ISO_3166-1'
+          example: USA
+        postalCode:
+          type: string
+          description: The postal, zip, or pin code of the address.
+          example: '10037'
+    Workflow-Issue:
+      type: object
+      required:
+      - category
+      - issue
+      - severity
+      properties:
+        issueId:
+          allOf:
+          - $ref: '#/components/schemas/Issue-ID'
+          readOnly: true
+        category:
+          $ref: '#/components/schemas/Workflow-Issue-Category'
+        issue:
+          $ref: '#/components/schemas/Workflow-Issue-Type'
+        workflowExecutionId:
+          type: string
+          description: Identifier of the workflow execution in which this issue was generated.
+        stepResultId:
+          type: string
+          description: Identifier of the step from which this issue originated, if applicable.
+        isCleared:
+          type: boolean
+          description: Indicates if this specific issue has been manually flagged as addressed.
+        createdBy:
+          type: string
+          description: User or system that created this issue.
+          readOnly: true
+        createdAt:
+          type: string
+          format: date-time
+          description: The timestamp when the issue was created.
+          readOnly: true
+        updatedAt:
+          type: string
+          format: date-time
+          description: The timestamp when the issue was last updated.
+          readOnly: true
+        updatedBy:
+          type: string
+          description: User or system that last updated this issue (e.g., System:<service_name> or User:<user_name>).
+          readOnly: true
+        updatedRequestId:
+          type: string
+          description: Identifier of the request that updated this issue.
+          readOnly: true
+        severity:
+          $ref: '#/components/schemas/Workflow-Issue-Severity'
+    Workflow-Execution-Steps:
+      type: object
+      properties:
+        order:
+          type: array
+          items:
+            type: string
+        passed:
+          type: array
+          items:
+            type: string
+        failed:
+          type: array
+          items:
+            type: string
+        incomplete:
+          type: array
+          items:
+            type: string
+        notApplicable:
+          type: array
+          items:
+            type: string
+  parameters:
+    entityId:
+      name: entityId
+      in: path
+      schema:
+        type: string
+      description: Unique FrankieOne identifier for an entity
+      required: true
+    levelNoIdQuery:
+      name: level
+      in: query
+      schema:
+        type: string
+        default: meta
+        enum:
+        - meta
+        - base64
+      description: "Determines what level of detail to return in the response\n - meta: Return all metadata only, no links or base64 data\n - base64: Return all metadata and images as base64"
+    X-Frankie-Username:
+      name: X-Frankie-Username
+      in: header
+      description: Username provided by API caller
+      required: false
+      schema:
+        type: string
+        example: fred.flintstone@frankieone.com
+    X-Frankie-CustomerChildID:
+      name: X-Frankie-CustomerChildID
+      in: header
+      required: false
+      schema:
+        type: string
+        example: 87654321-4321-4321-4321-210987654321
+      description: Your Customer Child ID provided by FrankieOne
+    X-Frankie-Channel:
+      name: X-Frankie-Channel
+      in: header
+      required: false
+      schema:
+        type: string
+      description: 'Open string that can be used to define the "channel" the request comes in from. It can potentially be used in routing and risk calculations upon request. Default values that can be used are:  api portal smartui Any alphanumeric string is supported though. Anything over 64 characters will be truncated.'
+    levelQuery:
+      name: level
+      in: query
+      schema:
+        type: string
+        default: meta
+        enum:
+        - id
+        - meta
+        - base64
+      description: "Determines what level of detail to return in the response\n - id: Return just an id\n - meta: Return all metadata only, no links or base64 data\n - base64: Return all metadata and data in base64 format"
+    Api-Key:
+      name: api_key
+      in: header
+      schema:
+        type: string
+        example: 245c765b124a098d09ef8765....
+      description: Your API key provided by FrankieOne
+      required: true
+    X-Frankie-Background:
+      name: X-Frankie-Background
+      schema:
+        type: integer
+        enum:
+        - 0
+        - 1
+      description: 'If this header parameter is supplied and set to 1, then the request will not wait for the process to finish,
+
+        and will return a 202 if there are no obvious errors in the input. The request will then run in the background
+
+        and send a notification back to the customer. See our callback API for details on this.
+
+        '
+      in: header
+      required: false
+    X-Frankie-CustomerID:
+      name: X-Frankie-CustomerID
+      in: header
+      required: true
+      schema:
+        type: string
+        example: 12345678-1234-1234-1234-123456789012
+      description: Your Customer ID provided by FrankieOne
+  securitySchemes:
+    Api-Key:
+      type: apiKey
+      in: header
+      name: api_key
+      description: ''
+    jwt:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

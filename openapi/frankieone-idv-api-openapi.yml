@@ -1,0 +1,4029 @@
+openapi: 3.0.3
+info:
+  title: Core V2 Audit IDV API
+  version: 2.0.0
+  description: This is the APIs for V2 Core. It allows you to do common operations, such as read audit entries or get workflow lists.
+  contact:
+    name: FrankieOne
+    url: https://www.frankieone.com/
+    email: help@frankieone.com
+servers:
+- url: https://api.uat.frankie.one
+security:
+- Api-Key: []
+tags:
+- name: IDV
+  description: Get a token and/or upload documents to initiate an IDV process
+paths:
+  /v2/individuals/{entityId}/actions/idv/token:
+    parameters:
+    - $ref: '#/components/parameters/entityId'
+    post:
+      summary: Queries the IDV provider for a token to be used with their sdk. This allows a provider SDK to be instantiated, this is to be called before starting the IDV or OCR process.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IDV-Token-Request'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IDV-Token-Response'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Invalid EntityId:
+                  value:
+                    errorCode: API-0400,
+                    errorMsg: 'Multiple Errors: See Issues list'
+                    details:
+                    - issue: 'entityId in path must be of type uuid: "test"'
+                      issueLocation: VALIDATE-entityId
+                    requestId: 01HM5XJ7VASZ3EJMB1VQGTBFJ4
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Invalid authentication:
+                  value:
+                    errorCode: AUTH-0002,
+                    errorMsg: Unauthorized
+                    details:
+                    - issue: Invalid Authentication provided. Access denied.
+                      issueLocation: request
+                    requestId: 00000000S6MNG7624K2TDXT1E3
+                No Api-Key:
+                  value:
+                    errorCode: AUTH-0401
+                    errorMsg: Unauthorized
+                    details:
+                    - issue: No api key provided. Access denied.
+                      issueLocation: request
+                    requestId: 00000001S6MNG7624K2TDXT1E3
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      operationId: getIDVToken
+      description: Get an IDV Token for the given individual.
+      parameters:
+      - $ref: '#/components/parameters/Api-Key'
+      - $ref: '#/components/parameters/X-Frankie-CustomerID'
+      - $ref: '#/components/parameters/X-Frankie-CustomerChildID'
+      - $ref: '#/components/parameters/X-Frankie-Channel'
+      tags:
+      - IDV
+      security:
+      - Api-Key: []
+      - jwt:
+        - kyc:api
+  /v2/individuals/{entityId}/actions/idv/ocr:
+    parameters:
+    - $ref: '#/components/parameters/entityId'
+    post:
+      summary: Submit an identity document photo for ocr processing. Results will be in the form of an identity document with populated with ocr results.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IDV-OCR-Request'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IDV-OCR-Response'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Invalid EntityId:
+                  value:
+                    errorCode: API-0400,
+                    errorMsg: 'Multiple Errors: See Issues list'
+                    details:
+                    - issue: 'entityId in path must be of type uuid: "test"'
+                      issueLocation: VALIDATE-entityId
+                    requestId: 01HM5XJ7VASZ3EJMB1VQGTBFJ4
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Invalid authentication:
+                  value:
+                    errorCode: AUTH-0002,
+                    errorMsg: Unauthorized
+                    details:
+                    - issue: Invalid Authentication provided. Access denied.
+                      issueLocation: request
+                    requestId: 00000000S6MNG7624K2TDXT1E3
+                No Api-Key:
+                  value:
+                    errorCode: AUTH-0401
+                    errorMsg: Unauthorized
+                    details:
+                    - issue: No api key provided. Access denied.
+                      issueLocation: request
+                    requestId: 00000001S6MNG7624K2TDXT1E3
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      operationId: processIDVOCR
+      description: Submit an identity document photo for ocr processing. Results will be in the form of an identity document with populated with ocr results if successful. Status will be COMPLETE_OCR if OCR was successful and no further images are required. The image can be uploaded or captured via a vendor SDK after calling get IDV token, or can be submitted directly as a fileData.
+      parameters:
+      - $ref: '#/components/parameters/Api-Key'
+      - $ref: '#/components/parameters/X-Frankie-CustomerID'
+      - $ref: '#/components/parameters/X-Frankie-CustomerChildID'
+      - $ref: '#/components/parameters/X-Frankie-Channel'
+      tags:
+      - IDV
+      security:
+      - Api-Key: []
+      - jwt:
+        - kyc:api
+  /v2/individuals/{entityId}/actions/idv/process:
+    parameters:
+    - $ref: '#/components/parameters/entityId'
+    post:
+      summary: At the end of the IDV data capture process with all photos and videos captured, signal to IDV provider that check is ready to analyse and check.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IDV-InitProcess-Request'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IDV-InitProcess-Response'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Invalid EntityId:
+                  value:
+                    errorCode: API-0400,
+                    errorMsg: 'Multiple Errors: See Issues list'
+                    details:
+                    - issue: 'entityId in path must be of type uuid: "test"'
+                      issueLocation: VALIDATE-entityId
+                    requestId: 01HM5XJ7VASZ3EJMB1VQGTBFJ4
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                Invalid authentication:
+                  value:
+                    errorCode: AUTH-0002,
+                    errorMsg: Unauthorized
+                    details:
+                    - issue: Invalid Authentication provided. Access denied.
+                      issueLocation: request
+                    requestId: 00000000S6MNG7624K2TDXT1E3
+                No Api-Key:
+                  value:
+                    errorCode: AUTH-0401
+                    errorMsg: Unauthorized
+                    details:
+                    - issue: No api key provided. Access denied.
+                      issueLocation: request
+                    requestId: 00000001S6MNG7624K2TDXT1E3
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '502':
+          description: Bad Gateway
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Service Unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      operationId: initBiometrics
+      description: "At the end of the IDV data capture process with all photos and videos captured, signal to IDV provider\n    that check is ready to analyse and check. If this call is successful, an entity\nis populated with with any details supplied if it doesn't not already have a name."
+      parameters:
+      - $ref: '#/components/parameters/Api-Key'
+      - $ref: '#/components/parameters/X-Frankie-CustomerID'
+      - $ref: '#/components/parameters/X-Frankie-CustomerChildID'
+      - $ref: '#/components/parameters/X-Frankie-Channel'
+      tags:
+      - IDV
+      security:
+      - Api-Key: []
+      - jwt:
+        - kyc:api
+components:
+  schemas:
+    Session:
+      type: object
+      description: Session details for an activity, this is always scoped to a singular entity.
+      properties:
+        token:
+          type: string
+          description: A token to identify the specific session for the activity
+    Phone-Number-ID:
+      type: string
+      description: 'As phone numbers are added to an entity, they are assigned an ID to assist with tracking.
+
+        If you are adjusting phone numbers, you will need to include the ID to reference it correctly in the list.'
+      example: ad165f64-5717-4562-b3fc-2c963f66bfa9
+    Supplementary-Data-Activity-Device:
+      type: object
+      description: 'Defines the details of an activity device result.
+
+        '
+      allOf:
+      - $ref: '#/components/schemas/Supplementary-Data-Base'
+      - type: object
+        properties:
+          riskLevel:
+            type: string
+          activityResults:
+            type: array
+            items:
+              $ref: '#/components/schemas/Supplementary-Data-Activity-Result-Detail'
+    IDV-Token-Response:
+      type: object
+      description: IDV Token Response, contains the token and it's expiry, and any vendor specific parameters.
+      properties:
+        applicantId:
+          description: The ID of the applicant attached to this check.
+          type: string
+        country:
+          description: Country code to check for. Must be a ISO-3166 alpha-3 code entry.
+          example: AUS
+          type: string
+        documentType:
+          description: Document type that will be used for the check.
+          example: DRIVER_LICENCE
+          type: string
+        provider:
+          description: Underlying provider, used for selecting the correct SDK if not using SmartUI.
+          example: OCRLabs
+          type: string
+        smsSent:
+          description: Has a sms to the user already been sent as part of the token request
+          example: true
+          type: boolean
+        token:
+          description: Tokens are only valid for a limited time.
+          example: 41cf9401f0f889616bef
+          type: string
+        tokenExpiry:
+          description: The time at which the provided token will expire.
+          type: string
+          format: date-time
+          example: '2020-01-01T00:00:00.000Z'
+        vendorParameters:
+          description: Vendor specific parameters, used for passing through additional parameters from the vendor to instantiate the SDK.
+          additionalProperties:
+            type: string
+          example:
+            tokenURL: example1.com
+          type: object
+        requestId:
+          $ref: '#/components/schemas/Request-ID'
+    Process-ResultEnum:
+      type: string
+      enum:
+      - MATCH
+      - PARTIAL_MATCH
+      - INVALID_MATCH
+      - NO_MATCH
+      - CLEAR
+      - HIT
+      - BAD_DATA
+      - CREATED
+      - UPDATED
+      - DELETED
+      - FAIL
+      - NOT_APPLICABLE
+      - SUSPECTED
+      - REJECTED
+      - MANUAL
+      - CLEAR_AUTO
+      - OVERRIDE
+      readOnly: true
+      description: 'The actual pass/fail result of the element check
+
+        - MATCH: The element check matched the expected criteria.
+
+        - PARTIAL_MATCH: The element check partially matched the expected criteria.
+
+        - INVALID_MATCH: The element check matched but was invalid.
+
+        - NO_MATCH: The element check did not match the expected criteria.
+
+        - CLEAR: The element check was cleared.
+
+        - HIT: The element check hit a specific condition or threshold.
+
+        - BAD_DATA: The element check encountered bad data.
+
+        - CREATED: The element check resulted in the creation of a new record.
+
+        - UPDATED: The element check resulted in the update of an existing record.
+
+        - DELETED: The element check resulted in the deletion of a record.
+
+        - FAIL: The element check failed.
+
+        - NOT_APPLICABLE: The element check was not applicable in the given context.
+
+        - SUSPECTED: The element check raised a suspicion but did not confirm it.
+
+        - REJECTED: The element check was rejected.
+
+        - MANUAL: The element check was manually reviewed or processed.
+
+        - CLEAR_AUTO: The element check was cleared automatically.
+
+        - OVERRIDE: The element check was overridden by a manual action or system rule.
+
+        '
+    Document-Supplementary-Data-National-ID:
+      type: object
+      description: Supplementary information relevant to a national ID.
+      allOf:
+      - $ref: '#/components/schemas/Document-Supplementary-Data-Base'
+      - type: object
+        properties:
+          homeCountryFullName:
+            type: string
+            description: The original full name from the individual's home country national ID.
+            example: 张伟明
+          paternalFamilyName:
+            type: string
+            description: The individual's family name inherited from the father's side.
+            example: MENDOZA
+          maternalFamilyName:
+            type: string
+            description: The individual's family name inherited from the mother's side.
+            example: GARCIA
+    Supplementary-Data-Matchlist:
+      type: object
+      description: 'Each match against a matchlist entry generates a PRO (Process Result Object), and this object describes the details of the matched entry.
+
+        '
+      allOf:
+      - $ref: '#/components/schemas/Supplementary-Data-Base'
+      - $ref: '#/components/schemas/Matchlist-Entry-Base'
+      - type: object
+        properties:
+          matchlistId:
+            type: string
+            format: uuid
+            description: Unique identifier for the matchlist.
+          matchlistName:
+            type: string
+            description: Unique name of the matchlist.
+          matchlistAction:
+            $ref: '#/components/schemas/Matchlist-Action'
+          confidence:
+            $ref: '#/components/schemas/Search-Confidence'
+          matchedFields:
+            type: array
+            items:
+              $ref: '#/components/schemas/Supplementary-Data-Matchlist-Field'
+    Supplementary-Data-AML-SanctionsData:
+      type: object
+      description: 'Contains sanction information about a specific matched entity.
+
+        '
+      properties:
+        countryCode:
+          type: string
+          description: 'The ISO 3166-1 alpha-3 country code where the sanction entry was recorded.
+
+            '
+        countryName:
+          type: string
+          description: 'The ISO 3166 country name where the sanction entry was recorded.
+
+            '
+        sourceName:
+          type: string
+          description: 'The source of the sanction entry data.
+
+            '
+        sourceUrl:
+          type: string
+          format: uri
+          description: 'The URL where the original sanction information can be found.
+
+            '
+        sourceReason:
+          type: string
+          description: 'The reason provided for sanctioning the individual or organization.
+
+            '
+        listingStart:
+          type: string
+          description: 'The date when the listing started. Will attempt to use ISO 8601 date format; otherwise, the format supplied by the source.
+
+            '
+        listingEnd:
+          type: string
+          description: 'The date when the listing ended (if available or known). Will attempt to use ISO 8601 date format; otherwise, the format supplied by the source.
+
+            '
+        imageUrl:
+          type: string
+          format: uri
+          description: 'Optional URL of an image of the person or company logo of the sanctioned entity.
+
+            '
+        referenceDocs:
+          type: array
+          items:
+            $ref: '#/components/schemas/Supplementary-Data-AML-ReferenceDocs'
+        additionalData:
+          type: array
+          items:
+            $ref: '#/components/schemas/Supplementary-Data-AML-AdditionalData'
+    Supplementary-Data-Activity-AML:
+      type: object
+      description: 'Provides details of an activity Anti-Money Laundering (AML) result.
+
+        '
+      allOf:
+      - $ref: '#/components/schemas/Supplementary-Data-Base'
+      - type: object
+        properties:
+          riskLevel:
+            type: string
+            description: Indicates the assessed risk level for the activity.
+          activityResults:
+            type: array
+            description: A list of detailed results for the activity AML check.
+            items:
+              $ref: '#/components/schemas/Supplementary-Data-Activity-Result-Detail'
+    Individual-Name:
+      type: object
+      required:
+      - familyName
+      x-examples:
+        Example 1:
+          givenName: John
+          middleName: Jacob
+          familyName: Smith
+      properties:
+        nameId:
+          type: string
+          example: 87654321-4321-4321-4321-210987654321
+          description: Include the nameId of an existing name for this individual to modify it
+          readOnly: true
+        language:
+          type: string
+          example: eng
+          description: The ISO-639-3 standard code that best represents the language and character set of the individual's name
+          default: eng
+        givenName:
+          type: string
+          example: John
+          description: First name or given name
+        middleName:
+          type: string
+          example: R
+          description: Middle name(s) or middle initial(s)
+        familyName:
+          type: string
+          example: Doe
+          description: Last name, family name, or surname.
+        otherName:
+          type: string
+          example: null
+          description: Another name that this person may be known as, e.g., "Bob" as an alternative to "Robert".
+        prefix:
+          type: string
+          example: Dr.
+          description: Letters or words that come before an individual's full name (e.g., title or honorific).
+        suffix:
+          type: string
+          example: Jr.
+          description: Letters or words that come after an individual's full name (e.g., generational suffix).
+        sourceId:
+          type: string
+          example: 87654321-4321-4321-4321-210987654322
+          description: The source from where a specific information was sourced from. This is a link to an informationSource object in the informationSources map
+          readOnly: true
+        displayName:
+          type: string
+          example: John Doe
+          description: Long format of the individual's full name, including any prefix, suffix, middle, or other names. Best used when the proper structure of the individual's name is unknown.
+    Supplementary-Data-Fraud-IP-Address:
+      type: object
+      description: 'Defines the details of a single IP address fraud check.
+
+        '
+      allOf:
+      - $ref: '#/components/schemas/Supplementary-Data-Base'
+      - $ref: '#/components/schemas/Supplementary-Data-Fraud-IP-Address-Data'
+    Process-Result-Manual-StatusEnum-AML:
+      type: string
+      enum:
+      - TRUE_POSITIVE
+      - FALSE_POSITIVE
+      - TRUE_POSITIVE_ACCEPT
+      - TRUE_POSITIVE_REJECT
+      - UNKNOWN
+      - UNKNOWN_ACCEPT
+      - UNKNOWN_REJECT
+      description: 'The manual status that the AML process result should be set to after the results have been reviewed.
+
+        - FALSE_POSITIVE: The result is determined to be a false positive, but you do not necessarily want to resolve it.
+
+        - FALSE_POSITIVE_ACCEPT: The result is determined to be a false positive and you want to resolve it. "Accept" infers you want to accept the activity.
+
+        - TRUE_POSITIVE: The result is determined to be a true positive, but you do not necessarily want to resolve it.
+
+        - TRUE_POSITIVE_REJECT: The result is determined to be a true positive and you want to resolve it. "Reject" infers you want to reject the activity.
+
+        - UNKNOWN: The result is determined to be unknown, but you do not necessarily want to resolve it.
+
+        - UNKNOWN_ACCEPT: The result is determined to be unknown and you want to resolve it. "Accept" infers you want to accept the activity.
+
+        - UNKNOWN_REJECT: The result is determined to be unknown and you want to resolve it. "Reject" infers you want to reject the activity.
+
+        '
+    Relationship:
+      type: object
+      properties:
+        entityId:
+          $ref: '#/components/schemas/Entity-ID'
+        entityType:
+          $ref: '#/components/schemas/Entity-Type'
+        origin:
+          $ref: '#/components/schemas/Relationship-Origin'
+    Likelihood:
+      type: string
+      description: 'Likelihood of a particular scenario
+
+        '
+      enum:
+      - LOW
+      - MEDIUM
+      - HIGH
+      - VERY_HIGH
+      - UNKNOWN
+    Supplementary-Data-AML-WatchlistData:
+      type: object
+      description: 'Contains non-PEP/non-sanction watchlist and other source information about a specific matched entity.
+
+        '
+      properties:
+        countryCode:
+          type: string
+          description: 'The ISO 3166-1 alpha-3 country code where the watchlist entry was recorded.
+
+            '
+        countryName:
+          type: string
+          description: 'The ISO 3166 country name where the watchlist entry was recorded.
+
+            '
+        sourceName:
+          type: string
+          description: 'The source of the watchlist entry data.
+
+            '
+        sourceUrl:
+          type: string
+          format: uri
+          description: 'The URL where the original watchlist information can be found.
+
+            '
+        sourceReason:
+          type: string
+          description: 'The reason provided for adding the individual or organization to the watchlist.
+
+            '
+        listingStart:
+          type: string
+          description: 'The date when the listing started. Will attempt to use ISO 8601 date format; otherwise, the format supplied by the source.
+
+            '
+        listingEnd:
+          type: string
+          description: 'The date when the listing ended (if available or known). Will attempt to use ISO 8601 date format; otherwise, the format supplied by the source.
+
+            '
+        imageUrl:
+          type: string
+          format: uri
+          description: 'Optional URL of an image of the person or company logo of the entity on this list.
+
+            '
+        referenceDocs:
+          type: array
+          items:
+            $ref: '#/components/schemas/Supplementary-Data-AML-ReferenceDocs'
+        additionalData:
+          type: array
+          items:
+            $ref: '#/components/schemas/Supplementary-Data-AML-AdditionalData'
+    Issue:
+      type: object
+      properties:
+        issue:
+          type: string
+          description: Description of the issue.
+        issueLocation:
+          type: string
+          description: The location or context where the issue was identified.
+        issueType:
+          type: string
+          description: The type or category of the issue.
+    Document-Supplementary-Data-Marriage-Certificate:
+      type: object
+      description: Supplementary information relevant to a marriage certificate.
+      allOf:
+      - $ref: '#/components/schemas/Document-Supplementary-Data-Base'
+      - type: object
+        description: Supplementary information relevant to a marriage certificate.
+        properties:
+          partner1GivenName:
+            type: string
+            description: The given name of partner 1.
+            example: Harry
+          partner1FamilyName:
+            type: string
+            description: The family name of partner 1.
+            example: Versailles
+          partner1OtherName:
+            type: string
+            description: The other name of partner 1.
+            example: S.
+          partner2GivenName:
+            type: string
+            description: The given name of partner 2.
+            example: Harry
+          partner2FamilyName:
+            type: string
+            description: The family name of partner 2.
+            example: Versailles
+          partner2OtherName:
+            type: string
+            description: The other name of partner 2.
+            example: S.
+          registrationDate:
+            type: string
+            description: The date the marriage was registered.
+            example: '2023'
+          marriageDate:
+            type: string
+            description: The date the marriage was held.
+            example: '2023-10-01'
+          dateOfPrint:
+            type: string
+            description: The date the birth certificate was printed.
+            example: '2023-10-01'
+    Supplementary-Data-Activity-Result-Detail-Indicator:
+      type: object
+      properties:
+        indicatorId:
+          $ref: '#/components/schemas/Indicator-ID'
+        name:
+          type: string
+        value:
+          type: string
+        score:
+          type: string
+        rules:
+          type: array
+          items:
+            $ref: '#/components/schemas/Supplementary-Data-Activity-Result-Detail-Rule'
+    Supplementary-Data-Matchlist-Attribute:
+      type: object
+      description: 'Information about a matched attribute within a matched field.
+
+        '
+      required:
+      - type
+      - confidence
+      properties:
+        type:
+          $ref: '#/components/schemas/Matchlist-Entry-Attribute-Type'
+        confidence:
+          $ref: '#/components/schemas/Search-Confidence'
+          description: 'Confidence score for the attribute match.
+
+            '
+    Request-ID:
+      type: string
+      example: 01HN9XHZN6MGXM9JXG50K59Q85
+      description: The unique request identifier for the API call made.
+    Supplementary-Data-Fraud-Device-Data:
+      type: object
+      description: 'Provides details of a single fraud check for device and related device data.
+
+        '
+      properties:
+        device:
+          $ref: '#/components/schemas/Device'
+        session:
+          $ref: '#/components/schemas/Session-Data'
+        indicators:
+          type: array
+          items:
+            $ref: '#/components/schemas/Supplementary-Data-Activity-Result-Detail-Indicator'
+        riskLevel:
+          $ref: '#/components/schemas/Risk-Level'
+        reference:
+          $ref: '#/components/schemas/Result-Reference'
+    Entity-Documents:
+      type: object
+      properties:
+        REPORT:
+          type: array
+          items:
+            $ref: '#/components/schemas/Document-Information'
+        SUPPORTING:
+          type: array
+          items:
+            $ref: '#/components/schemas/Document-Information'
+        IDENTITY:
+          type: array
+          items:
+            $ref: '#/components/schemas/Document-Information'
+        OTHER:
+          type: array
+          items:
+            $ref: '#/components/schemas/Document-Information'
+    Supplementary-Data-KYC-Address-MatchStrengths:
+      type: object
+      properties:
+        fullAddress:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 100
+        streetNumber:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 100
+        streetName:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 100
+        streetType:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 100
+        streetAll:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 100
+        locality:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 100
+        district:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 100
+        subdivision:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 100
+        postalCode:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 100
+        country:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 100
+    Entity-ID:
+      type: string
+      description: 'Entities are assigned an auto-generated UUID to ensure global uniqueness, represented as entityId. The entityId allows for precise modification when required.
+
+        To modify an entity, set the entityId of the entity you wish to update in an update request.'
+      example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+      readOnly: true
+    Supplementary-Data-AML-ReferenceDocs:
+      type: object
+      description: 'Captures references to source documents or websites, including the URL and, where available, a description of the original source.
+
+        '
+      properties:
+        url:
+          type: string
+          format: uri
+          description: URL of any external reference document related to this matched entity.
+        description:
+          type: string
+          description: If a description of the document is provided, it will be included here.
+    Matchlist-Entry-Reason-Code:
+      type: string
+      description: The reason code for the matchlist entry. This code will be translated to a configured description string. Supported codes are 1 to 24 characters long, consisting only of uppercase letters (A-Z), digits (0-9), underscores (_), or hyphens (-), with no spaces or special characters.
+      pattern: ^[A-Z0-9_-]{1,24}$
+    Supplementary-Data-Fraud-Email-Address:
+      type: object
+      description: 'Defines the details of a single email fraud check.
+
+        '
+      allOf:
+      - $ref: '#/components/schemas/Supplementary-Data-Base'
+      - type: object
+        properties:
+          emailAddressId:
+            $ref: '#/components/schemas/Email-Address-ID'
+          riskLevel:
+            $ref: '#/components/schemas/Risk-Level'
+          reference:
+            $ref: '#/components/schemas/Result-Reference'
+          indicators:
+            type: array
+            items:
+              $ref: '#/components/schemas/Supplementary-Data-Activity-Result-Detail-Indicator'
+    Process-Result-Object:
+      type: object
+      properties:
+        processResultId:
+          $ref: '#/components/schemas/Process-Result-ID'
+        schemaVersion:
+          type: integer
+          readOnly: true
+        entityId:
+          type: string
+          readOnly: true
+        requestId:
+          $ref: '#/components/schemas/Request-ID'
+          readOnly: true
+        stepName:
+          type: string
+          readOnly: true
+        stepType:
+          type: string
+          readOnly: true
+        objectType:
+          type: string
+          readOnly: true
+        objectId:
+          type: string
+          readOnly: true
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+        groupId:
+          type: string
+          readOnly: true
+        providerResult:
+          $ref: '#/components/schemas/Provider-Result'
+        result:
+          $ref: '#/components/schemas/Process-ResultEnum'
+        class:
+          $ref: '#/components/schemas/Process-Result-ClassEnum'
+        supplementaryData:
+          $ref: '#/components/schemas/Supplementary-Data'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Process-Result-Error'
+          readOnly: true
+        notes:
+          readOnly: true
+          allOf:
+          - $ref: '#/components/schemas/Custom-Attributes'
+        systemStatus:
+          $ref: '#/components/schemas/Process-Result-System-StatusEnum'
+        manualStatus:
+          $ref: '#/components/schemas/Process-Result-Manual-StatusEnum'
+        state:
+          $ref: '#/components/schemas/Process-Result-StateEnum'
+        riskFactors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Process-Risk-Factor-Value'
+          readOnly: true
+        updatedBy:
+          type: string
+          readOnly: true
+    Date-Base:
+      type: object
+      properties:
+        year:
+          type: string
+          description: Year in "YYYY" format.
+          example: '1990'
+        month:
+          type: string
+          description: Month in "MM" format.
+          example: '03'
+        day:
+          type: string
+          description: Day in "DD" format.
+          example: '27'
+        unstructured:
+          type: string
+          description: 'Raw date format without normalization or standardization to the Gregorian calendar.
+
+            This can be used to provide non-Gregorian dates (e.g., Islamic dates).'
+          example: 12 Rajab 1445 AH
+        type:
+          $ref: '#/components/schemas/Date-Type'
+    ConfidenceLevel:
+      type: object
+      properties:
+        normalized:
+          description: 'The normalized confidence level, if set.
+
+            Note: This is a normalized value, NOT the one used by the service provider (see the "actual" field).
+
+            Assumes a scale of 0.0 (exact match) to 100.0 (match anything).
+
+            '
+          type: number
+          format: float
+          minimum: 0
+          maximum: 100
+        actual:
+          description: 'The actual confidence level as provided by the service provider, if set.
+
+            Note: This is not a normalized value, but the original value from the provider.
+
+            '
+          type: string
+    IP-Information:
+      type: object
+      description: IP information, typically in relation to a device
+      properties:
+        v4Address:
+          type: string
+          description: The IPv4 address
+          format: ipv4
+        v6Address:
+          type: string
+          description: The IPv6 address
+          format: ipv6
+        trueAddress:
+          type: string
+          description: The true IP address
+        asn:
+          type: string
+          description: The ASN of the IP address
+        connectionType:
+          type: string
+          description: The type of IP connection (if available)
+          example:
+          - Fixed Line ISP
+        location:
+          $ref: '#/components/schemas/Geolocation'
+    Supplementary-Data-Visa:
+      type: object
+      description: 'Defines the Visa details returned from VEVO.
+
+        Class and subclass values can be found on the VEVO website.
+
+        '
+      allOf:
+      - $ref: '#/components/schemas/Supplementary-Data-Base'
+      - type: object
+        properties:
+          country:
+            type: string
+            description: Country of origin (ISO-3166-alpha3 code).
+          class:
+            type: string
+            description: Visa class.
+          subClass:
+            type: string
+            description: Visa subclass.
+          entitlementStatus:
+            type: string
+            description: Status of the visa entitlement.
+          grantDate:
+            type: string
+            format: date
+            description: Date the visa was granted.
+          expiryDate:
+            type: string
+            format: date
+            description: Date the visa expires.
+          hasExpired:
+            type: boolean
+            description: Indicates if the visa has expired (sometimes expiry date is not returned).
+          noExpiry:
+            type: boolean
+            description: Indicates if this visa has no expiry.
+          entitlementConditionCode:
+            type: string
+            description: Code for the entitlement condition.
+          entitlementConditionDescription:
+            type: string
+            description: Description of the entitlement condition.
+          holderType:
+            type: string
+            enum:
+            - PRIMARY
+            - SECONDARY
+            description: "Indicates if this is the primary visa holder or a secondary holder (usually a spouse/partner or other family member).\nValues:\n  - PRIMARY\n  - SECONDARY\n"
+          lookupErrorCode:
+            type: string
+            description: If there was an error during the lookup, this is the code returned from VEVO.
+          fuzziness:
+            $ref: '#/components/schemas/FuzzinessLevel'
+    Supplementary-Data-AML-PEPData:
+      type: object
+      description: 'Contains Politically Exposed Person (PEP) information about a specific matched entity.
+
+        '
+      properties:
+        countryCode:
+          type: string
+          description: 'The ISO 3166-1 alpha-3 country code where the PEP entry was recorded.
+
+            '
+        countryName:
+          type: string
+          description: 'The ISO 3166 country name where the PEP entry was recorded.
+
+            '
+        sourceName:
+          type: string
+          description: 'The source of the PEP entry data.
+
+            '
+        level:
+          type: string
+          description: 'The PEP "level", generally represented by a number from 1 (heads of state, military, civil service, etc.) to 4 (local government, minor public servants, etc.).
+
+            '
+        sourceUrl:
+          type: string
+          format: uri
+          description: 'The URL where the original PEP information can be found.
+
+            '
+        sourcePosition:
+          deprecated: true
+          type: string
+          description: '(Deprecated) The position held that created the PEP entry.
+
+            '
+        position:
+          type: string
+          description: 'The position held that created the PEP entry.
+
+            '
+        positionDescription:
+          type: string
+          description: 'A description of the position held that created the PEP entry.
+
+            '
+        status:
+          type: string
+          description: 'The current PEP status.
+
+            '
+        listingStart:
+          type: string
+          description: 'The date when the listing started. Will attempt to use ISO 8601 date format; otherwise, the format supplied by the source.
+
+            '
+        listingEnd:
+          type: string
+          description: 'The date when the listing ended (if available or known). Will attempt to use ISO 8601 date format; otherwise, the format supplied by the source.
+
+            '
+        imageUrl:
+          type: string
+          format: uri
+          description: 'Optional URL of an image of the person associated with their role.
+
+            '
+        referenceDocs:
+          type: array
+          items:
+            $ref: '#/components/schemas/Supplementary-Data-AML-ReferenceDocs'
+        additionalData:
+          type: array
+          items:
+            $ref: '#/components/schemas/Supplementary-Data-AML-AdditionalData'
+    Document-Information:
+      type: object
+      required:
+      - type
+      - country
+      properties:
+        documentId:
+          $ref: '#/components/schemas/Document-ID'
+        entityId:
+          $ref: '#/components/schemas/Entity-ID'
+        expiryDate:
+          $ref: '#/components/schemas/Date'
+          description: The expiry date of the document in YYYY-MM-DD format.
+        issueDate:
+          $ref: '#/components/schemas/Date'
+          description: The issue date of the document in YYYY-MM-DD format.
+        primaryIdentifier:
+          type: string
+          description: The primary ID number of the document, e.g., the ID number on a driver licence.
+          example: '000734130'
+        secondaryIdentifier:
+          type: string
+          description: The secondary ID number of the document, e.g., the card number on a driver licence.
+          example: P0001975
+        type:
+          $ref: '#/components/schemas/Document-Type'
+        subtype:
+          type: string
+          description: The sub-type of the document, if relevant. This can include specific report or attestation types, e.g., FACIAL_COMPARISON (attestation) or KYC (report).
+          example: Photo Comparison
+        subdivision:
+          type: string
+          description: The abbreviated ISO 3166 subdivision/region where the ID was issued, e.g., "VIC" for the Australian state of Victoria or "MA" for the US state of Massachusetts.
+          example: VIC
+        country:
+          type: string
+          maxLength: 3
+          description: 'The ISO 3166 alpha-3 country code where the document was issued, if relevant.
+
+            For more information, please refer to: https://en.wikipedia.org/wiki/List_of_ISO_3166_country_codes'
+          example: AUS
+        createdAt:
+          type: string
+          format: date-time
+          description: The date and time when the document record was created, in ISO 8601 format.
+          example: '2024-01-15T02:18:11.365Z'
+          readOnly: true
+        updatedAt:
+          type: string
+          format: date-time
+          description: The date and time when the document record was last updated, in ISO 8601 format.
+          example: '2025-01-16T02:18:11.365Z'
+          readOnly: true
+        validFrom:
+          $ref: '#/components/schemas/Date'
+          description: The date when the validity period for this document began, if applicable.
+        validTo:
+          $ref: '#/components/schemas/Date'
+          description: The date when the validity period for this document ended, if applicable.
+        sourceId:
+          type: string
+          description: The source from which specific information was sourced. This is a link to an informationSource object in the informationSources map.
+          example: 324f15f64-5717-4562-b3fc-2c963f66ffa1
+          readOnly: true
+        supplementaryData:
+          $ref: '#/components/schemas/Document-Supplementary-Data'
+        customAttributes:
+          $ref: '#/components/schemas/Custom-Attributes'
+        attachments:
+          type: array
+          description: 'List of scans, pages, or files for a single document, e.g., front and back images of a driver licence, or page 1, 2, and 3 of a supporting document.
+
+
+            Attachments can be uploaded in a single call or in multiple calls. To upload attachments over multiple calls, include the documentId in the request.'
+          items:
+            $ref: '#/components/schemas/Document-Attachment'
+    Activity-Result-ID:
+      type: string
+      readOnly: true
+      description: Activity Result ID that identifies a result from an evaluation of an activity
+      format: ulid
+    Activity-ID:
+      type: string
+      readOnly: true
+      description: Activity ID that identifies an activity within the Frankie platform
+      format: ulid
+    Supplementary-Data-KYB-Organization:
+      type: object
+      description: 'Defines OQRO (Ownership Query Result Object) at various stages in the KYB (Know Your Business) flow.
+
+        The ''oqro'' property temporarily stores the V1 OQRO and will be used until the V2 OQRO is defined.
+
+        '
+      allOf:
+      - $ref: '#/components/schemas/Supplementary-Data-Base'
+      - type: object
+        properties:
+          organization:
+            description: 'V2 OQRO; to be defined in the future.
+
+              '
+            properties:
+              entityId:
+                $ref: '#/components/schemas/Entity-ID'
+              entityType:
+                $ref: '#/components/schemas/Entity-Type'
+    Document-Supplementary-Data-Citizenship:
+      type: object
+      description: Supplementary information relevant to a citizenship certificate.
+      allOf:
+      - $ref: '#/components/schemas/Document-Supplementary-Data-Base'
+      - type: object
+        description: Supplementary information relevant to a citizenship certificate.
+        properties:
+          acquisitionDate:
+            type: string
+            description: The date citizenship was acquired.
+            example: 2000/01/01
+          primaryCountry:
+            type: string
+            description: The primary country of citizenship, represented by its three-letter ISO 3166-1 alpha-3 code.
+            example: USA
+          secondaryCountry:
+            type: string
+            description: The secondary country of citizenship, if applicable, represented by its three-letter ISO 3166-1 alpha-3 code.
+            example: CAN
+    Supplementary-Data-AML-AdditionalData:
+      type: object
+      description: 'Represents a simple key-value pair for AML data to capture any additional information not included in the main object.
+
+        '
+      properties:
+        key:
+          type: string
+          description: 'The key name, formatted in snake_case (e.g., key_in_snake_case), which can be converted to spaced title case for display.
+
+            '
+        value:
+          type: string
+          description: 'The value associated with the key, provided as a string for display purposes.
+
+            '
+    Supplementary-Data-IDV-Facial-Comparison:
+      type: object
+      description: 'Result of a facial comparison check, indicating how likely or accurate the presented face matches the ID document.
+
+
+        For resultMap keys, use the keys found in the enum: SupplementaryDataIDVEnumDataFacialComparison.
+
+        '
+      allOf:
+      - $ref: '#/components/schemas/Supplementary-Data-IDV-Base'
+      - type: object
+        properties:
+          comparedDocumentId:
+            type: string
+            format: uuid
+            description: The document ID of the ID document that was compared.
+          comparedDocumentAttachmentId:
+            type: string
+            format: uuid
+            description: The attachment ID of the ID document that was compared.
+          comparedSelfieId:
+            type: string
+            format: uuid
+            description: The document ID of the selfie that was compared.
+          comparedSelfieAttachmentId:
+            type: string
+            format: uuid
+            description: The attachment ID of the selfie that was compared.
+    Process-Result-Manual-StatusEnum-Matchlist:
+      type: string
+      enum:
+      - FALSE_POSITIVE
+      - TRUE_POSITIVE_REJECT
+      description: 'Any manual status set after the results have been reviewed.
+
+        - FALSE_POSITIVE: The result is determined to be a false positive, but you do not necessarily want to resolve it.
+
+        - TRUE_POSITIVE_REJECT: The result is determined to be a true positive and you want to resolve it. "Reject" infers you want to reject the activity.
+
+        '
+    Date-Of-Birth-Alternate:
+      type: object
+      allOf:
+      - type: object
+        properties:
+          dateOfBirthId:
+            type: string
+            description: 'As dates of birth are added to an entity, they are assigned a unique identifier to assist with modification and reference.
+
+              To modify a date of birth, include the dateOfBirthId in an update request for the individual.'
+          sourceId:
+            type: string
+            description: The source from which specific information was sourced. This is a link to an informationSource object in the informationSources map.
+            readOnly: true
+      - $ref: '#/components/schemas/Date'
+    Email:
+      type: object
+      properties:
+        emailAddressId:
+          $ref: '#/components/schemas/Email-Address-ID'
+        type:
+          type: string
+          enum:
+          - OTHER
+          - WORK
+          - PERSONAL
+          - BUSINESS
+          example: WORK
+          description: The type of email address, if known.
+        sourceId:
+          type: string
+          description: The source from which specific information was sourced. This is a link to an informationSource object in the informationSources map.
+          example: 31dd15f64-5717-4562-b3fc-2c963f66234d
+          readOnly: true
+        email:
+          type: string
+          description: The individual's email address. This email can be used to notify the individual of any verification requirements.
+          example: leonardo_dc@outlook.com
+        isPreferred:
+          type: boolean
+          description: Indicates whether this email address is the individual's preferred email. The preferred email will be used to send notifications at the client's request.
+          default: true
+        linkedAddresses:
+          type: array
+          readOnly: true
+          description: If the email is attached to one or more addresses, the address IDs of those addresses will be present.
+          items:
+            type: object
+            properties:
+              addressId:
+                description: The addressId of the linked address.
+                type: string
+                example: adc215f64-5717-4562-b3fc-2c963f66222a
+    Error-Base:
+      type: object
+      properties:
+        errorCode:
+          type: string
+        errorMsg:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/Issue'
+    Rule-ID:
+      type: string
+      readOnly: true
+      format: ulid
+      description: Rule ID that identifies an instance of a rule within the Frankie platform
+    Supplementary-Data-Duplicate:
+      type: object
+      description: 'Provides details of a single duplicate match, including the matching entity ID and a list of matched elements.
+
+        '
+      allOf:
+      - $ref: '#/components/schemas/Supplementary-Data-Base'
+      - type: object
+        properties:
+          duplicateEntityId:
+            $ref: '#/components/schemas/Entity-ID'
+            description: The entity ID of the entity that was matched by the matched fields.
+          matchedFields:
+            type: array
+            description: The list of fields that determined this is a duplicate of another entity.
+            items:
+              $ref: '#/components/schemas/Supplementary-Data-Duplicate-MatchField'
+          matchedRules:
+            type: array
+            description: The list of rules that were matched to determine this is a duplicate of another entity.
+            items:
+              $ref: '#/components/schemas/Supplementary-Data-Duplicate-MatchedRule'
+    IDV-InitProcess-Request:
+      type: object
+      description: Init IDV Process Request, used after capture of IDV data from a customer, including photos/videos of the face and ID. For providers that support it, this will synchronously report all report results from the provider. For providers that do not support synchronous reporting, this will request the reports and return a request id and status. The status can be polled for the final result or sent via webhook. Body parameters are optional, if they are not sent, then the latest token for the entity is used.
+      properties:
+        providerReferenceId:
+          description: provider reference Id if known. May be referred to as checkId or interviewId in vendor specific document
+          example: 41cf9401f0f889616bef
+          type: string
+        token:
+          description: if no check id has yet been created for this idv check, pass through the token instead
+          example: 41cf9401f0f889616bef
+          type: string
+        comment:
+          $ref: '#/components/schemas/Comment'
+    Process-Result-ID:
+      type: string
+      description: When a process result object is first created, it is assigned an ID. When updating the process result object, set the processResultID to the ID of the process result object you are referring to.
+      readOnly: true
+    Supplementary-Data-Duplicate-MatchField:
+      type: object
+      description: 'Provides details of a match between entities, the objects they represent, and the match strength.
+
+        '
+      properties:
+        objectType:
+          $ref: '#/components/schemas/Object-Type'
+        duplicateObjectId:
+          type: string
+          format: uuid
+          description: The ID of the object that was found to be a duplicate.
+        objectId:
+          type: string
+          format: uuid
+          description: The ID of the object that originated the match.
+        matchStrength:
+          $ref: '#/components/schemas/Supplementary-Data-Base-MatchStrength'
+    Document-Supplementary-Data-Base:
+      type: object
+      description: Supplementary data associated with a document.
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          description: The document type that defines the type of supplementary data returned.
+          enum:
+          - NATIONAL_HEALTH_ID
+          - BIRTH_CERT
+          - NATIONAL_ID
+          - CITIZENSHIP
+          - PASSPORT
+          - MARRIAGE_CERT
+    Supplementary-Data-AML-MediaData:
+      type: object
+      required:
+      - title
+      - source
+      description: 'Contains adverse media information about a specific matched entity.
+
+        '
+      properties:
+        title:
+          type: string
+          description: 'The title of the article or media source.
+
+            '
+        snippet:
+          type: string
+          description: 'A short excerpt or snippet from the article.
+
+            '
+        source:
+          type: string
+          description: 'The source or publisher of the article or media.
+
+            '
+        sourceDate:
+          type: string
+          description: 'The publication date, as referenced and formatted by the source.
+
+            '
+        sourceCountry:
+          type: string
+          description: 'The country of origin for the article, if available.
+
+            '
+        url:
+          type: string
+          description: 'The URL to the original full article, if available.
+
+            '
+        isCurrent:
+          type: boolean
+          default: true
+          description: 'Indicates whether this article is still considered current.
+
+            '
+    Evaluation-ID:
+      type: string
+      description: The ID of the evaluation
+      readOnly: true
+      format: ulid
+    Document-Supplementary-Data:
+      type: object
+      description: Supplementary information relevant to a specific document or report type.
+      oneOf:
+      - $ref: '#/components/schemas/Document-Supplementary-Data-National-Health-ID'
+      - $ref: '#/components/schemas/Document-Supplementary-Data-Birth-Certificate'
+      - $ref: '#/components/schemas/Document-Supplementary-Data-National-ID'
+      - $ref: '#/components/schemas/Document-Supplementary-Data-Citizenship'
+      - $ref: '#/components/schemas/Document-Supplementary-Data-Passport'
+      - $ref: '#/components/schemas/Document-Supplementary-Data-Marriage-Certificate'
+      discriminator:
+        propertyName: type
+        mapping:
+          NATIONAL_HEALTH_ID: '#/components/schemas/Document-Supplementary-Data-National-Health-ID'
+          BIRTH_CERT: '#/components/schemas/Document-Supplementary-Data-Birth-Certificate'
+          NATIONAL_ID: '#/components/schemas/Document-Supplementary-Data-National-ID'
+          CITIZENSHIP: '#/components/schemas/Document-Supplementary-Data-Citizenship'
+          PASSPORT: '#/components/schemas/Document-Supplementary-Data-Passport'
+          MARRIAGE_CERT: '#/components/schemas/Document-Supplementary-Data-Marriage-Certificate'
+    Individual:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/Base-Individual'
+      - type: object
+        properties:
+          informationSources:
+            type: object
+            description: Map of information sources used across the response.
+            additionalProperties:
+              $ref: '#/components/schemas/Information-Source'
+            readOnly: true
+          relationships:
+            $ref: '#/components/schemas/Individual-Relationships'
+    Entity:
+      type: object
+      properties:
+        entityId:
+          $ref: '#/components/schemas/Entity-ID'
+        entityType:
+          $ref: '#/components/schemas/Entity-Type'
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+        schemaVersion:
+          type: integer
+          description: The schema version of this entity.
+          example: 2
+          readOnly: true
+        addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/Address'
+          description: A list of all address information associated with the entity.
+        phoneNumbers:
+          type: array
+          items:
+            $ref: '#/components/schemas/Phone-Number'
+          description: A list of all phone numbers associated with the entity.
+        emailAddresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/Email'
+          description: A list of all email addresses associated with the entity.
+        customAttributes:
+          $ref: '#/components/schemas/Custom-Attributes'
+        externalReferences:
+          type: array
+          items:
+            $ref: '#/components/schemas/External-Reference'
+          description: A list of all external references associated with the entity.
+        documents:
+          $ref: '#/components/schemas/Entity-Documents'
+        sourceId:
+          type: string
+          description: The source from which specific information was sourced. This is a link to an informationSource object in the informationSources map.
+          readOnly: true
+    Supplementary-Data-Fraud-Device:
+      type: object
+      description: 'Provides details of a single device fraud check.
+
+        '
+      allOf:
+      - $ref: '#/components/schemas/Supplementary-Data-Base'
+      - $ref: '#/components/schemas/Supplementary-Data-Fraud-Device-Data'
+    Supplementary-Data-ID:
+      type: object
+      description: 'Provides the matching levels found for each ID element, where available.
+
+        Match strength is scaled from 0 (no match) to 100 (full match).
+
+        '
+      allOf:
+      - $ref: '#/components/schemas/Supplementary-Data-Base'
+      - type: object
+        properties:
+          matchStrengths:
+            $ref: '#/components/schemas/Supplementary-Data-ID-MatchStrengths'
+          fuzziness:
+            $ref: '#/components/schemas/FuzzinessLevel'
+    Indicator-ID:
+      type: string
+      readOnly: true
+      format: ulid
+      description: Indicator ID that identifies an indicator from a check on an activity
+    Individual-Name-Alternate:
+      type: object
+      required:
+      - familyName
+      x-examples:
+        Example 1:
+          givenName: John
+          middleName: Jacob
+          familyName: Smith
+      properties:
+        nameId:
+          type: string
+          example: 87654321-4321-4321-4321-210987654321
+          description: Include the nameId of an existing name for this individual to modify it.
+        language:
+          type: string
+          example: eng
+          description: The ISO-639-3 standard code that best represents the language and character set of the individual's name.
+          default: eng
+        givenName:
+          type: string
+          example: John
+          description: First name or given name.
+        middleName:
+          type: string
+          example: R
+          description: Middle name(s) or middle initial(s).
+        familyName:
+          type: string
+          example: Doe
+          description: Last name, family name, or surname.
+        otherName:
+          type: string
+          example: null
+          description: Other names to be stored with the entity.
+        prefix:
+          type: string
+          example: Dr.
+          description: Element or series of letters that precede the individual's full name (e.g., title or honorific).
+        suffix:
+          type: string
+          example: Jr.
+          description: Element or series of letters that follow the individual's full name (e.g., generational suffix).
+        sourceId:
+          type: string
+          example: 87654321-4321-4321-4321-210987654322
+          description: The source from which specific information was sourced. This is a link to an informationSource object in the informationSources map.
+          readOnly: true
+        displayName:
+          type: string
+          example: John Doe
+          description: Long format of the individual's full name, including any prefix, suffix, middle, or other names. Best used when the proper structure of the individual's name is unknown.
+        type:
+          type: string
+          example: OTHER
+          enum:
+          - OTHER
+          - ALIAS
+          - PREVIOUS
+          description: Classification of the individual's name in relation to any of their alternative names.
+    Supplementary-Data-AML-RelatedParties:
+      type: object
+      description: 'Defines the name and relationship of individuals or organizations related to the matched entity.
+
+        '
+      properties:
+        name:
+          type: string
+          description: The name of the related individual or organization.
+        relationship:
+          type: string
+          description: 'The nature of the relationship to the matched entity.
+
+            For example: "Sibling", "Director", "Known associate".
+
+            '
+    Process-Risk-Factor-Value:
+      type: object
+      description: Risk Factor Value
+      required:
+      - factor
+      - value
+      properties:
+        factor:
+          type: string
+          description: Name of the risk factor.
+        value:
+          type: string
+          description: Supplier/service provided value that Frankie will plug into the risk engine to determine a score.
+    Supplementary-Data-KYC-Gender:
+      type: object
+      description: 'Defines the matching results for a gender check. This is rarely used.
+
+        '
+      allOf:
+      - $ref: '#/components/schemas/Supplementary-Data-Base'
+      - type: object
+        properties:
+          matchStrengths:
+            $ref: '#/components/schemas/Supplementary-Data-KYC-Gender-MatchStrengths'
+          fuzziness:
+            $ref: '#/components/schemas/FuzzinessLevel'
+          wasNameMatchStrongEnough:
+            description: 'Indicates whether there was a sufficiently strong name match at the time this was checked, even if the gender was a perfect match.
+
+              This is only an indicator at the time the PRO was created. Subsequent checks that reuse this result may interpret this differently.
+
+              '
+            type: boolean
+    Device-ID:
+      type: string
+      description: ID of the device
+      readOnly: true
+      format: ulid
+    Supplementary-Data-Base:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          description: "The type of supplementary data. Possible values:\n  - AML\n  - KYC_ADDRESS\n  - KYC_DOB\n  - KYC_GENDER\n  - KYC_NAME\n  - ID\n  - VISA\n  - NAME_VALIDATION\n  - KYB_ORGANIZATION\n  - MATCHLIST\n  - DUPLICATE\n  - FRAUD_DEVICE\n  - FRAUD_EMAIL\n  - FRAUD_PHONE\n  - FRAUD_LOOKUP\n  - ACTIVITY_AML\n  - ACTIVITY_DEVICE\n  - ACTIVITY_FRAUD\n"
+          enum:
+          - AML
+          - KYC_ADDRESS
+          - KYC_DOB
+          - KYC_GENDER
+          - KYC_NAME
+          - ID
+          - VISA
+          - NAME_VALIDATION
+          - KYB_ORGANIZATION
+          - MATCHLIST
+          - DUPLICATE
+          - FRAUD_DEVICE
+          - FRAUD_EMAIL_ADDRESS
+          - FRAUD_PHONE_NUMBER
+          - FRAUD_IP_ADDRESS
+          - FRAUD_LOOKUP
+          - ACTIVITY_AML
+          - ACTIVITY_DEVICE
+          - ACTIVITY_FRAUD
+    Date-Type:
+      type: string
+      default: GREGORIAN
+      enum:
+      - BUDDHIST
+      - DISCORDIAN
+      - GREGORIAN
+      - HEBREW
+      - ISLAMIC
+      - JULIAN
+      - LUNAR
+      - MESO_AMERICAN
+      - PERSIAN
+      - OTHER
+      description: The calendar system used for the date, e.g., BUDDHIST, DISCORDIAN, GREGORIAN, HEBREW, ISLAMIC, JULIAN, LUNAR, MESO_AMERICAN, PERSIAN, or OTHER.
+    Phone-Number:
+      type: object
+      properties:
+        phoneNumberId:
+          $ref: '#/components/schemas/Phone-Number-ID'
+        isPreferred:
+          type: boolean
+          example: true
+          description: Indicates whether this is the individual's preferred phone number.
+        type:
+          type: string
+          enum:
+          - OTHER
+          - WORK
+          - HOME
+          - MOBILE
+          - BUSINESS
+          - FAX
+          description: The type of phone number.
+          example: MOBILE
+        sourceId:
+          type: string
+          description: The source from which specific information was sourced. This is a link to an informationSource object in the informationSources map.
+          example: 14fd5f64-5717-4562-b3fc-2c963f66ba34
+          readOnly: true
+        country:
+          type: string
+          description: ISO-3166-1 alpha-3 country code.
+          example: AUS
+        number:
+          type: string
+          description: The phone number.
+          example: 0426192340
+        linkedAddresses:
+          type: array
+          readOnly: true
+          description: If the phone number is attached to one or more addresses, the address IDs of those addresses will be present.
+          items:
+            type: object
+            properties:
+              addressId:
+                description: The addressId of the linked address.
+                type: string
+                example: fa335f64-5717-4562-b3fc-2c963f66cf41
+        unstructuredLongForm:
+          type: string
+          description: Used to capture free-form phone numbers or to store numbers that could not be normalized.
+    Supplementary-Data-IDV-ElementMap:
+      type: object
+      description: 'A map of IDV report elements obtained from the requested IDV service provider.
+
+
+        The map keys are arbitrary strings, but where possible, should use a value from the predefined IDV Data Enums.
+
+        Service provider connections should map supplied values to existing enums where possible.
+
+        If there is no relevant existing match, it is acceptable to use the original service provider value as the key.
+
+        '
+      additionalProperties:
+        $ref: '#/components/schemas/Supplementary-Data-IDV-Data'
+    FuzzinessLevel:
+      type: object
+      properties:
+        normalized:
+          description: 'The normalized fuzziness level, if set.
+
+            Note: This is a normalized value, NOT the one used by the service provider (see the "actual" field).
+
+            Assumes a scale of 0.0 (exact match) to 100.0 (match anything).
+
+            '
+          type: number
+          format: float
+          minimum: 0
+          maximum: 100
+        actual:
+          description: 'The actual fuzziness level as provided by the service provider, if set.
+
+            Note: This is not a normalized value, but the original value from the provider.
+
+            '
+          type: string
+    Supplementary-Data-NameValidation:
+      type: object
+      description: 'Details on how the native language name was verified against a dictionary of anglicized translations.
+
+        '
+      allOf:
+      - $ref: '#/components/schemas/Supplementary-Data-Base'
+      - type: object
+        properties:
+          langCode:
+            type: string
+            description: Language code used for translation.
+          nameMatchOrder:
+            type: string
+            description: 'Depending on the name to be translated and how it is presented, the native language and anglicized version ordering might be mixed up. The service will try various orderings to find a match.
+
+              The order codes represent the actual order that matched.
+
+              Each letter combination represents *F*amily, *G*iven, and *O*ther names.
+
+              For example, FGO means that Family, Given, and Other names matched in that order.
+
+              '
+            enum:
+            - FGO
+            - OFG
+            - GOF
+            - FOG
+            - GFO
+            - OGF
+            - FG
+            - FO
+            - GF
+            - OF
+          fuzziness:
+            $ref: '#/components/schemas/FuzzinessLevel'
+    Supplementary-Data-KYC-Gender-MatchStrengths:
+      type: object
+      properties:
+        gender:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 100
+    Relationship-Origin:
+      type: object
+      description: Details about the process that originated the relationship.
+      properties:
+        entityId:
+          $ref: '#/components/schemas/Entity-ID'
+        entityType:
+          $ref: '#/components/schemas/Entity-Type'
+        processResultId:
+          $ref: '#/components/schemas/Process-Result-ID'
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+          description: The date and time when the relationship origin record was created.
+    IDV-Token-Request:
+      type: object
+      description: IDV Token Request, queries the IDV provider for a token to be used with their sdk. If there is an existing token for this given entity that isn't expired, that will be returned instead of a new token.
+      properties:
+        applicantId:
+          description: ID of the applicant/individual in the IDV provider's system. Specify this if resuming/continuing an IDV check
+          example: 412e8c806fdfb0bb19b5
+          type: string
+        applicationId:
+          description: Reference or name of the application running this IDV check. Specify this if running this check embedded in a application rather than a web page.
+          example: 94d9a75a5072444c
+          type: string
+        country:
+          description: Country code to check for. Must be a ISO-3166 alpha-3 code entry. Only for use with providers that can restrict to a single country.
+          example: AUS
+          type: string
+        documentType:
+          description: Document type that will be used for the check. Can be one of DRIVERS_LICENCE, PASSPORT, NATIONAL_ID. . Only for use with providers that can restrict to a single document type.
+          example: DRIVER_LICENCE
+          type: string
+        referrer:
+          description: If this is for a web SDK, then you need to supply the referrer domain so that the token can be validated by the IDV service
+          example: https://example.com
+          type: string
+        relayState:
+          description: State from start of flow that should be relayed through the process via any redirects.
+          example: 412e8c806fdfb0bb19b5
+          type: string
+        provider:
+          description: What provider to use for the IDV check. This is the name of the provider as configured in the system. If not provided the default provider will be used.
+          example: onfido
+          type: string
+        products:
+          description: What product(s) for the provider to use for the IDV check. If not provided the default product for a provider will be used.
+          example: idv
+          type: array
+          items:
+            type: string
+        comment:
+          $ref: '#/components/schemas/Comment'
+    Document-Type:
+      type: string
+      enum:
+      - OTHER
+      - DRIVERS_LICENSE
+      - PASSPORT
+      - VISA
+      - IMMIGRATION
+      - NATIONAL_ID
+      - TAX_ID
+      - NATIONAL_HEALTH_ID
+      - CONCESSION
+      - HEALTH_CONCESSION
+      - PENSION
+      - MILITARY_ID
+      - BIRTH_CERT
+      - CITIZENSHIP
+      - MARRIAGE_CERT
+      - DEATH_CERT
+      - NAME_CHANGE
+      - UTILITY_BILL
+      - BANK_STATEMENT
+      - BANK_ACCOUNT
+      - INTENT_PROOF
+      - ATTESTATION
+      - SELF_IMAGE
+      - DEVICE
+      - VEHICLE_REGISTRATION
+      - PROOF_OF_ADDRESS
+      - HOUSE_REGISTRATION
+      - YELLOW_HOUSE_REGISTRATION
+      - WORK_PERMIT
+      - EMPLOYMENT_CERTIFICATE
+      - NOTARY_PUBLIC_ID
+      - EXTERNAL_ADMIN
+      - CHARGES
+      - PRE_ASIC
+      - ANNUAL_RETURN
+      - REPORT
+      - TRUST_DEED
+      - PARTNERSHIP_AGREEMENT
+      - ADMIN_CHANGE
+      - COMPANY_REPORT
+      - CHECK_RESULTS
+      - AVIATION_SECURITY_ID
+      - MARITIME_SECURITY_ID
+      description: "Valid document ID types.\n\n  - \"OTHER\": Generic document type. Unspecified.\n  - \"DRIVERS_LICENSE\": Driver's license.\n  - \"PASSPORT\": Passport.\n  - \"VISA\": Visa document (not Visa payment card).\n  - \"IMMIGRATION\": Immigration card.\n  - \"NATIONAL_ID\": Any national ID card.\n  - \"TAX_ID\": Any national tax identifier.\n  - \"NATIONAL_HEALTH_ID\": Any national health program ID card (e.g., Medicare, NHS).\n  - \"CONCESSION\": State-issued concession card.\n  - \"HEALTH_CONCESSION\": State-issued health-specific concession card.\n  - \"PENSION\": State-issued pension ID.\n  - \"MILITARY_ID\": Military ID.\n  - \"BIRTH_CERT\": Birth certificate.\n  - \"CITIZENSHIP\": Citizenship certificate.\n  - \"MARRIAGE_CERT\": Marriage certificate.\n  - \"DEATH_CERT\": Death certificate.\n  - \"NAME_CHANGE\": Name change confirmation.\n  - \"UTILITY_BILL\": Regulated utility bill, such as electricity, gas, etc.\n  - \"BANK_STATEMENT\": Bank/card statement.\n  - \"BANK_ACCOUNT\": Bank account.\n  - \"INTENT_PROOF\": Proof of intent, generally a photo/video or a scanned letter.\n  - \"ATTESTATION\": Document of attestation (e.g., Statutory Declaration).\n\n  NOTE: These cannot be used as a supporting document:\n  - \"SELF_IMAGE\": A \"selfie\" used for comparisons.\n  - \"DEVICE\": Device ID.\n  - \"VEHICLE_REGISTRATION\": Vehicle registration number.\n  - \"PROOF_OF_ADDRESS\": Any document that provides proof of address.\n  - \"HOUSE_REGISTRATION\": House registration document.\n  - \"YELLOW_HOUSE_REGISTRATION\": Yellow House Registration Thor Ror 13.\n  - \"WORK_PERMIT\": Work permit.\n  - \"EMPLOYMENT_CERTIFICATE\": Certificate of employment.\n  - \"NOTARY_PUBLIC_ID\": Notary Public Identification.\n\n  Business-related documentation:\n\n  - \"EXTERNAL_ADMIN\": Details of appointed administrator.\n  - \"CHARGES\": Details of any charges laid against a company or director.\n  - \"PRE_ASIC\": Any documents that are Pre-ASIC.\n  - \"ANNUAL_RETURN\": Details of a company's annual return.\n  - \"REPORT\": Frankie-generated report.\n  - \"TRUST_DEED\": Corporate trust deed.\n  - \"PARTNERSHIP_AGREEMENT\": Partnership agreement documents.\n  - \"ADMIN_CHANGE\": Change of administrator.\n  - \"COMPANY_REPORT\": Registry-filed company reports.\n\n  Special document types:\n\n  - \"CHECK_RESULTS\": Special document type for specifying results of checks completed other than through Frankie.\n  - \"AVIATION_SECURITY_ID\": Aviation Security Identification Card.\n  - \"MARITIME_SECURITY_ID\": Maritime Security Identification Card."
+    Process-Result-Manual-StatusEnum-KYC:
+      type: string
+      enum:
+      - PASS
+      - FAIL
+      description: 'Any manual status set after the results have been reviewed.
+
+        - PASS: When the result is determined to be a pass and no further action is needed.
+
+        - FAIL: When the result is determined to be a fail and no further action is needed.
+
+        '
+    Device-Properties:
+      type: object
+      description: Device properties
+      properties:
+        deviceId:
+          $ref: '#/components/schemas/Device-ID'
+        sourceId:
+          type: string
+          description: The source from where a specific information was sourced from. This is a link to an informationSource object in the informationSources map.
+        providerName:
+          type: string
+          description: The name of the provider
+        externalIdentifiers:
+          type: array
+          items:
+            $ref: '#/components/schemas/External-Reference-Information'
+        os:
+          type: string
+          description: the device operating system
+        trueOs:
+          type: string
+          description: the true OS of the device
+        firstSeenAt:
+          type: string
+          format: date-time
+          description: the first time the device was seen in the provider network
+        browser:
+          type: string
+          description: the device browser (if relevant)
+        platform:
+          type: string
+          description: the device platform
+        model:
+          type: string
+          description: the device model
+        fingerprint:
+          type: string
+          description: the device fingerprint
+        fingerprintConfidence:
+          type: number
+          description: the confidence of the fingerprint
+    Process-Result-Manual-StatusEnum:
+      allOf:
+      - $ref: '#/components/schemas/Process-Result-Manual-StatusEnum-AML'
+      - $ref: '#/components/schemas/Process-Result-Manual-StatusEnum-KYC'
+      - $ref: '#/components/schemas/Process-Result-Manual-StatusEnum-IDV'
+      - $ref: '#/components/schemas/Process-Result-Manual-StatusEnum-Duplicate'
+      - $ref: '#/components/schemas/Process-Result-Manual-StatusEnum-Matchlist'
+    Supplementary-Data-IDV-Data:
+      type: object
+      description: 'Contains information about a specific matched IDV element.
+
+        '
+      properties:
+        originalName:
+          type: string
+          description: The name of the element as returned by the provider, before normalization (e.g., 'face', 'dob', 'name').
+        confidence:
+          type: number
+          format: float
+          description: Service provider's confidence in this value.
+        confidenceThreshold:
+          type: number
+          format: float
+          description: Configured confidence threshold for this value to be considered valid.
+        originalData:
+          type: string
+          description: The raw data returned by the provider.
+        reviewedData:
+          type: string
+          description: If the applicant was given a chance to correct the data, this is the reviewed data with any changes.
+        resultNormalized:
+          type: string
+          description: The final result after applying confidence and normalization (e.g., clear, suspected, rejected).
+        description:
+          type: string
+          description: A description of the data element returned in the rawData field.
+    Document-Attachment-Side:
+      type: string
+      enum:
+      - FRONT
+      - BACK
+      description: Indicates whether the attachment is the front or back side of a document.
+    Supplementary-Data-Base-MatchStrength:
+      type: integer
+      description: 'Represents the standard match strength, scaled from 0 (no match) to 100 (exact match).
+
+        In some cases, a value of 50 may be interpreted as a "partial" match.
+
+        '
+      format: int32
+      minimum: 0
+      maximum: 100
+    Document-Attachment-ID:
+      type: string
+      format: uuid
+      description: When a document attachment is created or uploaded, it is assigned an attachmentId. This identifier will appear in a successful response or accepted response. It can be referenced in subsequent calls if you are uploading additional or updated data.
+    Supplementary-Data-Fraud-IP-Address-Data:
+      type: object
+      description: 'Defines the details of a single fraud check for IP address related data.
+
+        '
+      properties:
+        deviceId:
+          $ref: '#/components/schemas/Device-ID'
+        ipAddressInformation:
+          $ref: '#/components/schemas/IP-Information'
+        session:
+          $ref: '#/components/schemas/Session-Data'
+        indicators:
+          type: array
+          items:
+            $ref: '#/components/schemas/Supplementary-Data-Activity-Result-Detail-Indicator'
+        riskLevel:
+          $ref: '#/components/schemas/Risk-Level'
+        reference:
+          $ref: '#/components/schemas/Result-Reference'
+    IDV-InitProcess-Response:
+      type: object
+      description: Init Process Response, used after retrieval of IDV reports from a provider. For providers that support it, this will synchronously report all report results from the provider. For providers that do not support synchronous reporting, this will request the reports and return a request id and status. The status can be polled for the final result or sent via webhook
+      properties:
+        status:
+          type: string
+          example: COMPLETE
+          description: 'Status of the process. Status can be one of:
+
+            - IN_PROGRESS - the provider has been sent the request and is currently still processing the result
+
+            - CHECK_PROCESSING_DOWNLOAD_FAIL  - the provider has been sent the request and is currently still processing the result, there was an issue downloading the images that will be retried later automatically
+
+            - WAITING_SELFIE_UPLOAD - the selfie has not been uploaded yet by the applicant, still awaiting applicant action
+
+            - CHECK_PROCESSING - the provider has been sent the request and is currently still processing the result
+
+            - DOCUMENT_INVALID_EXCEEDED_SIZE_LIMIT - the document is too large to be processed
+
+            - DOCUMENT_INVALID_INCORRECT_FILE_FORMAT - the document is not a supported file format, mostly only jpeg and png are supported but this is provider specific
+
+            - PROVIDER_OFFLINE - the provider is not available for processing the request
+
+            - COMPLETE - process is valid and completed
+
+            '
+          enum:
+          - IN_PROGRESS
+          - CHECK_PROCESSING_DOWNLOAD_FAIL
+          - WAITING_SELFIE_UPLOAD
+          - CHECK_PROCESSING
+          - DOCUMENT_INVALID_EXCEEDED_SIZE_LIMIT
+          - DOCUMENT_INVALID_INCORRECT_FILE_FORMAT
+          - PROVIDER_OFFLINE
+          - COMPLETE
+        requestId:
+          $ref: '#/components/schemas/Request-ID'
+        workflowExecutionId:
+          type: string
+          description: If a workflow was run as part of the processing, this is the workflow execution id
+        ocrResult:
+          $ref: '#/components/schemas/Process-Result-Object'
+    Supplementary-Data-IDV-Document:
+      type: object
+      description: 'Result of a document check, indicating how likely or accurate the presented document is a valid ID document.
+
+
+        For resultMap keys, use the keys found in the enum: SupplementaryDataIDVEnumDataDocument.
+
+        '
+      allOf:
+      - $ref: '#/components/schemas/Supplementary-Data-IDV-Base'
+      - type: object
+        properties:
+          attachmentIds:
+            type: object
+            description: The IDs of the document images that were analyzed.
+            properties:
+              front:
+                type: string
+                format: uuid
+                description: The ID of the front image of the document.
+              back:
+                type: string
+                format: uuid
+                description: The ID of the back image of the document.
+          detectedDocumentType:
+            $ref: '#/components/schemas/Document-Type'
+          detectedDocumentCountry:
+            type: string
+            description: The ISO-3166-alpha3 country code of the document as detected.
+            example: AUS
+    Gender:
+      type: object
+      properties:
+        genderId:
+          type: string
+          readOnly: true
+          deprecated: true
+        gender:
+          $ref: '#/components/schemas/GenderEnum'
+        sourceId:
+          type: string
+          readOnly: true
+          description: The source from which specific information was sourced. This is a link to an informationSource object in the informationSources map.
+    Supplementary-Data-AML-MatchData-Country:
+      type: object
+      required:
+      - code
+      description: 'Represents the country code and match type for an AML (Anti-Money Laundering) country match.
+
+        '
+      properties:
+        code:
+          type: string
+          maxLength: 3
+          description: 'The ISO 3166-1 alpha-3 country code where a match was identified.
+
+            '
+        matchType:
+          type: string
+          description: "The type of match associated with this country. Possible values include:\n  - CITIZENSHIP\n  - RESIDENCE\n  - BIRTH\n  - NATIONALITY\n  - INCORPORATION (for organizations)\n  - OPERATION\n"
+    Address:
+      type: object
+      description: Address information in all available formats
+      allOf:
+      - $ref: '#/components/schemas/Address-Base'
+      - type: object
+        properties:
+          unstructuredLongForm:
+            type: string
+            description: Raw, unformatted address as provided by the source. Not normalized or standardized.
+            readOnly: true
+    Error:
+      type: object
+      x-examples:
+        '400':
+          requestId: 0123456789ABCDEFGHIJKLMNOP
+          errorCode: API-0400
+          errorMsg: Parsing credentials from "<invalid>" failed, because invalid.
+          httpStatusCode: 400
+        '401':
+          requestId: 0123456789ABCDEFGHIJKLMNOP
+          errorCode: API-0401
+          errorMsg: Unauthenticated due to invalid credentials.
+          httpStatusCode: 401
+        '409':
+          requestId: 0123456789ABCDEFGHIJKLMNOP
+          errorCode: API-0409
+          errorMsg: Conflict.
+          httpStatusCode: 409
+      allOf:
+      - $ref: '#/components/schemas/Error-Base'
+      - type: object
+        properties:
+          requestId:
+            $ref: '#/components/schemas/Request-ID'
+    Supplementary-Data-IDV-OCR-Comparison-Enum-Comparison-Source:
+      type: string
+      description: 'Indicates the source of the data used for comparison with the OCR scan results.
+
+        The source can be either the original entity data or the updated data extracted from the OCR scan.
+
+        '
+      enum:
+      - ENTITY
+      - OCR_UPDATE
+    Address-Base:
+      type: object
+      required:
+      - country
+      description: Address information in all available formats
+      properties:
+        addressId:
+          type: string
+          description: As addresses are added to an entity, they are assigned an ID to assist with tracking.
+        sourceId:
+          type: string
+          readOnly: true
+          description: The source from which specific information was sourced. This is a link to an informationSource object in the informationSources map.
+        type:
+          $ref: '#/components/schemas/Address-TypeEnum'
+          description: Used to indicate what sort of address this is, such as residential, business, postal, etc. Should be used in conjunction with the status field to indicate the current status of the address and provide more context.
+        typeDescription:
+          type: string
+          description: Description for the type or the address type as fetched from an authoritative source like a company registry.
+        validFrom:
+          $ref: '#/components/schemas/Date'
+          description: The date this address first became active. Used mostly with business addresses.
+        validTo:
+          $ref: '#/components/schemas/Date'
+          description: The date this address was no longer used (if available). Used mostly with business addresses.
+        longForm:
+          type: string
+          description: 'In some cases, the address will need to be supplied in "long form", such as when it is determined from a document scan, or is unparsable in some way.
+
+            The service will attempt to convert it to its constituent parts where possible.
+
+            WARNING: Use of longForm is not guaranteed to produce perfect results, due to the variety of potential formats. You have been warned.
+
+            Failure to break down or disambiguate the address will result in an error.'
+        unitNumber:
+          type: string
+          description: Unit/Apartment/Flat/Suite/etc. number
+        buildingName:
+          type: string
+          description: The name of the building, apartment block, condominium, etc.
+        streetName:
+          type: string
+          description: 'The name of the street.
+
+            This field should ideally contain only the street name, without the street number or street type. In some cases, especially when auto-populated by external services (e.g., Google), it may include additional address components.
+
+            For best results, keep the street name separate from the street number and street type. See https://apidocs.frankiefinancial.com/docs/working-with-addresses for more details.'
+        streetNumber:
+          type: string
+          description: The number assigned to the property on the street. Typically a number, but can also be alphanumeric (e.g., 3A).
+        streetType:
+          type: string
+          description: The street type, such as Road, Street, Avenue, Circuit, etc.
+        neighborhood:
+          type: string
+          description: The neighborhood or suburb within the town or city. Use this only if you require both a suburb and a locality/town/city; otherwise, use the "locality" parameter.
+        locality:
+          type: string
+          description: The locality, town, village, suburb, or city.
+        district:
+          type: string
+          description: The district, region, county, province, or cantonment.
+        subdivision:
+          type: string
+          description: The administrative area, state, or sub-division. Use local abbreviations, such as VIC (Victoria) or TX (Texas).
+        country:
+          type: string
+          description: 'The ISO-3166-1 country code. You must use the alpha-3 country code (e.g., AUS, USA, IDR, KOR, etc). Conversion will be handled as needed.
+
+            For more details, refer to: https://en.wikipedia.org/wiki/ISO_3166-1'
+        postalCode:
+          type: string
+          description: The postal code of the address.
+        careOf:
+          type: string
+          description: The individual or business name at this address, if different from the name of the entity to which this address belongs.
+        status:
+          $ref: '#/components/schemas/Address-StatusEnum'
+          description: The status of the address information, such as current, previous, or future. Should be used in conjunction with the `type` field to indicate the type of the address and provide more context.
+    Supplementary-Data-KYC-Name-MatchStrengths:
+      type: object
+      properties:
+        fullName:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 100
+        familyName:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 100
+        givenName:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 100
+        otherNames:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 100
+        firstInitialFamilyName:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 100
+    Process-Result-StateEnum:
+      type: string
+      readOnly: true
+      description: Denotes the final disposition of this element's check result
+      enum:
+      - IN_PROGRESS
+      - COMPLETED
+      - TIMEOUT
+      - ERROR
+    Supplementary-Data-AML-MatchData-NationalId:
+      type: object
+      description: 'Provides details of a matched identification document, if supplied.
+
+        '
+      properties:
+        idNumber:
+          type: string
+          description: The matched identification number.
+        idType:
+          type: string
+          description: The type of identification matched (e.g., National ID, passport).
+        idExpiry:
+          type: string
+          description: The expiry date of the identification document (if known), using the format provided by the service provider.
+        issuingCountryCode:
+          type: string
+          description: The ISO 3166-1 alpha-3 country code of the issuing country.
+        documentId:
+          type: string
+          description: The document ID if this was matched to a FrankieOne document record.
+    Consent:
+      type: object
+      properties:
+        type:
+          type: string
+          description: The type of consent given by an entity
+          example: UNDER18
+          enum:
+          - GENERAL
+          - DOCS
+          - CREDITHEADER
+          - UNDER18
+          - PAYROLL
+          - INSURANCE
+          - SUPERANNUATION
+        schemaVersion:
+          type: integer
+          readOnly: true
+        sourceId:
+          type: string
+          description: The source from which specific information was obtained. This is a link to an informationSource object in the informationSources map.
+          example: 93da15f64-5717-4562-b3fc-2c963f6663fe
+          readOnly: true
+    Matchlist-Action:
+      type: string
+      description: "Default action recommended for a match. The action can be one of the following:\n  - `BLOCK`: Recommended action is to block the entity.\n  - `ALERT`: Recommended action is to create an alert for the entity.\n  - `ALLOW`: Recommended action is to allow the entity.\n  - `REVIEW`: Recommended action is to review the entity.\n  - `NONE`: No action; only use the `riskFactor` if any."
+      enum:
+      - BLOCK
+      - ALERT
+      - ALLOW
+      - REVIEW
+      - NONE
+    Information-Source:
+      type: object
+      properties:
+        sourceId:
+          type: string
+          description: 'As sources are added to an entity, they''re assigned a unique identifier to assist with modification and reference.
+
+            To modify a source, include the sourceId in an update request call.'
+        type:
+          description: The type of source information e.g. "ID number"
+          type: string
+          example: ID number
+          deprecated: true
+        source:
+          description: The source of information like document number, website, etc.
+          type: string
+          example: Client
+        description:
+          description: The type or details of the source of information.
+          type: string
+          example: ''
+        provider:
+          description: The provider of the information, e.g., Equifax.
+          type: string
+          example: equifax-au
+        providerReference:
+          description: Reference linking to the provider for this information.
+          type: string
+          example: ''
+        createdAt:
+          type: string
+          format: date-time
+          description: The date and time this information was first created in the system.
+          example: '2024-01-15T02:18:11.365Z'
+        requestedAt:
+          type: string
+          format: date-time
+          description: The date and time FrankieOne requested this information from the external source provider.
+          example: '2024-01-15T02:18:11.365Z'
+        generatedAt:
+          type: string
+          format: date-time
+          description: The date and time FrankieOne generated this information, if applicable.
+          example: '2024-01-15T02:18:11.365Z'
+        retrievedAt:
+          type: string
+          format: date-time
+          description: The date and time FrankieOne retrieved this information from the external source provider.
+          example: '2024-01-15T02:18:11.365Z'
+        updatedAt:
+          type: string
+          format: date-time
+          description: The date and time this information was last updated in the system.
+          example: '2024-01-15T02:18:11.365Z'
+        isAuthoritative:
+          type: boolean
+          description: Indicates whether this information is from an authoritative source, e.g., a company registry.
+          example: false
+        isManual:
+          description: Indicates whether this information was added manually by the client rather than by a system or source provider.
+          type: boolean
+          example: true
+          deprecated: true
+      readOnly: true
+    Search-Confidence:
+      type: number
+      format: float
+      minimum: 0
+      maximum: 1
+      description: 'Confidence level of the search result, represented as a number between 0 and 1.
+
+        A higher value indicates greater confidence in the accuracy of the search result.
+
+        '
+    Supplementary-Data-IDV-OCR:
+      type: object
+      description: 'Result of a document OCR comparison. This object represents the comparison between scanned data (via OCR) and updated or alternately supplied results.
+
+
+        For the resultMap keys, use the keys defined in the enum: SupplementaryDataIDVEnumDataOCR.
+
+        '
+      allOf:
+      - $ref: '#/components/schemas/Supplementary-Data-IDV-Base'
+      - type: object
+        properties:
+          scannedDocumentId:
+            type: string
+            format: uuid
+            description: 'The documentId of the ID document on which OCR extraction was performed.
+
+              '
+          scannedAttachmentFrontId:
+            type: string
+            format: uuid
+            description: 'The attachmentId of the front image of the ID document used for OCR extraction.
+
+              '
+          scannedAttachmentBackId:
+            type: string
+            format: uuid
+            description: 'The attachmentId of the back image of the ID document used for OCR extraction, if a back image was provided.
+
+              '
+    Supplementary-Data-IDV-Base:
+      type: object
+      description: 'A report from an IDV provider based on a photographic or video biometrics process.
+
+        '
+      allOf:
+      - $ref: '#/components/schemas/Supplementary-Data-Base'
+      - type: object
+        properties:
+          outcomeRaw:
+            type: string
+            description: The original outcome of the IDV process, as reported by the service provider.
+          resultMap:
+            $ref: '#/components/schemas/Supplementary-Data-IDV-ElementMap'
+          requiredElements:
+            type: array
+            description: List of elements required to have passed, as per the step configuration.
+            items:
+              type: string
+              description: The IDV report element name, e.g., 'face', 'dob', 'name'.
+    Device:
+      type: object
+      description: 'Device information associated with an activity, used for submitting device checks using an external service.
+
+        '
+      allOf:
+      - $ref: '#/components/schemas/Device-Detail'
+      - type: object
+        properties:
+          geolocation:
+            $ref: '#/components/schemas/Geolocation'
+          ipAddressInformation:
+            $ref: '#/components/schemas/IP-Information'
+          createdAt:
+            type: string
+            description: the time the device was created in UTC ISO8601 format
+            format: date-time
+            readOnly: true
+    Matchlist-Entry-Attribute-Type:
+      type: string
+      description: 'Entity attributes eligible for screening.
+
+
+        A matchlist entry may not contain both `ORG_*` and `IND_*` attributes, and they must match the `ENTITY_TYPE` if it is provided.'
+      enum:
+      - ENTITY_TYPE
+      - EMAIL_ADDRESS
+      - EMAIL_DOMAIN
+      - PHONE_NUMBER
+      - ADDR_STREET_NUMBER
+      - ADDR_STREET_NAME
+      - ADDR_STREET_TYPE
+      - ADDR_NEIGHBORHOOD
+      - ADDR_LOCALITY
+      - ADDR_DISTRICT
+      - ADDR_SUBDIVISION
+      - ADDR_COUNTRY
+      - ADDR_POSTAL_CODE
+      - ADDR_UNSTRUCTURED_LONG_FORM
+      - DOC_CLASS
+      - DOC_TYPE
+      - DOC_SUBTYPE
+      - DOC_PRIMARY_IDENTIFIER
+      - DOC_SECONDARY_IDENTIFIER
+      - IND_DISPLAY_NAME
+      - IND_GIVEN_NAME
+      - IND_FAMILY_NAME
+      - IND_MIDDLE_NAME
+      - IND_DATE_OF_BIRTH
+      - IND_NATIONALITY
+      - ORG_REGISTERED_SUBDIVISION
+      - ORG_REGISTERED_COUNTRY
+      - ORG_REGISTRATION_NUMBER
+      - ORG_REGISTRATION_NUMBER_TYPE
+      - ORG_NAME
+    Document-Supplementary-Data-National-Health-ID:
+      type: object
+      description: Supplementary information relevant to a national health id.
+      allOf:
+      - $ref: '#/components/schemas/Document-Supplementary-Data-Base'
+      - type: object
+        properties:
+          reference:
+            type: string
+            description: The individual reference number used to identify the position of the applicant's name on the health card. Required for Australian Medicare cards (this is the number to the left of the name on the card).
+            example: '1'
+          nameOnCardLine1:
+            type: string
+            description: The individual's name as it appears on the card.
+          nameOnCardLine2:
+            type: string
+            description: If the individual's name spans more than one line, this is the part of the name that appears on line 2.
+          nameOnCardLine3:
+            type: string
+            description: If the individual's name spans more than two lines, this is the part of the name that appears on line 3.
+          nameOnCardLine4:
+            type: string
+            description: If the individual's name spans more than three lines, this is the part of the name that appears on line 4.
+          middleNameOnCard:
+            type: string
+            description: The individual's middle name or initial as it appears on the card.
+    Document-Supplementary-Data-Birth-Certificate:
+      type: object
+      description: Supplementary information relevant to a birth certificate.
+      allOf:
+      - $ref: '#/components/schemas/Document-Supplementary-Data-Base'
+      - type: object
+        description: Supplementary information relevant to a birth certificate.
+        properties:
+          registrationDate:
+            type: string
+            description: The date the birth was registered.
+            example: '2000'
+          registrationDistrict:
+            type: string
+            description: The district where the birth was registered.
+            example: Sydney
+          dateOfPrint:
+            type: string
+            description: The date the birth certificate was printed.
+            example: '2000'
+          givenName:
+            type: string
+            description: The given name as printed on the certificate.
+          otherNames:
+            type: string
+            description: Other name(s) as printed on the certificate.
+          familyName:
+            type: string
+            description: The family name as printed on the certificate.
+    Supplementary-Data-Activity-Result-Detail-Rule:
+      type: object
+      properties:
+        ruleId:
+          $ref: '#/components/schemas/Rule-ID'
+        reference:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        isActive:
+          type: boolean
+    Supplementary-Data-KYC-DoB:
+      type: object
+      description: 'Defines the matching levels for each date of birth element, where available.
+
+        Provides a match strength score ranging from 0 (no match) to 100 (full match).
+
+        '
+      allOf:
+      - $ref: '#/components/schemas/Supplementary-Data-Base'
+      - type: object
+        properties:
+          matchStrengths:
+            $ref: '#/components/schemas/Supplementary-Data-KYC-DoB-MatchStrengths'
+          fuzziness:
+            $ref: '#/components/schemas/FuzzinessLevel'
+          wasNameMatchStrongEnough:
+            description: 'Indicates whether there was a sufficiently strong name match at the time this was checked, even if the date of birth was a perfect match.
+
+              This is only an indicator at the time the PRO was created. Subsequent checks that reuse this result may interpret this differently.
+
+              '
+            type: boolean
+    Date:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/Date-Base'
+      - type: object
+        properties:
+          normalized:
+            type: string
+            format: date
+            description: Full date in ISO 8601 format ("YYYY-MM-DD"). This is a read-only field.
+            example: '1990-03-31'
+            readOnly: true
+    Attribute:
+      type: object
+      required:
+      - type
+      - value
+      properties:
+        type:
+          description: The attribute type.
+          type: string
+          maxLength: 64
+        value:
+          description: The value assigned to the attribute.
+          type: string
+    Result-Reference-Type:
+      type: string
+      description: The type of the reference (e.g. url)
+      enum:
+      - URL
+      - REFERENCE
+    Session-Data:
+      type: object
+      description: Session data for an activity, this is always scoped to a singular entity.
+      allOf:
+      - $ref: '#/components/schemas/Session'
+      - type: object
+        properties:
+          sessionId:
+            type: string
+            description: A Frankie ID for the session
+            format: ulid
+            readOnly: true
+          providerName:
+            type: string
+          entityId:
+            $ref: '#/components/schemas/Entity-ID'
+          createdAt:
+            type: string
+            description: the time the session was created in UTC ISO8601 format
+            format: date-time
+            readOnly: true
+          expiresAt:
+            type: string
+            description: the time the session expires in UTC ISO8601 format
+            format: date-time
+            readOnly: true
+    Behavior-Biometrics:
+      type: object
+      properties:
+        hesitationPercentileLongTermMemory:
+          type: number
+          description: 'The hesitation percentile for fields like address, name, etc which
+
+            are associated with long term memory.
+
+            '
+        hesitationPercentileNonLongTermMemory:
+          type: number
+          description: 'The hesitation percentile for fields like amount fields which
+
+            are not associated with long term memory.
+
+            '
+        numberDistractionEvents:
+          type: integer
+    Supplementary-Data-Fraud-Phone-Number:
+      type: object
+      description: 'Defines the details of a single phone number fraud check.
+
+        '
+      allOf:
+      - $ref: '#/components/schemas/Supplementary-Data-Base'
+      - type: object
+        properties:
+          phoneNumberId:
+            $ref: '#/components/schemas/Phone-Number-ID'
+          riskLevel:
+            $ref: '#/components/schemas/Risk-Level'
+          reference:
+            $ref: '#/components/schemas/Result-Reference'
+          indicators:
+            type: array
+            items:
+              $ref: '#/components/schemas/Supplementary-Data-Activity-Result-Detail-Indicator'
+    Supplementary-Data:
+      type: object
+      readOnly: true
+      oneOf:
+      - $ref: '#/components/schemas/Supplementary-Data-AML'
+      - $ref: '#/components/schemas/Supplementary-Data-KYC-Address'
+      - $ref: '#/components/schemas/Supplementary-Data-KYC-DoB'
+      - $ref: '#/components/schemas/Supplementary-Data-KYC-Gender'
+      - $ref: '#/components/schemas/Supplementary-Data-KYC-Name'
+      - $ref: '#/components/schemas/Supplementary-Data-ID'
+      - $ref: '#/components/schemas/Supplementary-Data-Visa'
+      - $ref: '#/components/schemas/Supplementary-Data-NameValidation'
+      - $ref: '#/components/schemas/Supplementary-Data-KYB-Organization'
+      - $ref: '#/components/schemas/Supplementary-Data-Duplicate'
+      - $ref: '#/components/schemas/Supplementary-Data-IDV-Document'
+      - $ref: '#/components/schemas/Supplementary-Data-IDV-Facial-Comparison'
+      - $ref: '#/components/schemas/Supplementary-Data-IDV-Facial-Liveness'
+      - $ref: '#/components/schemas/Supplementary-Data-IDV-OCR'
+      - $ref: '#/components/schemas/Supplementary-Data-IDV-OCR-Comparison'
+      - $ref: '#/components/schemas/Supplementary-Data-Matchlist'
+      - $ref: '#/components/schemas/Supplementary-Data-Activity-AML'
+      - $ref: '#/components/schemas/Supplementary-Data-Activity-Fraud'
+      - $ref: '#/components/schemas/Supplementary-Data-Activity-Device'
+      - $ref: '#/components/schemas/Supplementary-Data-Fraud-Device'
+      - $ref: '#/components/schemas/Supplementary-Data-Fraud-Email-Address'
+      - $ref: '#/components/schemas/Supplementary-Data-Fraud-IP-Address'
+      - $ref: '#/components/schemas/Supplementary-Data-Fraud-Phone-Number'
+      discriminator:
+        propertyName: type
+        mapping:
+          AML: '#/components/schemas/Supplementary-Data-AML'
+          KYC_ADDRESS: '#/components/schemas/Supplementary-Data-KYC-Address'
+          KYC_DOB: '#/components/schemas/Supplementary-Data-KYC-DoB'
+          KYC_GENDER: '#/components/schemas/Supplementary-Data-KYC-Gender'
+          KYC_NAME: '#/components/schemas/Supplementary-Data-KYC-Name'
+          ID: '#/components/schemas/Supplementary-Data-ID'
+          VISA: '#/components/schemas/Supplementary-Data-Visa'
+          NAME_VALIDATION: '#/components/schemas/Supplementary-Data-NameValidation'
+          KYB_ORGANIZATION: '#/components/schemas/Supplementary-Data-KYB-Organization'
+          DUPLICATE: '#/components/schemas/Supplementary-Data-Duplicate'
+          IDV_DOCUMENT: '#/components/schemas/Supplementary-Data-IDV-Document'
+          IDV_FACIAL_COMPARISON: '#/components/schemas/Supplementary-Data-IDV-Facial-Comparison'
+          IDV_FACIAL_LIVENESS: '#/components/schemas/Supplementary-Data-IDV-Facial-Liveness'
+          IDV_OCR: '#/components/schemas/Supplementary-Data-IDV-OCR'
+          IDV_OCR_COMPARISON: '#/components/schemas/Supplementary-Data-IDV-OCR-Comparison'
+          MATCHLIST: '#/components/schemas/Supplementary-Data-Matchlist'
+          ACTIVITY_AML: '#/components/schemas/Supplementary-Data-Activity-AML'
+          ACTIVITY_FRAUD: '#/components/schemas/Supplementary-Data-Activity-Fraud'
+          ACTIVITY_DEVICE: '#/components/schemas/Supplementary-Data-Activity-Device'
+          FRAUD_DEVICE: '#/components/schemas/Supplementary-Data-Fraud-Device'
+          FRAUD_EMAIL_ADDRESS: '#/components/schemas/Supplementary-Data-Fraud-Email-Address'
+          FRAUD_IP_ADDRESS: '#/components/schemas/Supplementary-Data-Fraud-IP-Address'
+          FRAUD_PHONE_NUMBER: '#/components/schemas/Supplementary-Data-Fraud-Phone-Number'
+    External-Reference:
+      type: object
+      description: Reference information used to identify the individual in systems external to FrankieOne.
+      allOf:
+      - type: object
+        properties:
+          referenceId:
+            type: string
+            description: 'As external references are added to an entity, they are assigned a unique identifier to assist with modification and reference.
+
+              To modify an external reference, include the referenceId in an update request for the individual.'
+            example: 24de15f64-5717-4562-b3fc-2c963f66e23e
+            readOnly: true
+          type:
+            type: string
+            enum:
+            - SYSTEM
+            - CUSTOMER
+            - OTHER
+            default: CUSTOMER
+          sourceId:
+            type: string
+            description: The source from which specific information was sourced. This is a link to an informationSource object in the informationSources map.
+            example: 93da15f64-5717-4562-b3fc-2c963f6663fe
+            readOnly: true
+      - $ref: '#/components/schemas/External-Reference-Information'
+    Document-Attachment-Type:
+      type: string
+      description: "General types of valid document attachments.\n  - \"PHOTO\": Any photo.\n  - \"VIDEO\": Any video.\n  - \"AUDIO\": Any audio.\n  - \"PDF\": PDF or PS file (may contain text, images, or both).\n  - \"DOC\": Word document, RTF, etc.\n  - \"ZIP\": Any compressed file(s)."
+    Device-Detail:
+      type: object
+      description: Device details
+      allOf:
+      - $ref: '#/components/schemas/Device-Indicators'
+      - $ref: '#/components/schemas/Device-Properties'
+    Supplementary-Data-ID-MatchStrengths:
+      type: object
+      properties:
+        primaryIdentifier:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 100
+        secondaryIdentifier:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 100
+        name:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 100
+          description: 'If the name verification result is known, record it here.
+
+
+            NOTE: This should not be used as a KYC result; informational only.
+
+            Please use a separate PRO for an actual KYC result if required.
+
+            '
+        dateOfBirth:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 100
+          description: 'If the date of birth verification result is known, record it here.
+
+
+            NOTE: This should not be used as a KYC result; informational only.
+
+            Please use a separate PRO for an actual KYC result if required.
+
+            '
+        expiryDate:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 100
+        isValid:
+          type: boolean
+          description: Indicates if the ID is valid (if known).
+        isExpired:
+          type: boolean
+          description: Indicates if the ID has expired (if known).
+        isBlocked:
+          type: boolean
+          description: Indicates if the ID has been blocked at the source.
+        blockingCode:
+          type: string
+          description: If the service provider returns a blocking code or reason, it will be recorded here.
+        attachmentId:
+          type: string
+          format: uuid
+          description: If a photo was sent to the service provider, the FrankieOne scanId is added for reference.
+        photoId:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 100
+          description: If a photo was supplied and checked, the match score is recorded here.
+        photoIssue:
+          type: string
+          description: If there was an issue checking the photo, any error details can be found here.
+    Supplementary-Data-KYC-Name:
+      type: object
+      description: 'Defines the matching levels for each name element, where available.
+
+        Provides a match strength score ranging from 0 (no match) to 100 (full match).
+
+        '
+      allOf:
+      - $ref: '#/components/schemas/Supplementary-Data-Base'
+      - type: object
+        properties:
+          matchStrengths:
+            $ref: '#/components/schemas/Supplementary-Data-KYC-Name-MatchStrengths'
+          fuzziness:
+            $ref: '#/components/schemas/FuzzinessLevel'
+    Process-Result-System-StatusEnum:
+      type: string
+      description: 'If there has been an additional system status applied to the process.
+
+        - VALID: The process result is valid and has not been marked for any special handling.
+
+        - EXPIRED: The process result has expired and is no longer valid.
+
+        - STALE: The process result is considered stale, meaning it may be outdated but not necessarily invalid.
+
+        - MARKED_INVALID: The process result has been explicitly marked as invalid.
+
+        - MARKED_IGNORE: The process result has been marked to be ignored, meaning it should not be considered in further processing.
+
+        '
+      enum:
+      - VALID
+      - EXPIRED
+      - STALE
+      - MARKED_INVALID
+      - MARKED_IGNORE
+      default: VALID
+      readOnly: true
+    Provider-Result:
+      type: object
+      properties:
+        name:
+          type: string
+        source:
+          type: string
+        sourceNormalized:
+          type: string
+        reference:
+          type: string
+        fuzziness:
+          $ref: '#/components/schemas/FuzzinessLevel'
+        confidence:
+          $ref: '#/components/schemas/ConfidenceLevel'
+        riskScore:
+          type: number
+          format: double
+        errorCode:
+          type: string
+        errorMessage:
+          type: string
+      readOnly: true
+    Custom-Attributes:
+      type: object
+      additionalProperties:
+        $ref: '#/components/schemas/Attribute'
+    Process-Result-Error:
+      type: object
+      properties:
+        code:
+          type: string
+          description: The error code associated with the process result.
+        description:
+          type: string
+          description: A description of the error.
+        location:
+          type: string
+          description: The location or context where the error occurred.
+    Date-Of-Birth:
+      type: object
+      allOf:
+      - type: object
+        properties:
+          dateOfBirthId:
+            type: string
+            description: 'As dates of birth are added to an entity, they are assigned a unique identifier to assist with modification and reference.
+
+              To modify a date of birth, include the dateOfBirthId in an update request for the individual.'
+            readOnly: true
+          sourceId:
+            type: string
+            description: The source from which specific information was sourced. This is a link to an informationSource object in the informationSources map.
+            readOnly: true
+      - $ref: '#/components/schemas/Date'
+    Document-Attachment:
+      type: object
+      required:
+      - data
+      description: Document attachment details.
+      properties:
+        attachmentId:
+          $ref: '#/components/schemas/Document-Attachment-ID'
+        sourceId:
+          type: string
+          readOnly: true
+          description: The source from which specific information was sourced. This is a link to an informationSource object in the informationSources map.
+        createdAt:
+          type: string
+          readOnly: true
+          format: date-time
+          description: The date and time the attachment was created. This is not the date of the attached document, which should be in the idIssued attribute of the document that owns this attachment.
+        updatedAt:
+          type: string
+          format: date-time
+          readOnly: true
+          description: The date and time the attachment was last updated. This is not the date of the attached document, which should be in the idIssued attribute of the document that owns this attachment.
+        filename:
+          type: string
+          description: If you are uploading a file where it is important to keep the original filename, you can provide it here. Otherwise, the Frankie service will assign an arbitrary name based on the attachmentId and an extension based on the MIME type.
+        mimeType:
+          type: string
+          description: The standard MIME type of the file being uploaded. This will be verified, but providing it can help speed up processing.
+        pageNumber:
+          type: integer
+          description: If uploading multiple pages, this can be used to track page numbers. There is no enforcement of these numbers. You can have multiple page 1's or a page 29 if you wish.
+        side:
+          $ref: '#/components/schemas/Document-Attachment-Side'
+        type:
+          $ref: '#/components/schemas/Document-Attachment-Type'
+        location:
+          description: Reference to where the data can be retrieved from.
+          type: string
+        data:
+          $ref: '#/components/schemas/Data-URI-Base64'
+        lastMalwareScanAt:
+          type: string
+          format: date-time
+        retrievalStatus:
+          $ref: '#/components/schemas/Document-Attachment-Retrieval-Status'
+    Supplementary-Data-AML-MatchData:
+      type: object
+      required:
+      - spReferenceId
+      - name
+      description: 'Contains information about this specific matched entity.
+
+        '
+      properties:
+        strength:
+          type: number
+          format: float
+          description: The match strength as determined by the service provider.
+        spReferenceId:
+          type: string
+          description: 'The internal identifier assigned by the service provider for the matched individual or business.
+
+            '
+        name:
+          type: string
+          description: 'The name matched by the service provider.
+
+            '
+        givenName:
+          type: string
+          description: 'The given name matched by the service provider (optional).
+
+            '
+        otherName:
+          type: string
+          description: 'The middle or other name(s) matched by the service provider (optional).
+
+            '
+        familyName:
+          type: string
+          description: 'The family name matched by the service provider (optional).
+
+            '
+        date:
+          type: string
+          description: 'The date matched in the system, formatted as provided by the service provider. May be only a year.
+
+            '
+        address:
+          type: string
+          description: 'The address matched by the service provider (optional).
+
+            '
+        countries:
+          type: array
+          items:
+            $ref: '#/components/schemas/Supplementary-Data-AML-MatchData-Country'
+        nationalId:
+          $ref: '#/components/schemas/Supplementary-Data-AML-MatchData-NationalId'
+        imageUrl:
+          type: string
+          format: uri
+          description: A URL to a displayable image of the matched individual or company logo.
+        isDeceased:
+          type: boolean
+          description: Indicates if this match is to a deceased individual.
+        isAlias:
+          type: boolean
+          description: Indicates if this match is an alias of the searched individual or organization.
+        isRelated:
+          type: boolean
+          description: Indicates if this match is a related party of the searched individual or organization.
+    Geolocation:
+      type: object
+      description: Geolocation details if it can be determined, typically related to a device during an activity
+      properties:
+        city:
+          type: string
+          description: The city
+          example:
+          - Melbourne
+          - San Francisco
+        country:
+          type: string
+          description: The country in alpha 3 ISO-3166-1 standard
+          example:
+          - AUS
+          - USA
+        subdivision:
+          type: string
+          description: The subdivision
+          example:
+          - Victoria
+          - California
+        latitude:
+          type: number
+          format: double
+          description: The latitude
+        longitude:
+          type: number
+          format: double
+          description: The longitude
+    Supplementary-Data-Activity-Fraud:
+      type: object
+      description: 'Defines the details of an activity fraud result.
+
+        '
+      allOf:
+      - $ref: '#/components/schemas/Supplementary-Data-Base'
+      - type: object
+        properties:
+          riskLevel:
+            type: string
+          activityResults:
+            type: array
+            items:
+              $ref: '#/components/schemas/Supplementary-Data-Activity-Result-Detail'
+    Email-Address-ID:
+      type: string
+      description: 'As email addresses are added to an entity, they are assigned a unique identifier to assist with modification and reference.
+
+        To modify an email, include the emailId in an update request.'
+      example: aa385f64-5717-4562-b3fc-2c963f66af21
+    External-Reference-Information:
+      type: object
+      x-examples:
+        Customer Reference:
+          name: CUSTOMER-REFERENCE
+          value: CUST-00001342
+          description: This is the customer id in the core banking system
+      required:
+      - name
+      - value
+      description: Used to store references and identifying information about an entity that is external to FrankieOne. If you wish to filter or search on customer information relevant to your business, that information should be added as an external reference.
+      properties:
+        name:
+          type: string
+          description: The name of the external reference.
+          example: CUSTOMER-REFERENCE
+        value:
+          type: string
+          description: The value of the external reference.
+          example: CUST-00001342
+        description:
+          type: string
+          description: A summary of what this external reference is and what it is used for.
+          example: This is the customer ID in the core banking system.
+    Device-Indicators:
+      type: object
+      properties:
+        riskScore:
+          type: integer
+          description: Risk score as determine by the device checking service
+        riskLevel:
+          $ref: '#/components/schemas/Risk-Level'
+        behaviorBiometrics:
+          $ref: '#/components/schemas/Behavior-Biometrics'
+        isRat:
+          type: boolean
+          description: Was the device user determined to be a rat?
+        isSupported:
+          type: boolean
+          description: Was the device supported or not?
+        isEmulated:
+          type: boolean
+          description: Was the device determined to be real or emulated?
+        isRooted:
+          type: boolean
+          description: Was the device determined to be rooted?
+        reputation:
+          type: string
+          description: The reputation of the device
+        vpnLikelihood:
+          $ref: '#/components/schemas/Likelihood'
+        proxyLikelihood:
+          $ref: '#/components/schemas/Likelihood'
+        botLikelihood:
+          $ref: '#/components/schemas/Likelihood'
+    Base-Individual:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/Entity'
+      - type: object
+        properties:
+          name:
+            $ref: '#/components/schemas/Individual-Name'
+          alternateNames:
+            type: array
+            items:
+              $ref: '#/components/schemas/Individual-Name-Alternate'
+            description: Other names that are legally registered or otherwise recorded, differing from the individual's primary English name (e.g., "李小龍"). Non-English names may be created as a conversion from the original format to complete the verification process.
+          dateOfBirth:
+            $ref: '#/components/schemas/Date-Of-Birth'
+          alternateDatesOfBirth:
+            type: array
+            items:
+              $ref: '#/components/schemas/Date-Of-Birth-Alternate'
+            description: Other dates that are registered or otherwise recorded, differing from the individual's primary Gregorian date of birth (e.g., Islamic dates like "29 Jumada Al-Akhirah 1445"). Non-Gregorian date formats will be maintained; however, additional Gregorian dates of birth may be created as a conversion from the original format to complete the verification process.
+          gender:
+            $ref: '#/components/schemas/Gender'
+          placeOfBirth:
+            $ref: '#/components/schemas/Address-Place-Of-Birth'
+            description: The address where the individual was born.
+          nationality:
+            type: string
+            description: ISO-3166-1 alpha-3 code of the individual's legal membership or affiliation with a nation.
+            example: AUS
+          consents:
+            type: array
+            items:
+              $ref: '#/components/schemas/Consent'
+            description: List of consent types that have been given for this entity.
+    Data-URI-Base64:
+      description: A Base64-encoded string or URI representing the data.
+      oneOf:
+      - type: object
+        readOnly: true
+        required:
+        - uri
+        properties:
+          uri:
+            type: string
+            description: URI identifying the resource location.
+            example: https://s3.amazonaws.com/dev/41963bc5feff322020137de233c3be0fac6/croppedFrontID/38d54232-b840-431d-b248-152345fe214.jpg
+      - type: object
+        required:
+        - base64
+        properties:
+          base64:
+            type: string
+            description: Base64-encoded string of the raw attachment data.
+            example: ZG9jdW1lbnQgaW1hZ2UgZ29lcyBoZXJl
+    Supplementary-Data-Activity-Result-Detail:
+      type: object
+      properties:
+        activityId:
+          $ref: '#/components/schemas/Activity-ID'
+        evaluationId:
+          $ref: '#/components/schemas/Evaluation-ID'
+        activityResultId:
+          $ref: '#/components/schemas/Activity-Result-ID'
+        reference:
+          $ref: '#/components/schemas/Result-Reference'
+        indicators:
+          type: array
+          items:
+            $ref: '#/components/schemas/Supplementary-Data-Activity-Result-Detail-Indicator'
+    Supplementary-Data-KYC-DoB-MatchStrengths:
+      type: object
+      properties:
+        fullDateOfBirth:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 100
+        year:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 100
+        month:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 100
+        day:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 100
+    Document-ID:
+      type: string
+      format: uuid
+      description: 'As documents are added to an entity, they are assigned a unique identifier to assist with modification and reference.
+
+        To modify a document, include the documentId in an update request.'
+      example: 92de15f64-5717-4562-b3fc-2c963f6665a7
+    Address-StatusEnum:
+      type: string
+      default: CURRENT
+      enum:
+      - CURRENT
+      - PREVIOUS
+      - FUTURE
+    Object-Type:
+      description: The type of object being annotated.
+      type: string
+      enum:
+      - ADDRESS
+      - NAME
+      - PHONE_NUMBER
+      - EMAIL
+      - DATE_OF_BIRTH
+      - WEBSITE
+      - SHAREHOLDER
+      - OFFICIAL
+      - UBO
+      - REGISTRATION
+      - SHAREHOLDING
+      - SHARECAPITAL
+      - DOCUMENT
+      - DOCUMENT_ATTACHMENT
+      - RESULT_PROCESS
+      - RESULT_STEP
+      - RESULT_WORKFLOW
+      - SERVICE_PROFILE
+      - AUDIT_EVENT
+      - EXTERNAL_REFERENCE
+      - RISK_ASSESSMENT
+      - MATCHLIST
+    Risk-Level:
+      type: string
+      enum:
+      - UNKNOWN
+      - LOW
+      - MEDIUM
+      - HIGH
+      - UNACCEPTABLE
+      description: "The risk level classification:\n  - UNKNOWN: Risk level is not determined.\n  - LOW: Low risk.\n  - MEDIUM: Medium risk.\n  - HIGH: High risk.\n  - UNACCEPTABLE: Risk level is unacceptable.\n"
+    Supplementary-Data-IDV-OCR-Comparison:
+      type: object
+      description: 'Result of an OCR and updated data comparison. This object represents the comparison between scanned data (via OCR) and updated or alternately supplied results.
+
+
+        When selecting data for comparison, preference is given to the entity details that have been or will be sent to service providers for verification, rather than the updated data provided in the OCR scan.
+
+
+        For the resultMap and mismatchMap keys, use the keys defined in the enum: SupplementaryDataIDVEnumDataOCRComparison.
+
+        '
+      allOf:
+      - $ref: '#/components/schemas/Supplementary-Data-IDV-Base'
+      - type: object
+        properties:
+          ocrResultId:
+            type: string
+            format: uuid
+            description: 'The proId of the OCR data PRO used for this comparison.
+
+              '
+          comparisonSource:
+            $ref: '#/components/schemas/Supplementary-Data-IDV-OCR-Comparison-Enum-Comparison-Source'
+          mismatchMap:
+            $ref: '#/components/schemas/Supplementary-Data-IDV-ElementMap'
+            description: 'Map of OCR mismatches between previously entered or expected values and the OCR result.
+
+
+              Actual matches should be recorded in resultMap.
+
+              '
+          nameId:
+            type: string
+            format: uuid
+            description: 'The nameId of the name object used in the comparison.
+
+              '
+          dobId:
+            type: string
+            format: uuid
+            description: 'The dobId of the date of birth object used in the comparison.
+
+              '
+    Individual-Relationships:
+      type: object
+      readOnly: true
+      properties:
+        duplicates:
+          type: array
+          description: 'List of duplicates for this individual. To determine which entity was marked as a duplicate,
+
+            refer to the entity state of the relevant duplicate or reconcile using the process results.
+
+            '
+          items:
+            $ref: '#/components/schemas/Relationship'
+    GenderEnum:
+      type: string
+      enum:
+      - MALE
+      - FEMALE
+      - NON_BINARY
+      - OTHER
+      - UNSPECIFIED
+    Process-Result-ClassEnum:
+      type: string
+      description: Provides additional clarity for the result class, especially for more generic element types like 'person'.
+      enum:
+      - KYC
+      - ID
+      - IDV
+      - AML
+      - FRAUDLIST
+      - FRAUDCHECK
+      - FRAUD
+      - DEVICE
+      - MOBILE
+      - EMAIL
+      - LOOKUP
+      - CREATE
+      - UPDATE
+      - DELETE
+      - KYB
+      - DUPLICATE
+      - BLOCKLIST
+      - SUPPORTING_DOC
+      - MATCHLIST
+      - VISA
+      - ACTIVITY
+      readOnly: true
+    IDV-OCR-Response:
+      type: object
+      description: OCR response
+      properties:
+        status:
+          type: string
+          example: COMPLETE_OCR
+          description: 'Status of the OCR process. Status can be one of:
+
+            - AWAITING_OCR_RESULTS_PROVIDER_OFFLINE - the provider is offline and the OCR results are not available
+
+            - AWAITING_DOCUMENT_UPLOAD_INVALID_TYPE  - the document type is not supported, mostly only passport, driving license and national id are supported but this is provider specific
+
+            - WAITING_DOCUMENT_UPLOAD_FAILED_OCR - the document upload failed to the provider
+
+            - AWAITING_DOCUMENT_OCR - the document is being processed by the provider still and it awaiting results
+
+            - DOCUMENT_INVALID_EXCEEDED_SIZE_LIMIT - the document is too large to be processed
+
+            - DOCUMENT_INVALID_INCORRECT_FILE_FORMAT - the document is not a supported file format, mostly only jpeg and png are supported but this is provider specific
+
+            - AWAITING_DOCUMENT_UPLOAD_BACK - the back of the document needs to be uploaded
+
+            - AWAITING_DOCUMENT_UPLOAD_FRONT - the front of the document needs to be upload
+
+            - COMPLETE_OCR - document OCR is valid and completed
+
+            '
+          enum:
+          - AWAITING_OCR_RESULTS_PROVIDER_OFFLINE
+          - AWAITING_DOCUMENT_UPLOAD_INVALID_TYPE
+          - WAITING_DOCUMENT_UPLOAD_FAILED_OCR
+          - AWAITING_DOCUMENT_OCR
+          - DOCUMENT_INVALID_EXCEEDED_SIZE_LIMIT
+          - DOCUMENT_INVALID_INCORRECT_FILE_FORMAT
+          - AWAITING_DOCUMENT_UPLOAD_BACK
+          - AWAITING_DOCUMENT_UPLOAD_FRONT
+          - COMPLETE_OCR
+        individual:
+          $ref: '#/components/schemas/Individual'
+        requestId:
+          $ref: '#/components/schemas/Request-ID'
+        ocrResult:
+          $ref: '#/components/schemas/Process-Result-Object'
+    Entity-Type:
+      type: string
+      enum:
+      - INDIVIDUAL
+      - ORGANIZATION
+      - UNKNOWN
+      description: The type of entity within Frankie. This can be "INDIVIDUAL", "ORGANIZATION", or "UNKNOWN".
+      readOnly: true
+    Process-Result-Manual-StatusEnum-Duplicate:
+      type: string
+      enum:
+      - FALSE_POSITIVE
+      - TRUE_POSITIVE_ACCEPT
+      - TRUE_POSITIVE_REJECT
+      description: 'Manual review status options for duplicate entity resolution. Used to indicate the outcome of a manual duplicate check between an existing entity (A) and an incoming entity (B):
+
+        - FALSE_POSITIVE: Entities are not duplicates. Both Entity A and Entity B are distinct and should be retained as separate records.
+
+        - TRUE_POSITIVE_ACCEPT: Entities are duplicates. Keep the incoming entity (Entity B) as the primary record and mark the existing entity (Entity A) as the duplicate. Use when the incoming record is more accurate or complete.
+
+        - TRUE_POSITIVE_REJECT: Entities are duplicates. Keep the existing entity (Entity A) as the primary record and mark the incoming entity (Entity B) as the duplicate. Use when the existing record is more trusted or complete.
+
+        '
+    Document-Supplementary-Data-Passport:
+      type: object
+      description: Supplementary information relevant to a national health id.
+      allOf:
+      - $ref: '#/components/schemas/Document-Supplementary-Data-Base'
+      - type: object
+        properties:
+          homeCountryFullName:
+            type: string
+            description: The original name from the home country of passport.
+            example: 张伟明
+    Result-Reference:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The source of the result (e.g. sardine)
+        type:
+          $ref: '#/components/schemas/Result-Reference-Type'
+        reference:
+          type: string
+          description: "A link or reference to the source of the result. \nThe format will depend on the source and the reference type.\n"
+    Document-Attachment-Retrieval-Status:
+      type: string
+      readOnly: true
+      enum:
+      - NORMAL
+      - EXCLUDED
+      - FAILED
+      description: "The reason why the data in a response is missing.\n\n- \"NORMAL\": The data was retrieved and is included. If it is empty, then\n  it was never provided or was provided empty.\n\n- \"EXCLUDED\": The retrieval request was not for 'full' data, or the object\n  has been deleted, so the data is not included.\n\n- \"FAILED\": The data could not be retrieved from the secure document\n  store.\n\nThe retrievalStatus enum will not usually be set in a request. If an\nattachment in a response has a 'FAILED' retrieval state, then\nthat object should not be sent back in a future update. It should\neither be omitted or the original data should be resent if it is available\nfrom another source. However, it is safe to send the object in an update\nwith the state received in a response. Any state other than 'NORMAL' (or\n'') will cause the blank data to be ignored, but other fields in the\nobject will be updated if needed."
+    Comment:
+      type: object
+      properties:
+        commentId:
+          type: string
+          description: Unique identifier for the comment.
+          example: 55fc5d54-46f7-49c8-bf78-e07ec79cd6e7
+          readOnly: true
+        text:
+          type: string
+          description: The text content of the comment.
+          example: Update after speaking to customer over the phone directly.
+    Address-TypeEnum:
+      type: string
+      default: OTHER
+      enum:
+      - OTHER
+      - RESIDENTIAL
+      - BUSINESS
+      - POSTAL
+      - REGISTERED_OFFICE
+      - PLACE_OF_BUSINESS
+      - OFFICIAL_CORRESPONDANCE
+      - PLACE_OF_BIRTH
+      - OFFICE_LOCALITY
+    Supplementary-Data-IDV-Facial-Liveness:
+      type: object
+      description: 'Result of a facial liveness check, indicating how likely the facial photo or video is of a live person.
+
+
+        For resultMap keys, use the keys found in the enum: SupplementaryDataIDVEnumDataFacialLiveness.
+
+        '
+      allOf:
+      - $ref: '#/components/schemas/Supplementary-Data-IDV-Base'
+      - type: object
+        properties:
+          comparedSelfieId:
+            type: string
+            format: uuid
+            description: The document ID of the selfie that was compared.
+          comparedSelfieAttachmentId:
+            type: string
+            format: uuid
+            description: The attachment ID of the selfie that was compared.
+    Supplementary-Data-Matchlist-Field:
+      type: object
+      description: 'Entity data that resulted in a match at the time of execution.
+
+        '
+      required:
+      - objectId
+      - objectType
+      properties:
+        objectId:
+          type: string
+          description: Unique identifier of the matched object.
+        objectType:
+          $ref: '#/components/schemas/Object-Type'
+        matchedAttributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Supplementary-Data-Matchlist-Attribute'
+    Matchlist-Entry-Base:
+      type: object
+      description: Basic details about a matchlist entry, excluding metadata.
+      properties:
+        entryId:
+          type: string
+          format: uuid
+          readOnly: true
+          description: Unique identifier for the matchlist entry.
+        entityId:
+          type: string
+          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+          description: The entity ID from which the attributes of this entry are derived. This is optional and can be used to link the matchlist entry to an entity.
+        entityType:
+          $ref: '#/components/schemas/Entity-Type'
+          description: The type of entity from which the attributes of this entry are derived. This is optional and can be used to link the matchlist entry to an entity.
+        reference:
+          type: string
+          description: Optional reference describing the context of this entry.
+          example: CERT-BAD-ACTOR-1234-5678
+        reasons:
+          description: The reasons for the matchlist entry. These codes will be translated to configured description strings.
+          type: array
+          items:
+            $ref: '#/components/schemas/Matchlist-Entry-Reason-Code'
+    Supplementary-Data-Duplicate-MatchedRule:
+      type: object
+      description: 'Provides details about the rule that was matched to classify the object as a duplicate.
+
+        '
+      properties:
+        name:
+          type: string
+          description: The name of the matched rule.
+        strength:
+          type: string
+          description: "The strength of the match. This is free-form, but it is recommended to use standard values for clarity, such as:\n  - \"VERY_LOW\"\n  - \"LOW\"\n  - \"MEDIUM\"\n  - \"HIGH\"\n  - \"VERY_HIGH\"\n"
+    IDV-OCR-Request:
+      type: object
+      description: OCR request, used to submit an image of an identity document for OCR processing. The image can be uploaded via a vendor SDK after calling get IDV token, or can be submitted directly as a fileData.
+      properties:
+        digital:
+          description: Is this a digital version of the id, eg Digital Driver Licence screenshot. If not provided assumed to be false.
+          type: boolean
+        documentId:
+          description: document id if known that the scan data should be attached to
+          type: string
+        fileData:
+          $ref: '#/components/schemas/Document-Attachment'
+        token:
+          description: if the image was captured via a provder SDK, pass through the token instead of the fileData
+          example: 41cf9401f0f889616bef
+          type: string
+    Supplementary-Data-KYC-Address:
+      type: object
+      description: 'Defines the matching levels for each address element, where available.
+
+        Provides a match strength score ranging from 0 (no match) to 100 (full match).
+
+        '
+      allOf:
+      - $ref: '#/components/schemas/Supplementary-Data-Base'
+      - type: object
+        properties:
+          matchStrengths:
+            $ref: '#/components/schemas/Supplementary-Data-KYC-Address-MatchStrengths'
+          fuzziness:
+            $ref: '#/components/schemas/FuzzinessLevel'
+          wasNameMatchStrongEnough:
+            description: 'Indicates whether there was a sufficiently strong name match at the time this was checked, even if the address was a perfect match.
+
+              This is only an indicator at the time the PRO was created. Subsequent checks that reuse this result may interpret this differently.
+
+              '
+            type: boolean
+    Address-Place-Of-Birth:
+      type: object
+      required:
+      - country
+      description: The country or address where the individual was born.
+      properties:
+        addressId:
+          type: string
+          description: As addresses are added to an entity, they are assigned an ID to assist with tracking.
+          example: 6ad15f64-5717-4562-b3fc-2c963f66abf9
+          readOnly: true
+        sourceId:
+          type: string
+          readOnly: true
+          description: The source from which specific information was sourced. This is a link to an informationSource object in the informationSources map.
+          example: 1da65f64-5717-4562-b3fc-2c963f669fba
+        longForm:
+          type: string
+          description: 'In some cases, the address will need to be supplied in "long form", such as when it is determined from a document scan, or is unparsable in some way.
+
+            The service will attempt to convert it to its constituent parts where possible.
+
+            WARNING: Use of longForm is not guaranteed to produce perfect results, due to the variety of potential formats. You have been warned.
+
+            Failure to break down or disambiguate the address will result in an error.'
+          example: 525 Kent Dr, Harlem NY 10037, USA
+        unstructuredLongForm:
+          type: string
+          readOnly: true
+          description: Raw, unformatted address as provided by the source. Not normalized or standardized.
+          example: 3A/525 KENT DRIVE HARLEM NEW YORK 10036 USA
+        unitNumber:
+          type: string
+          description: Unit/Apartment/Flat/Suite/etc. number
+          example: 3A
+        buildingName:
+          type: string
+          description: The name of the building, apartment block, condominium, etc.
+          example: EQ Tower
+        streetName:
+          type: string
+          description: 'The name of the street.
+
+            This field should ideally contain only the street name, without the street number or street type. In some cases, especially when auto-populated by external services (e.g., Google), it may include additional address components.
+
+            For best results, keep the street name separate from the street number and street type. See https://apidocs.frankiefinancial.com/docs/working-with-addresses for more details.'
+          example: Kent
+        streetNumber:
+          type: string
+          description: The number assigned to the property on the street. Typically a number, but can also be alphanumeric (e.g., 3A).
+          example: '525'
+        streetType:
+          type: string
+          description: The street type, such as Road, Street, Avenue, Circuit, etc.
+          example: Dr
+        neighborhood:
+          type: string
+          description: The neighborhood or suburb within the town or city. Use this only if you require both a suburb and a locality/town/city; otherwise, use the "locality" parameter.
+          example: Harlem
+        locality:
+          type: string
+          description: The locality, borough, town, village, or city.
+          example: Manhattan
+        district:
+          type: string
+          description: The district, region, county, province, or cantonment.
+          example: New York County
+        subdivision:
+          type: string
+          description: The ISO 3166-2 alphanumeric code of the administrative area/state/sub-division, minus the country code, e.g., VIC (Victoria) or TX (Texas).
+          example: NY
+        country:
+          type: string
+          description: 'The ISO 3166-1 alphanumeric three-letter code of the country, e.g., AUS, USA, IDR, KOR, etc.
+
+            For more details, refer to: https://en.wikipedia.org/wiki/ISO_3166-1'
+          example: USA
+        postalCode:
+          type: string
+          description: The postal, zip, or pin code of the address.
+          example: '10037'
+    Process-Result-Manual-StatusEnum-IDV:
+      type: string
+      enum:
+      - CLEAR
+      - REJECTED
+      description: 'Any manual status set after the results have been reviewed.
+
+        - CLEAR: When the result is determined to be clear and no further action is needed.
+
+        - REJECTED: When the result is determined to be rejected and no further action is needed.
+
+        '
+    Supplementary-Data-AML:
+      type: object
+      required:
+      - serviceProvider
+      description: 'Each AML match/hit generates a PRO, and this object describes the details of the matched individual or business.
+
+        '
+      allOf:
+      - $ref: '#/components/schemas/Supplementary-Data-Base'
+      - type: object
+        properties:
+          serviceProvider:
+            type: string
+            description: 'The name of the service provider from which this matched record was retrieved.
+
+              '
+          searchId:
+            type: string
+            description: 'The service provider''s search reference number, usually used to refer to an ongoing search.
+
+              '
+          caseId:
+            type: string
+            description: 'If the service provider has case management facilities, this is their case identifier. May be the same as the search ID.
+
+              '
+          referenceId:
+            type: string
+            description: 'An additional reference number provided by the service provider, or our own reference number.
+
+              '
+          originalStepSearchLevel:
+            type: string
+            description: 'Indicates if this was a simple PEP or PEP media check that found this match. Used to determine if more information is needed when re-using existing results.
+
+              '
+          groupingId:
+            type: string
+            description: 'Some matches can be grouped together as part of a collection of searches. This can be the searchId or a reference ID.
+
+              '
+          reportUrl:
+            type: string
+            format: uri
+            description: 'If the service provider supplies a pre-packaged report that can be downloaded independently, this is the URL to retrieve it.
+
+              '
+          fuzziness:
+            $ref: '#/components/schemas/FuzzinessLevel'
+          matchData:
+            $ref: '#/components/schemas/Supplementary-Data-AML-MatchData'
+          aliases:
+            type: array
+            items:
+              type: string
+              description: Alternative names, aliases, "AKA"s, or names as spelled in other languages, etc.
+          relatedParties:
+            type: array
+            items:
+              $ref: '#/components/schemas/Supplementary-Data-AML-RelatedParties'
+          referenceDocs:
+            type: array
+            items:
+              $ref: '#/components/schemas/Supplementary-Data-AML-ReferenceDocs'
+          notes:
+            $ref: '#/components/schemas/Custom-Attributes'
+          pepData:
+            type: array
+            items:
+              $ref: '#/components/schemas/Supplementary-Data-AML-PEPData'
+          sanctionData:
+            type: array
+            items:
+              $ref: '#/components/schemas/Supplementary-Data-AML-SanctionsData'
+          watchlistData:
+            type: array
+            items:
+              $ref: '#/components/schemas/Supplementary-Data-AML-WatchlistData'
+          mediaData:
+            type: array
+            items:
+              $ref: '#/components/schemas/Supplementary-Data-AML-MediaData'
+  parameters:
+    entityId:
+      name: entityId
+      in: path
+      schema:
+        type: string
+      description: Unique FrankieOne identifier for an entity
+      required: true
+    X-Frankie-CustomerChildID:
+      name: X-Frankie-CustomerChildID
+      in: header
+      required: false
+      schema:
+        type: string
+        example: 87654321-4321-4321-4321-210987654321
+      description: Your Customer Child ID provided by FrankieOne
+    X-Frankie-Channel:
+      name: X-Frankie-Channel
+      in: header
+      required: false
+      schema:
+        type: string
+      description: 'Open string that can be used to define the "channel" the request comes in from. It can potentially be used in routing and risk calculations upon request. Default values that can be used are:  api portal smartui Any alphanumeric string is supported though. Anything over 64 characters will be truncated.'
+    Api-Key:
+      name: api_key
+      in: header
+      schema:
+        type: string
+        example: 245c765b124a098d09ef8765....
+      description: Your API key provided by FrankieOne
+      required: true
+    X-Frankie-CustomerID:
+      name: X-Frankie-CustomerID
+      in: header
+      required: true
+      schema:
+        type: string
+        example: 12345678-1234-1234-1234-123456789012
+      description: Your Customer ID provided by FrankieOne
+  securitySchemes:
+    Api-Key:
+      type: apiKey
+      in: header
+      name: api_key
+      description: ''
+    jwt:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
