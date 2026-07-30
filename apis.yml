@@ -4,7 +4,20 @@ description: >-
   FrankieOne is an identity verification, compliance, and fraud prevention platform connecting applications to hundreds
   of global data sources through a single API for KYC, KYB, document IDV, ongoing monitoring, and matchlist management.
 type: Index
-image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+accessModel:
+  pricing: freemium
+  onboarding: self-serve
+  trial: false
+  try_now: true
+  public: false
+  label: Freemium · Self-serve signup
+  confidence: high
+  source:
+  - plans
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/frankieone.png
 access: 3rd-Party
 created: '2025-02-08'
 modified: '2026-05-19'
@@ -19,52 +32,344 @@ tags:
 url: https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/apis.yml
 specificationVersion: '0.19'
 apis:
-  - aid: frankieone:kyc-v2
-    name: FrankieOne KYC V2 API
-    description: >-
-      KYC V2 API for managing individuals, profiles, workflows, results, and documents. Supports identity verification,
-      AML screening, IDV, fraud checks, duplicate detection, matchlist matching, and ongoing monitoring.
-    humanURL: https://docs.frankieone.com/v1.14.1/docs/welcome-to-frankie
-    baseURL: https://api.frankie.one
-    tags:
-      - Identity Verification
-      - KYC
-      - AML
-      - IDV
-      - Documents
-      - Workflows
-    properties:
-      - type: Documentation
-        url: https://docs.frankieone.com/v1.14.1/docs/welcome-to-frankie
-      - type: OpenAPI
-        url: https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/openapi/kyc-v2-openapi.json
-      - type: Capabilities
-        url: >-
-          https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/capabilities/frankieone-kyc-capabilities.yml
-      - type: Rules
-        url: https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/rules/frankieone-kyc-rules.yml
-  - aid: frankieone:core-v2
-    name: FrankieOne Core V2 API
-    description: >-
-      Core V2 API for platform-level operations including audit retrieval, workflow discovery, background request
-      status, and matchlist management.
-    humanURL: https://docs.frankieone.com/
-    baseURL: https://api.frankie.one
-    tags:
-      - Audit
-      - Workflows
-      - Matchlists
-      - Compliance
-    properties:
-      - type: Documentation
-        url: https://docs.frankieone.com/
-      - type: OpenAPI
-        url: https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/openapi/core-v2-openapi.yml
-      - type: Capabilities
-        url: >-
-          https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/capabilities/frankieone-core-capabilities.yml
-      - type: Rules
-        url: https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/rules/frankieone-core-rules.yml
+- aid: frankieone:frankieone-audit-api
+  name: FrankieOne Audit API
+  description: Manage audit entries
+  humanURL: https://docs.frankieone.com/v1.14.1/docs/welcome-to-frankie
+  baseURL: https://api.frankie.one
+  tags:
+  - Audit
+  properties:
+  - type: OpenAPI
+    url: openapi/frankieone-audit-api-openapi.yml
+  - type: Documentation
+    url: https://docs.frankieone.com/v1.14.1/docs/welcome-to-frankie
+  - type: Capabilities
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/capabilities/frankieone-kyc-capabilities.yml
+  - type: Rules
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/rules/frankieone-kyc-rules.yml
+  - type: Documentation
+    url: https://docs.frankieone.com/
+  - type: Capabilities
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/capabilities/frankieone-core-capabilities.yml
+  - type: Rules
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/rules/frankieone-core-rules.yml
+- aid: frankieone:frankieone-hostedurl-api
+  name: FrankieOne HostedURL API
+  description: Manage hosted URLs for an individual
+  humanURL: https://docs.frankieone.com/v1.14.1/docs/welcome-to-frankie
+  baseURL: https://api.frankie.one
+  tags:
+  - HostedURL
+  properties:
+  - type: OpenAPI
+    url: openapi/frankieone-hostedurl-api-openapi.yml
+  - type: Documentation
+    url: https://docs.frankieone.com/v1.14.1/docs/welcome-to-frankie
+  - type: Capabilities
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/capabilities/frankieone-kyc-capabilities.yml
+  - type: Rules
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/rules/frankieone-kyc-rules.yml
+  - type: Documentation
+    url: https://docs.frankieone.com/
+  - type: Capabilities
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/capabilities/frankieone-core-capabilities.yml
+  - type: Rules
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/rules/frankieone-core-rules.yml
+- aid: frankieone:frankieone-idv-api
+  name: FrankieOne IDV API
+  description: Get a token and/or upload documents to initiate an IDV process
+  humanURL: https://docs.frankieone.com/v1.14.1/docs/welcome-to-frankie
+  baseURL: https://api.frankie.one
+  tags:
+  - IDV
+  properties:
+  - type: OpenAPI
+    url: openapi/frankieone-idv-api-openapi.yml
+  - type: Documentation
+    url: https://docs.frankieone.com/v1.14.1/docs/welcome-to-frankie
+  - type: Capabilities
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/capabilities/frankieone-kyc-capabilities.yml
+  - type: Rules
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/rules/frankieone-kyc-rules.yml
+  - type: Documentation
+    url: https://docs.frankieone.com/
+  - type: Capabilities
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/capabilities/frankieone-core-capabilities.yml
+  - type: Rules
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/rules/frankieone-core-rules.yml
+- aid: frankieone:frankieone-individual-documents-api
+  name: FrankieOne Individual Documents API
+  description: Manage documents for individuals
+  humanURL: https://docs.frankieone.com/v1.14.1/docs/welcome-to-frankie
+  baseURL: https://api.frankie.one
+  tags:
+  - Individual Documents
+  properties:
+  - type: OpenAPI
+    url: openapi/frankieone-individual-documents-api-openapi.yml
+  - type: Documentation
+    url: https://docs.frankieone.com/v1.14.1/docs/welcome-to-frankie
+  - type: Capabilities
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/capabilities/frankieone-kyc-capabilities.yml
+  - type: Rules
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/rules/frankieone-kyc-rules.yml
+  - type: Documentation
+    url: https://docs.frankieone.com/
+  - type: Capabilities
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/capabilities/frankieone-core-capabilities.yml
+  - type: Rules
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/rules/frankieone-core-rules.yml
+- aid: frankieone:frankieone-individual-entities-api
+  name: FrankieOne Individual Entities API
+  description: Manage individual entity records
+  humanURL: https://docs.frankieone.com/v1.14.1/docs/welcome-to-frankie
+  baseURL: https://api.frankie.one
+  tags:
+  - Individual Entities
+  properties:
+  - type: OpenAPI
+    url: openapi/frankieone-individual-entities-api-openapi.yml
+  - type: Documentation
+    url: https://docs.frankieone.com/v1.14.1/docs/welcome-to-frankie
+  - type: Capabilities
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/capabilities/frankieone-kyc-capabilities.yml
+  - type: Rules
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/rules/frankieone-kyc-rules.yml
+  - type: Documentation
+    url: https://docs.frankieone.com/
+  - type: Capabilities
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/capabilities/frankieone-core-capabilities.yml
+  - type: Rules
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/rules/frankieone-core-rules.yml
+- aid: frankieone:frankieone-individual-entity-elements-api
+  name: FrankieOne Individual Entity Elements API
+  description: Manage individual entity record elements
+  humanURL: https://docs.frankieone.com/v1.14.1/docs/welcome-to-frankie
+  baseURL: https://api.frankie.one
+  tags:
+  - Individual Entity Elements
+  properties:
+  - type: OpenAPI
+    url: openapi/frankieone-individual-entity-elements-api-openapi.yml
+  - type: Documentation
+    url: https://docs.frankieone.com/v1.14.1/docs/welcome-to-frankie
+  - type: Capabilities
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/capabilities/frankieone-kyc-capabilities.yml
+  - type: Rules
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/rules/frankieone-kyc-rules.yml
+  - type: Documentation
+    url: https://docs.frankieone.com/
+  - type: Capabilities
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/capabilities/frankieone-core-capabilities.yml
+  - type: Rules
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/rules/frankieone-core-rules.yml
+- aid: frankieone:frankieone-individual-profiles-api
+  name: FrankieOne Individual Profiles API
+  description: Manage individual profiles
+  humanURL: https://docs.frankieone.com/v1.14.1/docs/welcome-to-frankie
+  baseURL: https://api.frankie.one
+  tags:
+  - Individual Profiles
+  properties:
+  - type: OpenAPI
+    url: openapi/frankieone-individual-profiles-api-openapi.yml
+  - type: Documentation
+    url: https://docs.frankieone.com/v1.14.1/docs/welcome-to-frankie
+  - type: Capabilities
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/capabilities/frankieone-kyc-capabilities.yml
+  - type: Rules
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/rules/frankieone-kyc-rules.yml
+  - type: Documentation
+    url: https://docs.frankieone.com/
+  - type: Capabilities
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/capabilities/frankieone-core-capabilities.yml
+  - type: Rules
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/rules/frankieone-core-rules.yml
+- aid: frankieone:frankieone-individual-results-api
+  name: FrankieOne Individual Results API
+  description: Manage results for individuals
+  humanURL: https://docs.frankieone.com/v1.14.1/docs/welcome-to-frankie
+  baseURL: https://api.frankie.one
+  tags:
+  - Individual Results
+  properties:
+  - type: OpenAPI
+    url: openapi/frankieone-individual-results-api-openapi.yml
+  - type: Documentation
+    url: https://docs.frankieone.com/v1.14.1/docs/welcome-to-frankie
+  - type: Capabilities
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/capabilities/frankieone-kyc-capabilities.yml
+  - type: Rules
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/rules/frankieone-kyc-rules.yml
+  - type: Documentation
+    url: https://docs.frankieone.com/
+  - type: Capabilities
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/capabilities/frankieone-core-capabilities.yml
+  - type: Rules
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/rules/frankieone-core-rules.yml
+- aid: frankieone:frankieone-individual-risks-api
+  name: FrankieOne Individual Risks API
+  description: Manage risks associated with an individual
+  humanURL: https://docs.frankieone.com/v1.14.1/docs/welcome-to-frankie
+  baseURL: https://api.frankie.one
+  tags:
+  - Individual Risks
+  properties:
+  - type: OpenAPI
+    url: openapi/frankieone-individual-risks-api-openapi.yml
+  - type: Documentation
+    url: https://docs.frankieone.com/v1.14.1/docs/welcome-to-frankie
+  - type: Capabilities
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/capabilities/frankieone-kyc-capabilities.yml
+  - type: Rules
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/rules/frankieone-kyc-rules.yml
+  - type: Documentation
+    url: https://docs.frankieone.com/
+  - type: Capabilities
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/capabilities/frankieone-core-capabilities.yml
+  - type: Rules
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/rules/frankieone-core-rules.yml
+- aid: frankieone:frankieone-individual-workflows-api
+  name: FrankieOne Individual Workflows API
+  description: The Individual Workflows API from FrankieOne — 5 operation(s) for individual workflows.
+  humanURL: https://docs.frankieone.com/v1.14.1/docs/welcome-to-frankie
+  baseURL: https://api.frankie.one
+  tags:
+  - Individual Workflows
+  properties:
+  - type: OpenAPI
+    url: openapi/frankieone-individual-workflows-api-openapi.yml
+  - type: Documentation
+    url: https://docs.frankieone.com/v1.14.1/docs/welcome-to-frankie
+  - type: Capabilities
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/capabilities/frankieone-kyc-capabilities.yml
+  - type: Rules
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/rules/frankieone-kyc-rules.yml
+  - type: Documentation
+    url: https://docs.frankieone.com/
+  - type: Capabilities
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/capabilities/frankieone-core-capabilities.yml
+  - type: Rules
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/rules/frankieone-core-rules.yml
+- aid: frankieone:frankieone-matchlists-api
+  name: FrankieOne Matchlists API
+  description: The Matchlists API from FrankieOne — 6 operation(s) for matchlists.
+  humanURL: https://docs.frankieone.com/v1.14.1/docs/welcome-to-frankie
+  baseURL: https://api.frankie.one
+  tags:
+  - Matchlists
+  properties:
+  - type: OpenAPI
+    url: openapi/frankieone-matchlists-api-openapi.yml
+  - type: Documentation
+    url: https://docs.frankieone.com/v1.14.1/docs/welcome-to-frankie
+  - type: Capabilities
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/capabilities/frankieone-kyc-capabilities.yml
+  - type: Rules
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/rules/frankieone-kyc-rules.yml
+  - type: Documentation
+    url: https://docs.frankieone.com/
+  - type: Capabilities
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/capabilities/frankieone-core-capabilities.yml
+  - type: Rules
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/rules/frankieone-core-rules.yml
+- aid: frankieone:frankieone-monitoring-api
+  name: FrankieOne Monitoring API
+  description: Turn on/off ongoing monitoring for an individual entity
+  humanURL: https://docs.frankieone.com/v1.14.1/docs/welcome-to-frankie
+  baseURL: https://api.frankie.one
+  tags:
+  - Monitoring
+  properties:
+  - type: OpenAPI
+    url: openapi/frankieone-monitoring-api-openapi.yml
+  - type: Documentation
+    url: https://docs.frankieone.com/v1.14.1/docs/welcome-to-frankie
+  - type: Capabilities
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/capabilities/frankieone-kyc-capabilities.yml
+  - type: Rules
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/rules/frankieone-kyc-rules.yml
+  - type: Documentation
+    url: https://docs.frankieone.com/
+  - type: Capabilities
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/capabilities/frankieone-core-capabilities.yml
+  - type: Rules
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/rules/frankieone-core-rules.yml
+- aid: frankieone:frankieone-search-api
+  name: FrankieOne Search API
+  description: The Search API from FrankieOne — 1 operation(s) for search.
+  humanURL: https://docs.frankieone.com/v1.14.1/docs/welcome-to-frankie
+  baseURL: https://api.frankie.one
+  tags:
+  - Search
+  properties:
+  - type: OpenAPI
+    url: openapi/frankieone-search-api-openapi.yml
+  - type: Documentation
+    url: https://docs.frankieone.com/v1.14.1/docs/welcome-to-frankie
+  - type: Capabilities
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/capabilities/frankieone-kyc-capabilities.yml
+  - type: Rules
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/rules/frankieone-kyc-rules.yml
+  - type: Documentation
+    url: https://docs.frankieone.com/
+  - type: Capabilities
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/capabilities/frankieone-core-capabilities.yml
+  - type: Rules
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/rules/frankieone-core-rules.yml
 common:
   - type: AgenticAccess
     url: agentic-access/frankieone-agentic-access.yml
