@@ -1,0 +1,38 @@
+{
+  "provider": "frankieone",
+  "sources": [
+    "frankieone-audit-api-openapi.yml",
+    "frankieone-hostedurl-api-openapi.yml",
+    "frankieone-idv-api-openapi.yml",
+    "frankieone-individual-documents-api-openapi.yml",
+    "frankieone-individual-entities-api-openapi.yml",
+    "frankieone-individual-entity-elements-api-openapi.yml",
+    "frankieone-individual-profiles-api-openapi.yml",
+    "frankieone-individual-results-api-openapi.yml",
+    "frankieone-individual-risks-api-openapi.yml",
+    "frankieone-individual-workflows-api-openapi.yml",
+    "frankieone-matchlists-api-openapi.yml",
+    "frankieone-monitoring-api-openapi.yml",
+    "frankieone-search-api-openapi.yml"
+  ],
+  "outputs": [
+    "frankieone-audit-api-openapi.yml",
+    "frankieone-hostedurl-api-openapi.yml",
+    "frankieone-idv-api-openapi.yml",
+    "frankieone-individual-documents-api-openapi.yml",
+    "frankieone-individual-entities-api-openapi.yml",
+    "frankieone-individual-entity-elements-api-openapi.yml",
+    "frankieone-individual-profiles-api-openapi.yml",
+    "frankieone-individual-results-api-openapi.yml",
+    "frankieone-individual-risks-api-openapi.yml",
+    "frankieone-individual-workflows-api-openapi.yml",
+    "frankieone-matchlists-api-openapi.yml",
+    "frankieone-monitoring-api-openapi.yml",
+    "frankieone-search-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}
