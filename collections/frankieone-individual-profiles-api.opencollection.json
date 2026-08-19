@@ -1,0 +1,136 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Core V2 Audit Individual Profiles API",
+    "version": "2.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "api_key",
+      "value": "{{api_key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Individual Profiles",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get a service profile for a given individual entity.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.uat.frankie.one/v2/individuals/:entityId/serviceprofiles/:serviceName",
+            "headers": [
+              {
+                "name": "api_key",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerChildID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Channel",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "entityId",
+                "value": "",
+                "type": "path",
+                "description": "Unique FrankieOne identifier for an entity"
+              },
+              {
+                "name": "serviceName",
+                "value": "",
+                "type": "path",
+                "description": "The unique name of the service profile"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "api_key",
+              "value": "{{api_key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get a profile for a given individual entity."
+        },
+        {
+          "info": {
+            "name": "Update a profile for a given individual entity.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.uat.frankie.one/v2/individuals/:entityId/serviceprofiles/:serviceName",
+            "headers": [
+              {
+                "name": "api_key",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerChildID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Channel",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "entityId",
+                "value": "",
+                "type": "path",
+                "description": "Unique FrankieOne identifier for an entity"
+              },
+              {
+                "name": "serviceName",
+                "value": "",
+                "type": "path",
+                "description": "The unique name of the service profile"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "api_key",
+              "value": "{{api_key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Update a profile for a given individual entity."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,476 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Core V2 Audit Individual Workflows API",
+    "version": "2.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "api_key",
+      "value": "{{api_key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Individual Workflows",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get a list of executable workflows",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.uat.frankie.one/v2/workflows",
+            "headers": [
+              {
+                "name": "api_key",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerChildID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Channel",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "serviceName",
+                "value": "",
+                "type": "query",
+                "description": "The unique name of the service profile"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Query parameter to include additional fields of fetch workflow"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "api_key",
+              "value": "{{api_key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get a list of workflows that can be executed"
+        },
+        {
+          "info": {
+            "name": "Create an individual and execute a workflow for the given service profile",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.uat.frankie.one/v2/individuals/new/serviceprofiles/:serviceName/workflows/:workflowName/execute",
+            "headers": [
+              {
+                "name": "X-Frankie-CustomerID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerChildID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Channel",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Background",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "serviceName",
+                "value": "",
+                "type": "path",
+                "description": "The unique name of the service profile"
+              },
+              {
+                "name": "workflowName",
+                "value": "",
+                "type": "path",
+                "description": "The unique name of the workflow"
+              },
+              {
+                "name": "level",
+                "value": "",
+                "type": "query",
+                "description": "Determines what level of detail to return in the response\n - id: Return just an id\n - meta: Return all metadata only, no links or base64 data\n - base64: Return all metadata and data in base64 format"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "api_key",
+              "value": "{{api_key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Create an individual and execute a workflow for the given service profile"
+        },
+        {
+          "info": {
+            "name": "Execute a workflow for the given service profile",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.uat.frankie.one/v2/individuals/:entityId/serviceprofiles/:serviceName/workflows/:workflowName/execute",
+            "headers": [
+              {
+                "name": "X-Frankie-CustomerID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerChildID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Channel",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Background",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "entityId",
+                "value": "",
+                "type": "path",
+                "description": "Unique FrankieOne identifier for an entity"
+              },
+              {
+                "name": "serviceName",
+                "value": "",
+                "type": "path",
+                "description": "The unique name of the service profile"
+              },
+              {
+                "name": "workflowName",
+                "value": "",
+                "type": "path",
+                "description": "The unique name of the workflow"
+              },
+              {
+                "name": "level",
+                "value": "",
+                "type": "query",
+                "description": "Determines what level of detail to return in the response\n - id: Return just an id\n - meta: Return all metadata only, no links or base64 data\n - base64: Return all metadata and data in base64 format"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "api_key",
+              "value": "{{api_key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Execute a workflow for the given service profile."
+        },
+        {
+          "info": {
+            "name": "Get a list of executions and their results",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.uat.frankie.one/v2/individuals/:entityId/serviceprofiles/:serviceName/workflows/:workflowName/executions",
+            "headers": [
+              {
+                "name": "api_key",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerChildID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Channel",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "entityId",
+                "value": "",
+                "type": "path",
+                "description": "Unique FrankieOne identifier for an entity"
+              },
+              {
+                "name": "serviceName",
+                "value": "",
+                "type": "path",
+                "description": "The unique name of the service profile"
+              },
+              {
+                "name": "workflowName",
+                "value": "",
+                "type": "path",
+                "description": "The unique name of the workflow"
+              },
+              {
+                "name": "limit",
+                "value": "20",
+                "type": "query",
+                "description": "Limit the number of items that will be returned as part of the request"
+              },
+              {
+                "name": "page",
+                "value": "2",
+                "type": "query",
+                "description": "The page number that you want to retrieve for the list query"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Order of the sort fields will be sorted upon"
+              },
+              {
+                "name": "sortFields",
+                "value": "",
+                "type": "query",
+                "description": "List of fields that the Process Results will be filtered with\nAvailable values : createdAt, updatedAt"
+              },
+              {
+                "name": "workflowResults",
+                "value": "",
+                "type": "query",
+                "description": "list of workflow execution result values to filter results on"
+              },
+              {
+                "name": "workflowExecutionStates",
+                "value": "",
+                "type": "query",
+                "description": "List of workflow execution state values to filter with"
+              },
+              {
+                "name": "startedAtBefore",
+                "value": "2024-02-29T02:15:04Z",
+                "type": "query",
+                "description": "Filter on the startedAt field, results returned are based on being before the value (inclusive)"
+              },
+              {
+                "name": "startedAtAfter",
+                "value": "2024-02-29T02:15:04Z",
+                "type": "query",
+                "description": "Filter on the startedAt field, results returned are based on being before the value (inclusive)"
+              },
+              {
+                "name": "endedAtAfter",
+                "value": "2024-02-29T02:15:04Z",
+                "type": "query",
+                "description": "Filter on the endedAt field, results returned are based on being before the value (inclusive)"
+              },
+              {
+                "name": "endedAtBefore",
+                "value": "2024-02-29T02:15:04Z",
+                "type": "query",
+                "description": "Filter on the endedAt field, results returned are based on being before the value (inclusive)"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "api_key",
+              "value": "{{api_key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get a list of entity results. Always sorted in reverse chrono order"
+        },
+        {
+          "info": {
+            "name": "Get the result of a specific execution by its executionId.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.uat.frankie.one/v2/individuals/:entityId/serviceprofiles/:serviceName/workflows/:workflowName/executions/:workflowExecutionId",
+            "headers": [
+              {
+                "name": "api_key",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerChildID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Channel",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "entityId",
+                "value": "",
+                "type": "path",
+                "description": "Unique FrankieOne identifier for an entity"
+              },
+              {
+                "name": "serviceName",
+                "value": "",
+                "type": "path",
+                "description": "The unique name of the service profile"
+              },
+              {
+                "name": "workflowName",
+                "value": "",
+                "type": "path",
+                "description": "The unique name of the workflow"
+              },
+              {
+                "name": "workflowExecutionId",
+                "value": "",
+                "type": "path",
+                "description": "Unique workflow execution identifier"
+              },
+              {
+                "name": "level",
+                "value": "",
+                "type": "query",
+                "description": "Determines what level of detail to return in the response\n - meta: Return all metadata only, no links or base64 data\n - base64: Return all metadata and images as base64"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "api_key",
+              "value": "{{api_key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get the result of a specific execution by its executionId."
+        },
+        {
+          "info": {
+            "name": "Override the status of a specific workflow execution.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.uat.frankie.one/v2/individuals/:entityId/serviceprofiles/:serviceName/workflows/:workflowName/executions/:workflowExecutionId",
+            "headers": [
+              {
+                "name": "api_key",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerChildID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Channel",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "entityId",
+                "value": "",
+                "type": "path",
+                "description": "Unique FrankieOne identifier for an entity"
+              },
+              {
+                "name": "serviceName",
+                "value": "",
+                "type": "path",
+                "description": "The unique name of the service profile"
+              },
+              {
+                "name": "workflowName",
+                "value": "",
+                "type": "path",
+                "description": "The unique name of the workflow"
+              },
+              {
+                "name": "workflowExecutionId",
+                "value": "",
+                "type": "path",
+                "description": "Unique workflow execution identifier"
+              },
+              {
+                "name": "level",
+                "value": "",
+                "type": "query",
+                "description": "Determines what level of detail to return in the response\n - meta: Return all metadata only, no links or base64 data\n - base64: Return all metadata and images as base64"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "api_key",
+              "value": "{{api_key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Override the result of a specific workflow execution by its id."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

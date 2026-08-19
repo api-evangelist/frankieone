@@ -1,0 +1,85 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Core V2 Audit Monitoring API",
+    "version": "2.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "api_key",
+      "value": "{{api_key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Monitoring",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Turn on/off monitoring for a given entity",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.uat.frankie.one/v2/individuals/:entityId/monitor",
+            "headers": [
+              {
+                "name": "api_key",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerChildID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Channel",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "entityId",
+                "value": "",
+                "type": "path",
+                "description": "Unique FrankieOne identifier for an entity"
+              },
+              {
+                "name": "enabled",
+                "value": "",
+                "type": "query",
+                "description": "Enable or disable monitoring for the given entity. Set to true to turn monitoring on or set to false to turn monitoring off."
+              },
+              {
+                "name": "monitoringTypes",
+                "value": "",
+                "type": "query",
+                "description": "The type of ongoing monitoring to be enabled/disable for the given entity. Exclude this parameter to set the monitoring status for all types."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "api_key",
+              "value": "{{api_key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Toggle monitoring on or off for for a given entity e.g. AML monitoring. Use this endpoint to either:\n- Enable monitoring - System will start monitoring the entity for potential changes.\n- Disable monitoring - System will no longer monitor the entity for new potential matches and will no longer send alerts.\n\nThe endpoint will effectively manage the monitoring status of the entity.\nHaving monitoring status of a type enabled means that the entity is being monitored for that type.\nIf the entity has "
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

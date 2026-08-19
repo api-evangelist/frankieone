@@ -1,0 +1,531 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Core V2 Audit Individual Results API",
+    "version": "2.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "api_key",
+      "value": "{{api_key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Individual Results",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Approve Manual KYC for an individual",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.uat.frankie.one/v2/individuals/:entityId/results/mkyc",
+            "headers": [
+              {
+                "name": "api_key",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerChildID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Channel",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "entityId",
+                "value": "",
+                "type": "path",
+                "description": "Unique FrankieOne identifier for an entity"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "api_key",
+              "value": "{{api_key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Approve manual KYC (mKYC) for an individual as to allow them to pass all KYC workflow steps without performing eKYC. To ensure there is enough evidence for the mKYC process to be valid, the individual will need to have documents that match at least one of the following combinations:\n\n1 Primary Photographic ID e.g. \n  - \"DRIVERS_LICENSE\": Driver's license.\n  - \"PASSPORT\": Passport\n\n2 Primary Non-Photographic IDs e.g.\n  - \"BIRTH_CERT\": Birth certificate\n  - \"CITIZENSHIP\": Citizenship certificate\n\n"
+        },
+        {
+          "info": {
+            "name": "Invalidate any Manual KYC evidences of an individual",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.uat.frankie.one/v2/individuals/:entityId/results/mkyc/invalidate",
+            "headers": [
+              {
+                "name": "api_key",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerChildID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Channel",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "entityId",
+                "value": "",
+                "type": "path",
+                "description": "Unique FrankieOne identifier for an entity"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "api_key",
+              "value": "{{api_key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Invalidate any Manual KYC evidences of an individual. This will force the entity to be verified by eKYC processes when KYC verification is next run. Only invalidate mKYC evidences if manual KYC evidences had previously been supplied for this entity."
+        },
+        {
+          "info": {
+            "name": "Update the status of AML process results",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.uat.frankie.one/v2/individuals/:entityId/results/aml",
+            "headers": [
+              {
+                "name": "api_key",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerChildID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Channel",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "entityId",
+                "value": "",
+                "type": "path",
+                "description": "Unique FrankieOne identifier for an entity"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "api_key",
+              "value": "{{api_key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Update the status of a set of AML process results."
+        },
+        {
+          "info": {
+            "name": "Update the status of IDV process results",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.uat.frankie.one/v2/individuals/:entityId/results/idv",
+            "headers": [
+              {
+                "name": "api_key",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerChildID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Channel",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "entityId",
+                "value": "",
+                "type": "path",
+                "description": "Unique FrankieOne identifier for an entity"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "api_key",
+              "value": "{{api_key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Update the status of a set of IDV process results."
+        },
+        {
+          "info": {
+            "name": "Update the status of Matchlist process results",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.uat.frankie.one/v2/individuals/:entityId/results/matchlist",
+            "headers": [
+              {
+                "name": "api_key",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerChildID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Channel",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "entityId",
+                "value": "",
+                "type": "path",
+                "description": "Unique FrankieOne identifier for an entity"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "api_key",
+              "value": "{{api_key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Update the status of a set of Matchlist process results."
+        },
+        {
+          "info": {
+            "name": "Update the status of Duplicate process results",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.uat.frankie.one/v2/individuals/:entityId/results/duplicate",
+            "headers": [
+              {
+                "name": "api_key",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerChildID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Channel",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "entityId",
+                "value": "",
+                "type": "path",
+                "description": "Unique FrankieOne identifier for an entity"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "api_key",
+              "value": "{{api_key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Update the status of a set of Duplicate process results.\nThe request body supports batch processing of duplicate results with the following components:\n- processResults: Array of UUID strings identifying specific duplicate Process Results to update - manualStatus: The resolution status for the duplicates, which can be one of:\n  * FALSE_POSITIVE: When the flagged entities are determined to be different individuals (both records should be kept)\n  * TRUE_POSITIVE_ACCEPT: Keep the current entity as "
+        },
+        {
+          "info": {
+            "name": "Update the status of Fraud process results",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.uat.frankie.one/v2/individuals/:entityId/results/fraud",
+            "headers": [
+              {
+                "name": "api_key",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerChildID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Channel",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "entityId",
+                "value": "",
+                "type": "path",
+                "description": "Unique FrankieOne identifier for an entity"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "api_key",
+              "value": "{{api_key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Update the status of a set of Fraud process results.\nThe request body supports batch processing of fraud results with the following components:\n- processResults: Array of UUID strings identifying specific fraud Process Results to update - manualStatus: The resolution status for the fraud, which can be one of:\n  * FALSE_POSITIVE: When the result is determined to be false positive.\n  * TRUE_POSITIVE: When the result is determined to be true positive.\n  * UNKNOWN: When the result is still being eva"
+        },
+        {
+          "info": {
+            "name": "Get a list of process results",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.uat.frankie.one/v2/individuals/:entityId/results",
+            "headers": [
+              {
+                "name": "api_key",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerChildID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Channel",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Username",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "entityId",
+                "value": "",
+                "type": "path",
+                "description": "Unique FrankieOne identifier for an entity"
+              },
+              {
+                "name": "profileName",
+                "value": "",
+                "type": "query",
+                "description": "The unique name of the service profile"
+              },
+              {
+                "name": "createdAtBefore",
+                "value": "2024-02-29T02:15:04Z",
+                "type": "query",
+                "description": "Filter on the createdAt field, results returned are based on being before the value (inclusively)"
+              },
+              {
+                "name": "createdAtAfter",
+                "value": "2024-02-29T02:15:04Z",
+                "type": "query",
+                "description": "Filter on the createdAt field, results returned are based on being after the value (inclusively)"
+              },
+              {
+                "name": "updatedAtBefore",
+                "value": "2024-02-29T02:15:04Z",
+                "type": "query",
+                "description": "Filter on the updatedAt field, results returned are based on being before the value (inclusively)"
+              },
+              {
+                "name": "updatedAtAfter",
+                "value": "2024-02-29T02:15:04Z",
+                "type": "query",
+                "description": "Filter on the updatedAt field, results returned are based on being before the value (inclusively)"
+              },
+              {
+                "name": "stepNames",
+                "value": "",
+                "type": "query",
+                "description": "List of steps to include, separated by a comma."
+              },
+              {
+                "name": "stepTypes",
+                "value": "",
+                "type": "query",
+                "description": "A list of stepTypes the Process Result is associated with"
+              },
+              {
+                "name": "objectTypes",
+                "value": "",
+                "type": "query",
+                "description": "List of objectTypes to filter upon"
+              },
+              {
+                "name": "classes",
+                "value": "",
+                "type": "query",
+                "description": "List of classes to filter results with Available values : KYC, ID, IDV, AML, FRAUDLIST, FRAUDCHECK, DEVICE, MOBILE, EMAIL, LOOKUP, CREATE, UPDATE, DELETE, MANUAL, ORGANIZATION_PROFILE, ORGANIZATION_OWNERSHIP"
+              },
+              {
+                "name": "systemStatuses",
+                "value": "",
+                "type": "query",
+                "description": "List of systemStatus values to filter results with\nAvailable values : VALID, EXPIRED, STALE, MARKED_INVALID, MARKED_IGNORE"
+              },
+              {
+                "name": "manualStatuses",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "states",
+                "value": "",
+                "type": "query",
+                "description": "List of state values to filter results with\nAvailable values : IN_PROGRESS, COMPLETED, TIMEOUT, ERROR"
+              },
+              {
+                "name": "results",
+                "value": "",
+                "type": "query",
+                "description": "List of result value that the Process Result will be filtered with\nAvailable values : MATCH, PARTIAL_MATCH, INVALID_MATCH, NO_MATCH, CLEAR, HIT, BAD_DATA, CREATED, UPDATED, DELETED, FAIL"
+              },
+              {
+                "name": "sortFields",
+                "value": "",
+                "type": "query",
+                "description": "List of fields that the Process Results will be filtered with\nAvailable values : createdAt, updatedAt"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Order of the sort fields will be sorted upon"
+              },
+              {
+                "name": "page",
+                "value": "2",
+                "type": "query",
+                "description": "The page number that you want to retrieve for the list query"
+              },
+              {
+                "name": "limit",
+                "value": "20",
+                "type": "query",
+                "description": "Limit the number of items that will be returned as part of the request"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "api_key",
+              "value": "{{api_key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Get a list of process results for a given individual entity"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,1215 @@
+{
+  "item": [
+    {
+      "id": "22846c50-b2d0-4592-9ceb-a819460677a9",
+      "name": "Audit",
+      "description": {
+        "content": "Manage audit entries",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "77294ad3-0b9b-4767-b6f4-ac8230be6599",
+          "name": "List audit events",
+          "request": {
+            "name": "List audit events",
+            "description": {
+              "content": "List all audit events with filtering.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v2",
+                "audit"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "entityId",
+                  "value": "<string>",
+                  "description": "Entity ID"
+                },
+                {
+                  "disabled": false,
+                  "key": "workflowNames",
+                  "value": "<string>",
+                  "description": "List of Workflow Names to filter the audit events upon"
+                },
+                {
+                  "disabled": false,
+                  "key": "workflowNames",
+                  "value": "<string>",
+                  "description": "List of Workflow Names to filter the audit events upon"
+                },
+                {
+                  "disabled": false,
+                  "key": "workflowRiskLevels",
+                  "value": "<string>",
+                  "description": "List of workflow risk levels to filter the audit events upon"
+                },
+                {
+                  "disabled": false,
+                  "key": "workflowRiskLevels",
+                  "value": "<string>",
+                  "description": "List of workflow risk levels to filter the audit events upon"
+                },
+                {
+                  "disabled": false,
+                  "key": "sources",
+                  "value": "<string>",
+                  "description": "List of Sources that the audit events will be filtered upon"
+                },
+                {
+                  "disabled": false,
+                  "key": "sources",
+                  "value": "<string>",
+                  "description": "List of Sources that the audit events will be filtered upon"
+                },
+                {
+                  "disabled": false,
+                  "key": "requestId",
+                  "value": "<string>",
+                  "description": "Request Identifier to filter the audit events upon"
+                },
+                {
+                  "disabled": false,
+                  "key": "afterTimestamp",
+                  "value": "<date>",
+                  "description": "Filter the Audit Events after the given filter based on the Event 'timestamp' value"
+                },
+                {
+                  "disabled": false,
+                  "key": "beforeTimestamp",
+                  "value": "<date>",
+                  "description": "Filter the Audit Events before the given filter based on the Event 'timestamp' value"
+                },
+                {
+                  "disabled": false,
+                  "key": "channels",
+                  "value": "<string>",
+                  "description": "List of Channels to filter the audit events upon"
+                },
+                {
+                  "disabled": false,
+                  "key": "channels",
+                  "value": "<string>",
+                  "description": "List of Channels to filter the audit events upon"
+                },
+                {
+                  "disabled": false,
+                  "key": "sort",
+                  "value": "<string>",
+                  "description": "Order of the sort fields will be sorted upon"
+                },
+                {
+                  "disabled": false,
+                  "key": "sortFields",
+                  "value": "<string>",
+                  "description": "The list of sort fields that will be used in the query, the order of the sort fields will determine the order in which the items are sorted"
+                },
+                {
+                  "disabled": false,
+                  "key": "sortFields",
+                  "value": "<string>",
+                  "description": "The list of sort fields that will be used in the query, the order of the sort fields will determine the order in which the items are sorted"
+                },
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "<integer>",
+                  "description": "The page number that you want to retrieve for the list query"
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "20",
+                  "description": "Limit the number of items that will be returned as part of the request"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) Your API key provided by FrankieOne",
+                "key": "api_key",
+                "value": "<string>"
+              },
+              {
+                "disabled": false,
+                "description": "(Required) Your Customer ID provided by FrankieOne",
+                "key": "X-Frankie-CustomerID",
+                "value": "<string>"
+              },
+              {
+                "disabled": false,
+                "description": "Your Customer Child ID provided by FrankieOne",
+                "key": "X-Frankie-CustomerChildID",
+                "value": "<string>"
+              },
+              {
+                "disabled": false,
+                "description": "Open string that can be used to define the \"channel\" the request comes in from. It can potentially be used in routing and risk calculations upon request. Default values that can be used are:  api portal smartui Any alphanumeric string is supported though. Anything over 64 characters will be truncated.",
+                "key": "X-Frankie-Channel",
+                "value": "<string>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "api_key"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "bfc0fce3-02b3-4b8b-a1a7-f5f722d308b2",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "audit"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "entityId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "workflowNames",
+                      "value": "KYC Onboarding"
+                    },
+                    {
+                      "key": "workflowNames",
+                      "value": "Transaction Monitoring"
+                    },
+                    {
+                      "key": "workflowRiskLevels",
+                      "value": "LOW"
+                    },
+                    {
+                      "key": "workflowRiskLevels",
+                      "value": "HIGH"
+                    },
+                    {
+                      "key": "sources",
+                      "value": "user@username.com"
+                    },
+                    {
+                      "key": "sources",
+                      "value": "FrankieOne System"
+                    },
+                    {
+                      "key": "sources",
+                      "value": "Experian Connector"
+                    },
+                    {
+                      "key": "requestId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "afterTimestamp",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "beforeTimestamp",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "channels",
+                      "value": "API"
+                    },
+                    {
+                      "key": "channels",
+                      "value": "API"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sortFields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sortFields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "2"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "api_key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Your API key provided by FrankieOne",
+                    "key": "api_key",
+                    "value": "245c765b124a098d09ef8765...."
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Your Customer ID provided by FrankieOne",
+                    "key": "X-Frankie-CustomerID",
+                    "value": "12345678-1234-1234-1234-123456789012"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Your Customer Child ID provided by FrankieOne",
+                    "key": "X-Frankie-CustomerChildID",
+                    "value": "87654321-4321-4321-4321-210987654321"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Open string that can be used to define the \"channel\" the request comes in from. It can potentially be used in routing and risk calculations upon request. Default values that can be used are:  api portal smartui Any alphanumeric string is supported though. Anything over 64 characters will be truncated.",
+                    "key": "X-Frankie-Channel",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"requestId\": \"01HN9XHZN6MGXM9JXG50K59Q85\",\n  \"meta\": {\n    \"page\": 6069,\n    \"total\": 5576,\n    \"limit\": 8182,\n    \"count\": 9966,\n    \"sort\": \"desc\",\n    \"sortFields\": [\n      \"createdAt\",\n      \"updatedAt\"\n    ]\n  },\n  \"events\": [\n    {\n      \"eventId\": \"123e4567-e89b-12d3-a456-426614174000\",\n      \"schemaVersion\": 2,\n      \"requestId\": \"01HN9XHZN6MGXM9JXG50K59Q85\",\n      \"level\": 2,\n      \"type\": \"LEGACY_AUDIT\",\n      \"description\": \"Executing Vendor Check for Entity\",\n      \"source\": \"FrankieOne System\",\n      \"channel\": \"API\",\n      \"eventStatus\": \"SUCCESS\",\n      \"timestamp\": \"2020-01-01T00:00:00.000Z\",\n      \"elapsedTimeInMilliSeconds\": 2,\n      \"functionName\": \"executeVendorCheck\",\n      \"descriptionDetails\": \"A new entity has been created with the following attributes:\\n - Name\\n - Address\\n\",\n      \"objectId\": \"string\",\n      \"objectType\": \"DATE_OF_BIRTH\",\n      \"entityId\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n      \"batchId\": \"string\",\n      \"serviceProfileId\": \"string\",\n      \"serviceName\": \"kyc\",\n      \"status\": \"UNCHECKED\",\n      \"workflowExecutionId\": \"string\",\n      \"workflowName\": \"safe_harbour_1+1\",\n      \"workflowVersion\": \"v23\",\n      \"stepResultId\": \"string\",\n      \"stepName\": \"kyc-equifax\",\n      \"stepVersion\": \"v2.0.0\",\n      \"riskScore\": 10,\n      \"riskLevel\": \"MEDIUM\",\n      \"entityType\": \"ORGANIZATION\",\n      \"userComment\": {\n        \"commentId\": \"55fc5d54-46f7-49c8-bf78-e07ec79cd6e7\",\n        \"text\": \"Update after speaking to customer over the phone directly.\"\n      },\n      \"lifecyclePhase\": \"OTHER\",\n      \"supplementaryData\": {\n        \"type\": \"MATCHLIST_ENTRIES\",\n        \"origin\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"errors\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ],\n        \"previousRisk\": {\n          \"riskScore\": 2535.108253980075,\n          \"riskLevel\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"risk\": {\n          \"level\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"contributedScore\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"overallScore\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"factors\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      }\n    },\n    {\n      \"eventId\": \"123e4567-e89b-12d3-a456-426614174000\",\n      \"schemaVersion\": 2,\n      \"requestId\": \"01HN9XHZN6MGXM9JXG50K59Q85\",\n      \"level\": 2,\n      \"type\": \"SERVICE_PROFILE_STATE_CHANGE\",\n      \"description\": \"Executing Vendor Check for Entity\",\n      \"source\": \"FrankieOne System\",\n      \"channel\": \"API\",\n      \"eventStatus\": \"SUCCESS\",\n      \"timestamp\": \"2020-01-01T00:00:00.000Z\",\n      \"elapsedTimeInMilliSeconds\": 2,\n      \"functionName\": \"executeVendorCheck\",\n      \"descriptionDetails\": \"A new entity has been created with the following attributes:\\n - Name\\n - Address\\n\",\n      \"objectId\": \"string\",\n      \"objectType\": \"UBO\",\n      \"entityId\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n      \"batchId\": \"string\",\n      \"serviceProfileId\": \"string\",\n      \"serviceName\": \"kyc\",\n      \"status\": \"UNCHECKED\",\n      \"workflowExecutionId\": \"string\",\n      \"workflowName\": \"safe_harbour_1+1\",\n      \"workflowVersion\": \"v23\",\n      \"stepResultId\": \"string\",\n      \"stepName\": \"kyc-equifax\",\n      \"stepVersion\": \"v2.0.0\",\n      \"riskScore\": 10,\n      \"riskLevel\": \"UNKNOWN\",\n      \"entityType\": \"INDIVIDUAL\",\n      \"userComment\": {\n        \"commentId\": \"55fc5d54-46f7-49c8-bf78-e07ec79cd6e7\",\n        \"text\": \"Update after speaking to customer over the phone directly.\"\n      },\n      \"lifecyclePhase\": \"OTHER\",\n      \"supplementaryData\": {\n        \"type\": \"MATCHLIST_RESULT\",\n        \"origin\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"errors\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ],\n        \"previousRisk\": {\n          \"riskScore\": 3601.669861532697,\n          \"riskLevel\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"risk\": {\n          \"level\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"contributedScore\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"overallScore\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"factors\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "aaf06177-4e84-4990-9b9c-47bd1eaefc07",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "audit"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "entityId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "workflowNames",
+                      "value": "KYC Onboarding"
+                    },
+                    {
+                      "key": "workflowNames",
+                      "value": "Transaction Monitoring"
+                    },
+                    {
+                      "key": "workflowRiskLevels",
+                      "value": "LOW"
+                    },
+                    {
+                      "key": "workflowRiskLevels",
+                      "value": "HIGH"
+                    },
+                    {
+                      "key": "sources",
+                      "value": "user@username.com"
+                    },
+                    {
+                      "key": "sources",
+                      "value": "FrankieOne System"
+                    },
+                    {
+                      "key": "sources",
+                      "value": "Experian Connector"
+                    },
+                    {
+                      "key": "requestId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "afterTimestamp",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "beforeTimestamp",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "channels",
+                      "value": "API"
+                    },
+                    {
+                      "key": "channels",
+                      "value": "API"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sortFields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sortFields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "2"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "api_key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Your API key provided by FrankieOne",
+                    "key": "api_key",
+                    "value": "245c765b124a098d09ef8765...."
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Your Customer ID provided by FrankieOne",
+                    "key": "X-Frankie-CustomerID",
+                    "value": "12345678-1234-1234-1234-123456789012"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Your Customer Child ID provided by FrankieOne",
+                    "key": "X-Frankie-CustomerChildID",
+                    "value": "87654321-4321-4321-4321-210987654321"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Open string that can be used to define the \"channel\" the request comes in from. It can potentially be used in routing and risk calculations upon request. Default values that can be used are:  api portal smartui Any alphanumeric string is supported though. Anything over 64 characters will be truncated.",
+                    "key": "X-Frankie-Channel",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorCode\": \"API-0400,\",\n  \"errorMsg\": \"Multiple Errors: See Issues list\",\n  \"details\": [\n    {\n      \"issue\": \"entityId in path must be of type uuid: \\\"test\\\"\",\n      \"issueLocation\": \"VALIDATE-entityId\"\n    }\n  ],\n  \"requestId\": \"01HM5XJ7VASZ3EJMB1VQGTBFJ4\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "79d23dc0-7ba7-444c-920e-fdedec4d904e",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "audit"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "entityId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "workflowNames",
+                      "value": "KYC Onboarding"
+                    },
+                    {
+                      "key": "workflowNames",
+                      "value": "Transaction Monitoring"
+                    },
+                    {
+                      "key": "workflowRiskLevels",
+                      "value": "LOW"
+                    },
+                    {
+                      "key": "workflowRiskLevels",
+                      "value": "HIGH"
+                    },
+                    {
+                      "key": "sources",
+                      "value": "user@username.com"
+                    },
+                    {
+                      "key": "sources",
+                      "value": "FrankieOne System"
+                    },
+                    {
+                      "key": "sources",
+                      "value": "Experian Connector"
+                    },
+                    {
+                      "key": "requestId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "afterTimestamp",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "beforeTimestamp",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "channels",
+                      "value": "API"
+                    },
+                    {
+                      "key": "channels",
+                      "value": "API"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sortFields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sortFields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "2"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "api_key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Your API key provided by FrankieOne",
+                    "key": "api_key",
+                    "value": "245c765b124a098d09ef8765...."
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Your Customer ID provided by FrankieOne",
+                    "key": "X-Frankie-CustomerID",
+                    "value": "12345678-1234-1234-1234-123456789012"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Your Customer Child ID provided by FrankieOne",
+                    "key": "X-Frankie-CustomerChildID",
+                    "value": "87654321-4321-4321-4321-210987654321"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Open string that can be used to define the \"channel\" the request comes in from. It can potentially be used in routing and risk calculations upon request. Default values that can be used are:  api portal smartui Any alphanumeric string is supported though. Anything over 64 characters will be truncated.",
+                    "key": "X-Frankie-Channel",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorCode\": \"AUTH-0002,\",\n  \"errorMsg\": \"Unauthorized\",\n  \"details\": [\n    {\n      \"issue\": \"Invalid Authentication provided. Access denied.\",\n      \"issueLocation\": \"request\"\n    }\n  ],\n  \"requestId\": \"00000000S6MNG7624K2TDXT1E3\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e0d6b1c3-094e-4296-80ac-49fc3734e4b5",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "audit"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "entityId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "workflowNames",
+                      "value": "KYC Onboarding"
+                    },
+                    {
+                      "key": "workflowNames",
+                      "value": "Transaction Monitoring"
+                    },
+                    {
+                      "key": "workflowRiskLevels",
+                      "value": "LOW"
+                    },
+                    {
+                      "key": "workflowRiskLevels",
+                      "value": "HIGH"
+                    },
+                    {
+                      "key": "sources",
+                      "value": "user@username.com"
+                    },
+                    {
+                      "key": "sources",
+                      "value": "FrankieOne System"
+                    },
+                    {
+                      "key": "sources",
+                      "value": "Experian Connector"
+                    },
+                    {
+                      "key": "requestId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "afterTimestamp",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "beforeTimestamp",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "channels",
+                      "value": "API"
+                    },
+                    {
+                      "key": "channels",
+                      "value": "API"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sortFields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sortFields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "2"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "api_key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Your API key provided by FrankieOne",
+                    "key": "api_key",
+                    "value": "245c765b124a098d09ef8765...."
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Your Customer ID provided by FrankieOne",
+                    "key": "X-Frankie-CustomerID",
+                    "value": "12345678-1234-1234-1234-123456789012"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Your Customer Child ID provided by FrankieOne",
+                    "key": "X-Frankie-CustomerChildID",
+                    "value": "87654321-4321-4321-4321-210987654321"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Open string that can be used to define the \"channel\" the request comes in from. It can potentially be used in routing and risk calculations upon request. Default values that can be used are:  api portal smartui Any alphanumeric string is supported though. Anything over 64 characters will be truncated.",
+                    "key": "X-Frankie-Channel",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorCode\": \"string\",\n  \"errorMsg\": \"string\",\n  \"details\": [\n    {\n      \"issue\": \"string\",\n      \"issueLocation\": \"string\",\n      \"issueType\": \"string\"\n    },\n    {\n      \"issue\": \"string\",\n      \"issueLocation\": \"string\",\n      \"issueType\": \"string\"\n    }\n  ],\n  \"requestId\": \"01HN9XHZN6MGXM9JXG50K59Q85\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5edae837-05b7-4897-9357-7f779e7be3ba",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "audit"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "entityId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "workflowNames",
+                      "value": "KYC Onboarding"
+                    },
+                    {
+                      "key": "workflowNames",
+                      "value": "Transaction Monitoring"
+                    },
+                    {
+                      "key": "workflowRiskLevels",
+                      "value": "LOW"
+                    },
+                    {
+                      "key": "workflowRiskLevels",
+                      "value": "HIGH"
+                    },
+                    {
+                      "key": "sources",
+                      "value": "user@username.com"
+                    },
+                    {
+                      "key": "sources",
+                      "value": "FrankieOne System"
+                    },
+                    {
+                      "key": "sources",
+                      "value": "Experian Connector"
+                    },
+                    {
+                      "key": "requestId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "afterTimestamp",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "beforeTimestamp",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "channels",
+                      "value": "API"
+                    },
+                    {
+                      "key": "channels",
+                      "value": "API"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sortFields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sortFields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "2"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "api_key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Your API key provided by FrankieOne",
+                    "key": "api_key",
+                    "value": "245c765b124a098d09ef8765...."
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Your Customer ID provided by FrankieOne",
+                    "key": "X-Frankie-CustomerID",
+                    "value": "12345678-1234-1234-1234-123456789012"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Your Customer Child ID provided by FrankieOne",
+                    "key": "X-Frankie-CustomerChildID",
+                    "value": "87654321-4321-4321-4321-210987654321"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Open string that can be used to define the \"channel\" the request comes in from. It can potentially be used in routing and risk calculations upon request. Default values that can be used are:  api portal smartui Any alphanumeric string is supported though. Anything over 64 characters will be truncated.",
+                    "key": "X-Frankie-Channel",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorCode\": \"string\",\n  \"errorMsg\": \"string\",\n  \"details\": [\n    {\n      \"issue\": \"string\",\n      \"issueLocation\": \"string\",\n      \"issueType\": \"string\"\n    },\n    {\n      \"issue\": \"string\",\n      \"issueLocation\": \"string\",\n      \"issueType\": \"string\"\n    }\n  ],\n  \"requestId\": \"01HN9XHZN6MGXM9JXG50K59Q85\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1a8e7b81-64b6-4b0c-812c-fdb21914b9dc",
+              "name": "Bad Gateway",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "audit"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "entityId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "workflowNames",
+                      "value": "KYC Onboarding"
+                    },
+                    {
+                      "key": "workflowNames",
+                      "value": "Transaction Monitoring"
+                    },
+                    {
+                      "key": "workflowRiskLevels",
+                      "value": "LOW"
+                    },
+                    {
+                      "key": "workflowRiskLevels",
+                      "value": "HIGH"
+                    },
+                    {
+                      "key": "sources",
+                      "value": "user@username.com"
+                    },
+                    {
+                      "key": "sources",
+                      "value": "FrankieOne System"
+                    },
+                    {
+                      "key": "sources",
+                      "value": "Experian Connector"
+                    },
+                    {
+                      "key": "requestId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "afterTimestamp",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "beforeTimestamp",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "channels",
+                      "value": "API"
+                    },
+                    {
+                      "key": "channels",
+                      "value": "API"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sortFields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sortFields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "2"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "api_key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Your API key provided by FrankieOne",
+                    "key": "api_key",
+                    "value": "245c765b124a098d09ef8765...."
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Your Customer ID provided by FrankieOne",
+                    "key": "X-Frankie-CustomerID",
+                    "value": "12345678-1234-1234-1234-123456789012"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Your Customer Child ID provided by FrankieOne",
+                    "key": "X-Frankie-CustomerChildID",
+                    "value": "87654321-4321-4321-4321-210987654321"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Open string that can be used to define the \"channel\" the request comes in from. It can potentially be used in routing and risk calculations upon request. Default values that can be used are:  api portal smartui Any alphanumeric string is supported though. Anything over 64 characters will be truncated.",
+                    "key": "X-Frankie-Channel",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Gateway",
+              "code": 502,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorCode\": \"string\",\n  \"errorMsg\": \"string\",\n  \"details\": [\n    {\n      \"issue\": \"string\",\n      \"issueLocation\": \"string\",\n      \"issueType\": \"string\"\n    },\n    {\n      \"issue\": \"string\",\n      \"issueLocation\": \"string\",\n      \"issueType\": \"string\"\n    }\n  ],\n  \"requestId\": \"01HN9XHZN6MGXM9JXG50K59Q85\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7aae6eb2-b358-4483-9154-b4227d371bf3",
+              "name": "Service Unavailable",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "audit"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "entityId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "workflowNames",
+                      "value": "KYC Onboarding"
+                    },
+                    {
+                      "key": "workflowNames",
+                      "value": "Transaction Monitoring"
+                    },
+                    {
+                      "key": "workflowRiskLevels",
+                      "value": "LOW"
+                    },
+                    {
+                      "key": "workflowRiskLevels",
+                      "value": "HIGH"
+                    },
+                    {
+                      "key": "sources",
+                      "value": "user@username.com"
+                    },
+                    {
+                      "key": "sources",
+                      "value": "FrankieOne System"
+                    },
+                    {
+                      "key": "sources",
+                      "value": "Experian Connector"
+                    },
+                    {
+                      "key": "requestId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "afterTimestamp",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "beforeTimestamp",
+                      "value": "<date>"
+                    },
+                    {
+                      "key": "channels",
+                      "value": "API"
+                    },
+                    {
+                      "key": "channels",
+                      "value": "API"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sortFields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sortFields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "2"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "api_key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Your API key provided by FrankieOne",
+                    "key": "api_key",
+                    "value": "245c765b124a098d09ef8765...."
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Your Customer ID provided by FrankieOne",
+                    "key": "X-Frankie-CustomerID",
+                    "value": "12345678-1234-1234-1234-123456789012"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Your Customer Child ID provided by FrankieOne",
+                    "key": "X-Frankie-CustomerChildID",
+                    "value": "87654321-4321-4321-4321-210987654321"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Open string that can be used to define the \"channel\" the request comes in from. It can potentially be used in routing and risk calculations upon request. Default values that can be used are:  api portal smartui Any alphanumeric string is supported though. Anything over 64 characters will be truncated.",
+                    "key": "X-Frankie-Channel",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorCode\": \"string\",\n  \"errorMsg\": \"string\",\n  \"details\": [\n    {\n      \"issue\": \"string\",\n      \"issueLocation\": \"string\",\n      \"issueType\": \"string\"\n    },\n    {\n      \"issue\": \"string\",\n      \"issueLocation\": \"string\",\n      \"issueType\": \"string\"\n    }\n  ],\n  \"requestId\": \"01HN9XHZN6MGXM9JXG50K59Q85\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.uat.frankie.one",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "api_key"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "8c3654fc-c9a5-4735-8749-b97575cd8174",
+    "name": "Core V2 Audit API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "This is the APIs for V2 Core. It allows you to do common operations, such as read audit entries or get workflow lists.\n\nContact Support:\n Name: FrankieOne\n Email: help@frankieone.com",
+      "type": "text/plain"
+    }
+  }
+}

@@ -1,0 +1,870 @@
+{
+  "item": [
+    {
+      "id": "01e0791d-45a3-4eb3-9978-12ed71a16386",
+      "name": "Search",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "bc6778a9-b54b-40a8-bbaf-8739339a9a4e",
+          "name": "Search for profiles",
+          "request": {
+            "name": "Search for profiles",
+            "description": {
+              "content": "Search for Individuals and Organizations that match the provided search parameters.  Search parameters are supplied in the form of an entity object.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v2",
+                "search",
+                "serviceprofiles"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "sortFields",
+                  "value": "<string>,<string>",
+                  "description": "List of fields that the Process Results will be filtered with\nAvailable values : createdAt, updatedAt"
+                },
+                {
+                  "disabled": false,
+                  "key": "sort",
+                  "value": "<string>",
+                  "description": "Order of the sort fields will be sorted upon"
+                },
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "<integer>",
+                  "description": "The page number that you want to retrieve for the list query"
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "20",
+                  "description": "Limit the number of items that will be returned as part of the request"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) Your API key provided by FrankieOne",
+                "key": "api_key",
+                "value": "<string>"
+              },
+              {
+                "disabled": false,
+                "description": "(Required) Your Customer ID provided by FrankieOne",
+                "key": "X-Frankie-CustomerID",
+                "value": "<string>"
+              },
+              {
+                "disabled": false,
+                "description": "Your Customer Child ID provided by FrankieOne",
+                "key": "X-Frankie-CustomerChildID",
+                "value": "<string>"
+              },
+              {
+                "disabled": false,
+                "description": "Open string that can be used to define the \"channel\" the request comes in from. It can potentially be used in routing and risk calculations upon request. Default values that can be used are:  api portal smartui Any alphanumeric string is supported though. Anything over 64 characters will be truncated.",
+                "key": "X-Frankie-Channel",
+                "value": "<string>"
+              },
+              {
+                "disabled": false,
+                "description": "Username provided by API caller",
+                "key": "X-Frankie-Username",
+                "value": "<string>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "api_key"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"search\": {\n    \"type\": \"<string>\",\n    \"terms\": [\n      {\n        \"term\": \"<string>\",\n        \"field\": \"<string>\"\n      },\n      {\n        \"term\": \"<string>\",\n        \"field\": \"<string>\"\n      }\n    ]\n  },\n  \"filters\": {\n    \"entityIds\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"createdAtBefore\": \"<dateTime>\",\n    \"createdAtAfter\": \"<dateTime>\",\n    \"updatedAtAfter\": \"<dateTime>\",\n    \"updatedAtBefore\": \"<dateTime>\",\n    \"assignees\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"reviewers\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"states\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"workflowNames\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"workflowExecutionStatuses\": [\n      {\n        \"status\": [\n          \"UNCHECKED\",\n          \"UNCHECKED\"\n        ],\n        \"overrideType\": \"ALL\"\n      },\n      {\n        \"status\": [\n          \"UNCHECKED\",\n          \"UNCHECKED\"\n        ],\n        \"overrideType\": \"ALL\"\n      }\n    ],\n    \"statusOverrideType\": \"ALL\",\n    \"workflowStatuses\": [\n      \"UNCHECKED\",\n      \"UNCHECKED\"\n    ],\n    \"issueCategories\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"issueSeverities\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"riskLevels\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"issues\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"workflowExecutionScope\": \"ANY\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "c6b593ea-bad8-4ac8-bbfd-2f1d5846c996",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "search",
+                    "serviceprofiles"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "sortFields",
+                      "value": "<string>,<string>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "2"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "api_key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Your API key provided by FrankieOne",
+                    "key": "api_key",
+                    "value": "245c765b124a098d09ef8765...."
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Your Customer ID provided by FrankieOne",
+                    "key": "X-Frankie-CustomerID",
+                    "value": "12345678-1234-1234-1234-123456789012"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Your Customer Child ID provided by FrankieOne",
+                    "key": "X-Frankie-CustomerChildID",
+                    "value": "87654321-4321-4321-4321-210987654321"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Open string that can be used to define the \"channel\" the request comes in from. It can potentially be used in routing and risk calculations upon request. Default values that can be used are:  api portal smartui Any alphanumeric string is supported though. Anything over 64 characters will be truncated.",
+                    "key": "X-Frankie-Channel",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Username provided by API caller",
+                    "key": "X-Frankie-Username",
+                    "value": "fred.flintstone@frankieone.com"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"search\": {\n    \"type\": \"<string>\",\n    \"terms\": [\n      {\n        \"term\": \"<string>\",\n        \"field\": \"<string>\"\n      },\n      {\n        \"term\": \"<string>\",\n        \"field\": \"<string>\"\n      }\n    ]\n  },\n  \"filters\": {\n    \"entityIds\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"createdAtBefore\": \"<dateTime>\",\n    \"createdAtAfter\": \"<dateTime>\",\n    \"updatedAtAfter\": \"<dateTime>\",\n    \"updatedAtBefore\": \"<dateTime>\",\n    \"assignees\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"reviewers\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"states\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"workflowNames\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"workflowExecutionStatuses\": [\n      {\n        \"status\": [\n          \"UNCHECKED\",\n          \"UNCHECKED\"\n        ],\n        \"overrideType\": \"ALL\"\n      },\n      {\n        \"status\": [\n          \"UNCHECKED\",\n          \"UNCHECKED\"\n        ],\n        \"overrideType\": \"ALL\"\n      }\n    ],\n    \"statusOverrideType\": \"ALL\",\n    \"workflowStatuses\": [\n      \"UNCHECKED\",\n      \"UNCHECKED\"\n    ],\n    \"issueCategories\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"issueSeverities\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"riskLevels\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"issues\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"workflowExecutionScope\": \"LAST\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"meta\": {\n    \"page\": 3146,\n    \"total\": 6005,\n    \"limit\": 7815,\n    \"count\": 9532,\n    \"sort\": \"desc\",\n    \"sortFields\": [\n      \"createdAt\",\n      \"createdAt\"\n    ]\n  },\n  \"requestId\": \"01HN9XHZN6MGXM9JXG50K59Q85\",\n  \"matches\": [\n    [\n      {\n        \"serviceProfile\": {\n          \"serviceProfileId\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"latestRiskAssessmentId\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"latestWorkflowExecutionId\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"entityId\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"entityName\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"entityType\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"organizationType\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"country\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"schemaVersion\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"createdAt\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"createdRequestId\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"createdBy\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"updatedAt\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"updatedBy\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"updatedRequestId\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"assignee\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"reviewer\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"currentWorkflowId\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"currentWorkflowName\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"workflowSummaries\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"serviceName\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"customerReference\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"subscriptions\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"state\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"confidence\": 0.8191914045160201,\n        \"fieldsMatched\": [\n          {\n            \"field\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"confidence\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"field\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"confidence\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      },\n      {\n        \"serviceProfile\": {\n          \"serviceProfileId\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"latestRiskAssessmentId\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"latestWorkflowExecutionId\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"entityId\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"entityName\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"entityType\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"organizationType\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"country\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"schemaVersion\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"createdAt\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"createdRequestId\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"createdBy\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"updatedAt\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"updatedBy\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"updatedRequestId\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"assignee\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"reviewer\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"currentWorkflowId\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"currentWorkflowName\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"workflowSummaries\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"serviceName\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"customerReference\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"subscriptions\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"state\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"confidence\": 0.29165306522527135,\n        \"fieldsMatched\": [\n          {\n            \"field\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"confidence\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"field\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"confidence\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      }\n    ],\n    [\n      {\n        \"serviceProfile\": {\n          \"serviceProfileId\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"latestRiskAssessmentId\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"latestWorkflowExecutionId\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"entityId\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"entityName\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"entityType\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"organizationType\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"country\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"schemaVersion\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"createdAt\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"createdRequestId\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"createdBy\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"updatedAt\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"updatedBy\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"updatedRequestId\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"assignee\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"reviewer\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"currentWorkflowId\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"currentWorkflowName\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"workflowSummaries\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"serviceName\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"customerReference\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"subscriptions\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"state\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"confidence\": 0.5752582493015336,\n        \"fieldsMatched\": [\n          {\n            \"field\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"confidence\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"field\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"confidence\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      },\n      {\n        \"serviceProfile\": {\n          \"serviceProfileId\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"latestRiskAssessmentId\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"latestWorkflowExecutionId\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"entityId\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"entityName\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"entityType\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"organizationType\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"country\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"schemaVersion\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"createdAt\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"createdRequestId\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"createdBy\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"updatedAt\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"updatedBy\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"updatedRequestId\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"assignee\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"reviewer\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"currentWorkflowId\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"currentWorkflowName\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"workflowSummaries\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"serviceName\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"customerReference\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"subscriptions\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"state\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"confidence\": 0.13322532154141598,\n        \"fieldsMatched\": [\n          {\n            \"field\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"confidence\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"field\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"confidence\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      }\n    ]\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "12c32349-09e5-4837-9397-75ea6e8afbcb",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "search",
+                    "serviceprofiles"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "sortFields",
+                      "value": "<string>,<string>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "2"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "api_key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Your API key provided by FrankieOne",
+                    "key": "api_key",
+                    "value": "245c765b124a098d09ef8765...."
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Your Customer ID provided by FrankieOne",
+                    "key": "X-Frankie-CustomerID",
+                    "value": "12345678-1234-1234-1234-123456789012"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Your Customer Child ID provided by FrankieOne",
+                    "key": "X-Frankie-CustomerChildID",
+                    "value": "87654321-4321-4321-4321-210987654321"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Open string that can be used to define the \"channel\" the request comes in from. It can potentially be used in routing and risk calculations upon request. Default values that can be used are:  api portal smartui Any alphanumeric string is supported though. Anything over 64 characters will be truncated.",
+                    "key": "X-Frankie-Channel",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Username provided by API caller",
+                    "key": "X-Frankie-Username",
+                    "value": "fred.flintstone@frankieone.com"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"search\": {\n    \"type\": \"<string>\",\n    \"terms\": [\n      {\n        \"term\": \"<string>\",\n        \"field\": \"<string>\"\n      },\n      {\n        \"term\": \"<string>\",\n        \"field\": \"<string>\"\n      }\n    ]\n  },\n  \"filters\": {\n    \"entityIds\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"createdAtBefore\": \"<dateTime>\",\n    \"createdAtAfter\": \"<dateTime>\",\n    \"updatedAtAfter\": \"<dateTime>\",\n    \"updatedAtBefore\": \"<dateTime>\",\n    \"assignees\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"reviewers\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"states\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"workflowNames\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"workflowExecutionStatuses\": [\n      {\n        \"status\": [\n          \"UNCHECKED\",\n          \"UNCHECKED\"\n        ],\n        \"overrideType\": \"ALL\"\n      },\n      {\n        \"status\": [\n          \"UNCHECKED\",\n          \"UNCHECKED\"\n        ],\n        \"overrideType\": \"ALL\"\n      }\n    ],\n    \"statusOverrideType\": \"ALL\",\n    \"workflowStatuses\": [\n      \"UNCHECKED\",\n      \"UNCHECKED\"\n    ],\n    \"issueCategories\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"issueSeverities\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"riskLevels\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"issues\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"workflowExecutionScope\": \"LAST\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorCode\": \"API-0400,\",\n  \"errorMsg\": \"Multiple Errors: See Issues list\",\n  \"details\": [\n    {\n      \"issue\": \"entityId in path must be of type uuid: \\\"test\\\"\",\n      \"issueLocation\": \"VALIDATE-entityId\"\n    }\n  ],\n  \"requestId\": \"01HM5XJ7VASZ3EJMB1VQGTBFJ4\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e47091de-8493-46ed-abdb-7f9392999348",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "search",
+                    "serviceprofiles"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "sortFields",
+                      "value": "<string>,<string>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "2"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "api_key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Your API key provided by FrankieOne",
+                    "key": "api_key",
+                    "value": "245c765b124a098d09ef8765...."
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Your Customer ID provided by FrankieOne",
+                    "key": "X-Frankie-CustomerID",
+                    "value": "12345678-1234-1234-1234-123456789012"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Your Customer Child ID provided by FrankieOne",
+                    "key": "X-Frankie-CustomerChildID",
+                    "value": "87654321-4321-4321-4321-210987654321"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Open string that can be used to define the \"channel\" the request comes in from. It can potentially be used in routing and risk calculations upon request. Default values that can be used are:  api portal smartui Any alphanumeric string is supported though. Anything over 64 characters will be truncated.",
+                    "key": "X-Frankie-Channel",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Username provided by API caller",
+                    "key": "X-Frankie-Username",
+                    "value": "fred.flintstone@frankieone.com"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"search\": {\n    \"type\": \"<string>\",\n    \"terms\": [\n      {\n        \"term\": \"<string>\",\n        \"field\": \"<string>\"\n      },\n      {\n        \"term\": \"<string>\",\n        \"field\": \"<string>\"\n      }\n    ]\n  },\n  \"filters\": {\n    \"entityIds\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"createdAtBefore\": \"<dateTime>\",\n    \"createdAtAfter\": \"<dateTime>\",\n    \"updatedAtAfter\": \"<dateTime>\",\n    \"updatedAtBefore\": \"<dateTime>\",\n    \"assignees\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"reviewers\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"states\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"workflowNames\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"workflowExecutionStatuses\": [\n      {\n        \"status\": [\n          \"UNCHECKED\",\n          \"UNCHECKED\"\n        ],\n        \"overrideType\": \"ALL\"\n      },\n      {\n        \"status\": [\n          \"UNCHECKED\",\n          \"UNCHECKED\"\n        ],\n        \"overrideType\": \"ALL\"\n      }\n    ],\n    \"statusOverrideType\": \"ALL\",\n    \"workflowStatuses\": [\n      \"UNCHECKED\",\n      \"UNCHECKED\"\n    ],\n    \"issueCategories\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"issueSeverities\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"riskLevels\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"issues\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"workflowExecutionScope\": \"LAST\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorCode\": \"AUTH-0002,\",\n  \"errorMsg\": \"Unauthorized\",\n  \"details\": [\n    {\n      \"issue\": \"Invalid Authentication provided. Access denied.\",\n      \"issueLocation\": \"request\"\n    }\n  ],\n  \"requestId\": \"00000000S6MNG7624K2TDXT1E3\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2001eb20-2ac4-4958-9b82-6ee1353572fe",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "search",
+                    "serviceprofiles"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "sortFields",
+                      "value": "<string>,<string>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "2"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "api_key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Your API key provided by FrankieOne",
+                    "key": "api_key",
+                    "value": "245c765b124a098d09ef8765...."
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Your Customer ID provided by FrankieOne",
+                    "key": "X-Frankie-CustomerID",
+                    "value": "12345678-1234-1234-1234-123456789012"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Your Customer Child ID provided by FrankieOne",
+                    "key": "X-Frankie-CustomerChildID",
+                    "value": "87654321-4321-4321-4321-210987654321"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Open string that can be used to define the \"channel\" the request comes in from. It can potentially be used in routing and risk calculations upon request. Default values that can be used are:  api portal smartui Any alphanumeric string is supported though. Anything over 64 characters will be truncated.",
+                    "key": "X-Frankie-Channel",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Username provided by API caller",
+                    "key": "X-Frankie-Username",
+                    "value": "fred.flintstone@frankieone.com"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"search\": {\n    \"type\": \"<string>\",\n    \"terms\": [\n      {\n        \"term\": \"<string>\",\n        \"field\": \"<string>\"\n      },\n      {\n        \"term\": \"<string>\",\n        \"field\": \"<string>\"\n      }\n    ]\n  },\n  \"filters\": {\n    \"entityIds\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"createdAtBefore\": \"<dateTime>\",\n    \"createdAtAfter\": \"<dateTime>\",\n    \"updatedAtAfter\": \"<dateTime>\",\n    \"updatedAtBefore\": \"<dateTime>\",\n    \"assignees\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"reviewers\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"states\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"workflowNames\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"workflowExecutionStatuses\": [\n      {\n        \"status\": [\n          \"UNCHECKED\",\n          \"UNCHECKED\"\n        ],\n        \"overrideType\": \"ALL\"\n      },\n      {\n        \"status\": [\n          \"UNCHECKED\",\n          \"UNCHECKED\"\n        ],\n        \"overrideType\": \"ALL\"\n      }\n    ],\n    \"statusOverrideType\": \"ALL\",\n    \"workflowStatuses\": [\n      \"UNCHECKED\",\n      \"UNCHECKED\"\n    ],\n    \"issueCategories\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"issueSeverities\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"riskLevels\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"issues\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"workflowExecutionScope\": \"LAST\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorCode\": \"string\",\n  \"errorMsg\": \"string\",\n  \"details\": [\n    {\n      \"issue\": \"string\",\n      \"issueLocation\": \"string\",\n      \"issueType\": \"string\"\n    },\n    {\n      \"issue\": \"string\",\n      \"issueLocation\": \"string\",\n      \"issueType\": \"string\"\n    }\n  ],\n  \"requestId\": \"01HN9XHZN6MGXM9JXG50K59Q85\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e89e8e2a-05fd-46be-bed2-ddcf7dd23e4e",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "search",
+                    "serviceprofiles"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "sortFields",
+                      "value": "<string>,<string>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "2"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "api_key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Your API key provided by FrankieOne",
+                    "key": "api_key",
+                    "value": "245c765b124a098d09ef8765...."
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Your Customer ID provided by FrankieOne",
+                    "key": "X-Frankie-CustomerID",
+                    "value": "12345678-1234-1234-1234-123456789012"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Your Customer Child ID provided by FrankieOne",
+                    "key": "X-Frankie-CustomerChildID",
+                    "value": "87654321-4321-4321-4321-210987654321"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Open string that can be used to define the \"channel\" the request comes in from. It can potentially be used in routing and risk calculations upon request. Default values that can be used are:  api portal smartui Any alphanumeric string is supported though. Anything over 64 characters will be truncated.",
+                    "key": "X-Frankie-Channel",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Username provided by API caller",
+                    "key": "X-Frankie-Username",
+                    "value": "fred.flintstone@frankieone.com"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"search\": {\n    \"type\": \"<string>\",\n    \"terms\": [\n      {\n        \"term\": \"<string>\",\n        \"field\": \"<string>\"\n      },\n      {\n        \"term\": \"<string>\",\n        \"field\": \"<string>\"\n      }\n    ]\n  },\n  \"filters\": {\n    \"entityIds\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"createdAtBefore\": \"<dateTime>\",\n    \"createdAtAfter\": \"<dateTime>\",\n    \"updatedAtAfter\": \"<dateTime>\",\n    \"updatedAtBefore\": \"<dateTime>\",\n    \"assignees\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"reviewers\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"states\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"workflowNames\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"workflowExecutionStatuses\": [\n      {\n        \"status\": [\n          \"UNCHECKED\",\n          \"UNCHECKED\"\n        ],\n        \"overrideType\": \"ALL\"\n      },\n      {\n        \"status\": [\n          \"UNCHECKED\",\n          \"UNCHECKED\"\n        ],\n        \"overrideType\": \"ALL\"\n      }\n    ],\n    \"statusOverrideType\": \"ALL\",\n    \"workflowStatuses\": [\n      \"UNCHECKED\",\n      \"UNCHECKED\"\n    ],\n    \"issueCategories\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"issueSeverities\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"riskLevels\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"issues\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"workflowExecutionScope\": \"LAST\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorCode\": \"string\",\n  \"errorMsg\": \"string\",\n  \"details\": [\n    {\n      \"issue\": \"string\",\n      \"issueLocation\": \"string\",\n      \"issueType\": \"string\"\n    },\n    {\n      \"issue\": \"string\",\n      \"issueLocation\": \"string\",\n      \"issueType\": \"string\"\n    }\n  ],\n  \"requestId\": \"01HN9XHZN6MGXM9JXG50K59Q85\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6eba986c-7d72-48d0-ba73-b4325331fa92",
+              "name": "Bad Gateway",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "search",
+                    "serviceprofiles"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "sortFields",
+                      "value": "<string>,<string>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "2"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "api_key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Your API key provided by FrankieOne",
+                    "key": "api_key",
+                    "value": "245c765b124a098d09ef8765...."
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Your Customer ID provided by FrankieOne",
+                    "key": "X-Frankie-CustomerID",
+                    "value": "12345678-1234-1234-1234-123456789012"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Your Customer Child ID provided by FrankieOne",
+                    "key": "X-Frankie-CustomerChildID",
+                    "value": "87654321-4321-4321-4321-210987654321"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Open string that can be used to define the \"channel\" the request comes in from. It can potentially be used in routing and risk calculations upon request. Default values that can be used are:  api portal smartui Any alphanumeric string is supported though. Anything over 64 characters will be truncated.",
+                    "key": "X-Frankie-Channel",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Username provided by API caller",
+                    "key": "X-Frankie-Username",
+                    "value": "fred.flintstone@frankieone.com"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"search\": {\n    \"type\": \"<string>\",\n    \"terms\": [\n      {\n        \"term\": \"<string>\",\n        \"field\": \"<string>\"\n      },\n      {\n        \"term\": \"<string>\",\n        \"field\": \"<string>\"\n      }\n    ]\n  },\n  \"filters\": {\n    \"entityIds\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"createdAtBefore\": \"<dateTime>\",\n    \"createdAtAfter\": \"<dateTime>\",\n    \"updatedAtAfter\": \"<dateTime>\",\n    \"updatedAtBefore\": \"<dateTime>\",\n    \"assignees\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"reviewers\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"states\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"workflowNames\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"workflowExecutionStatuses\": [\n      {\n        \"status\": [\n          \"UNCHECKED\",\n          \"UNCHECKED\"\n        ],\n        \"overrideType\": \"ALL\"\n      },\n      {\n        \"status\": [\n          \"UNCHECKED\",\n          \"UNCHECKED\"\n        ],\n        \"overrideType\": \"ALL\"\n      }\n    ],\n    \"statusOverrideType\": \"ALL\",\n    \"workflowStatuses\": [\n      \"UNCHECKED\",\n      \"UNCHECKED\"\n    ],\n    \"issueCategories\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"issueSeverities\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"riskLevels\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"issues\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"workflowExecutionScope\": \"LAST\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Gateway",
+              "code": 502,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorCode\": \"string\",\n  \"errorMsg\": \"string\",\n  \"details\": [\n    {\n      \"issue\": \"string\",\n      \"issueLocation\": \"string\",\n      \"issueType\": \"string\"\n    },\n    {\n      \"issue\": \"string\",\n      \"issueLocation\": \"string\",\n      \"issueType\": \"string\"\n    }\n  ],\n  \"requestId\": \"01HN9XHZN6MGXM9JXG50K59Q85\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d6b0e9b2-0adc-4e2c-a15f-e15752573109",
+              "name": "Service Unavailable",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "search",
+                    "serviceprofiles"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "sortFields",
+                      "value": "<string>,<string>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "2"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "api_key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Your API key provided by FrankieOne",
+                    "key": "api_key",
+                    "value": "245c765b124a098d09ef8765...."
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Your Customer ID provided by FrankieOne",
+                    "key": "X-Frankie-CustomerID",
+                    "value": "12345678-1234-1234-1234-123456789012"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Your Customer Child ID provided by FrankieOne",
+                    "key": "X-Frankie-CustomerChildID",
+                    "value": "87654321-4321-4321-4321-210987654321"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Open string that can be used to define the \"channel\" the request comes in from. It can potentially be used in routing and risk calculations upon request. Default values that can be used are:  api portal smartui Any alphanumeric string is supported though. Anything over 64 characters will be truncated.",
+                    "key": "X-Frankie-Channel",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Username provided by API caller",
+                    "key": "X-Frankie-Username",
+                    "value": "fred.flintstone@frankieone.com"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"search\": {\n    \"type\": \"<string>\",\n    \"terms\": [\n      {\n        \"term\": \"<string>\",\n        \"field\": \"<string>\"\n      },\n      {\n        \"term\": \"<string>\",\n        \"field\": \"<string>\"\n      }\n    ]\n  },\n  \"filters\": {\n    \"entityIds\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"createdAtBefore\": \"<dateTime>\",\n    \"createdAtAfter\": \"<dateTime>\",\n    \"updatedAtAfter\": \"<dateTime>\",\n    \"updatedAtBefore\": \"<dateTime>\",\n    \"assignees\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"reviewers\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"states\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"workflowNames\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"workflowExecutionStatuses\": [\n      {\n        \"status\": [\n          \"UNCHECKED\",\n          \"UNCHECKED\"\n        ],\n        \"overrideType\": \"ALL\"\n      },\n      {\n        \"status\": [\n          \"UNCHECKED\",\n          \"UNCHECKED\"\n        ],\n        \"overrideType\": \"ALL\"\n      }\n    ],\n    \"statusOverrideType\": \"ALL\",\n    \"workflowStatuses\": [\n      \"UNCHECKED\",\n      \"UNCHECKED\"\n    ],\n    \"issueCategories\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"issueSeverities\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"riskLevels\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"issues\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"workflowExecutionScope\": \"LAST\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorCode\": \"string\",\n  \"errorMsg\": \"string\",\n  \"details\": [\n    {\n      \"issue\": \"string\",\n      \"issueLocation\": \"string\",\n      \"issueType\": \"string\"\n    },\n    {\n      \"issue\": \"string\",\n      \"issueLocation\": \"string\",\n      \"issueType\": \"string\"\n    }\n  ],\n  \"requestId\": \"01HN9XHZN6MGXM9JXG50K59Q85\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.uat.frankie.one",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "api_key"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "8767cb0d-2154-4329-a83a-e14ac2751873",
+    "name": "Core V2 Audit Search API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "This is the APIs for V2 Core. It allows you to do common operations, such as read audit entries or get workflow lists.\n\nContact Support:\n Name: FrankieOne\n Email: help@frankieone.com",
+      "type": "text/plain"
+    }
+  }
+}

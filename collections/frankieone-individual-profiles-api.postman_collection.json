@@ -1,0 +1,1798 @@
+{
+  "item": [
+    {
+      "id": "123d51a9-5ac6-4a92-8663-42c2dd481b08",
+      "name": "Individual Profiles",
+      "description": {
+        "content": "Manage individual profiles",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "e3b2d4a3-cf5c-4b6b-9c3c-c0b5800caedd",
+          "name": "Update a profile for a given individual entity.",
+          "request": {
+            "name": "Update a profile for a given individual entity.",
+            "description": {
+              "content": "Update a profile for a given individual entity.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v2",
+                "individuals",
+                ":entityId",
+                "serviceprofiles",
+                ":serviceName"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "entityId",
+                  "description": "(Required) Unique FrankieOne identifier for an entity"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "serviceName",
+                  "description": "(Required) The unique name of the service profile"
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) Your API key provided by FrankieOne",
+                "key": "api_key",
+                "value": "<string>"
+              },
+              {
+                "disabled": false,
+                "description": "(Required) Your Customer ID provided by FrankieOne",
+                "key": "X-Frankie-CustomerID",
+                "value": "<string>"
+              },
+              {
+                "disabled": false,
+                "description": "Your Customer Child ID provided by FrankieOne",
+                "key": "X-Frankie-CustomerChildID",
+                "value": "<string>"
+              },
+              {
+                "disabled": false,
+                "description": "Open string that can be used to define the \"channel\" the request comes in from. It can potentially be used in routing and risk calculations upon request. Default values that can be used are:  api portal smartui Any alphanumeric string is supported though. Anything over 64 characters will be truncated.",
+                "key": "X-Frankie-Channel",
+                "value": "<string>"
+              },
+              {
+                "disabled": false,
+                "description": "Username provided by API caller",
+                "key": "X-Frankie-Username",
+                "value": "<string>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "api_key"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"serviceProfile\": {\n    \"assignee\": \"<string>\",\n    \"reviewer\": \"<string>\",\n    \"currentWorkflowName\": \"<string>\",\n    \"state\": \"<string>\"\n  },\n  \"comment\": {\n    \"text\": \"<string>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "3ba88891-9811-4ed8-8862-4e6317bbbe2c",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "individuals",
+                    ":entityId",
+                    "serviceprofiles",
+                    ":serviceName"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entityId",
+                      "description": "(Required) Unique FrankieOne identifier for an entity"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "serviceName",
+                      "description": "(Required) The unique name of the service profile"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "api_key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Your API key provided by FrankieOne",
+                    "key": "api_key",
+                    "value": "245c765b124a098d09ef8765...."
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Your Customer ID provided by FrankieOne",
+                    "key": "X-Frankie-CustomerID",
+                    "value": "12345678-1234-1234-1234-123456789012"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Your Customer Child ID provided by FrankieOne",
+                    "key": "X-Frankie-CustomerChildID",
+                    "value": "87654321-4321-4321-4321-210987654321"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Open string that can be used to define the \"channel\" the request comes in from. It can potentially be used in routing and risk calculations upon request. Default values that can be used are:  api portal smartui Any alphanumeric string is supported though. Anything over 64 characters will be truncated.",
+                    "key": "X-Frankie-Channel",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Username provided by API caller",
+                    "key": "X-Frankie-Username",
+                    "value": "fred.flintstone@frankieone.com"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"serviceProfile\": {\n    \"assignee\": \"Ryan Gosling\",\n    \"reviewer\": \"Ryan Trahan\",\n    \"currentWorkflowName\": \"<string>\",\n    \"state\": \"<string>\"\n  },\n  \"comment\": {\n    \"text\": \"Update after speaking to customer over the phone directly.\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"requestId\": \"01HN9XHZN6MGXM9JXG50K59Q85\",\n  \"serviceProfile\": {\n    \"serviceProfileId\": \"55fc5d54-46f7-49c8-bf78-e07ec79c42fd\",\n    \"latestRiskAssessmentId\": \"string\",\n    \"latestWorkflowExecutionId\": \"string\",\n    \"entityId\": \"string\",\n    \"entityName\": \"string\",\n    \"entityType\": \"string\",\n    \"organizationType\": \"SOLE TRADER\",\n    \"country\": \"AUS\",\n    \"schemaVersion\": 2,\n    \"createdAt\": \"2024-01-15T02:18:11.365Z\",\n    \"createdRequestId\": \"01HMR2ERSKCYAVXKS1FKSRT2T4\",\n    \"createdBy\": \"Ryan Reynolds\",\n    \"updatedAt\": \"2024-01-15T02:18:11.365Z\",\n    \"updatedBy\": \"Ryan Reynolds\",\n    \"updatedRequestId\": \"01HMR2ERSKCYAVXKS1FKSRT2T4\",\n    \"assignee\": \"Ryan Gosling\",\n    \"reviewer\": \"Ryan Trahan\",\n    \"currentWorkflowId\": \"string\",\n    \"currentWorkflowName\": \"string\",\n    \"workflowSummaries\": [\n      {\n        \"schemaVersion\": 1780,\n        \"workflowName\": \"string\",\n        \"workflowExecutionId\": \"string\",\n        \"workflowExecutionState\": \"COMPLETED\",\n        \"status\": \"UNCHECKED\",\n        \"statusOverrideAt\": \"1950-06-07T15:20:37.637Z\",\n        \"statusOverrideRequestId\": \"string\",\n        \"statusOverrideBy\": \"string\",\n        \"riskAssessment\": {\n          \"entityId\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"serviceProfileId\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"workflowId\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"workflowExecutionId\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"riskAssessmentId\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"schemaVersion\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"createdAt\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"updatedAt\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"updatedBy\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"updatedRequestId\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"workflowRiskScore\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"workflowRiskLevel\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"riskScore\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"riskLevel\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"isOutdated\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"riskFactors\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"isManual\": false,\n        \"steps\": {\n          \"order\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"passed\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"failed\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"incomplete\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"notApplicable\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"startedAt\": \"2023-02-03T08:16:42.762Z\",\n        \"endedAt\": \"1995-09-26T16:54:16.300Z\",\n        \"issues\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ],\n        \"lifecyclePhase\": \"OTHER\",\n        \"monitoringTypes\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ]\n      },\n      {\n        \"schemaVersion\": 850,\n        \"workflowName\": \"string\",\n        \"workflowExecutionId\": \"string\",\n        \"workflowExecutionState\": \"CANCELED\",\n        \"status\": \"UNCHECKED\",\n        \"statusOverrideAt\": \"1992-12-27T19:17:57.225Z\",\n        \"statusOverrideRequestId\": \"string\",\n        \"statusOverrideBy\": \"string\",\n        \"riskAssessment\": {\n          \"entityId\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"serviceProfileId\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"workflowId\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"workflowExecutionId\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"riskAssessmentId\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"schemaVersion\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"createdAt\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"updatedAt\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"updatedBy\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"updatedRequestId\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"workflowRiskScore\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"workflowRiskLevel\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"riskScore\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"riskLevel\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"isOutdated\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"riskFactors\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"isManual\": true,\n        \"steps\": {\n          \"order\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"passed\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"failed\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"incomplete\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"notApplicable\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"startedAt\": \"1956-09-10T00:00:22.035Z\",\n        \"endedAt\": \"1989-02-09T15:56:44.776Z\",\n        \"issues\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ],\n        \"lifecyclePhase\": \"OTHER\",\n        \"monitoringTypes\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ]\n      }\n    ],\n    \"serviceName\": \"string\",\n    \"customerReference\": \"string\",\n    \"subscriptions\": [\n      {\n        \"serviceProfileId\": \"string\",\n        \"status\": \"DISABLED\",\n        \"type\": \"ACTIVITY\",\n        \"workflowName\": \"string\",\n        \"workflowId\": \"string\",\n        \"enabledAt\": \"1993-10-11T13:46:28.039Z\",\n        \"enabledRequestId\": \"string\",\n        \"enabledBy\": \"string\",\n        \"disabledAt\": \"2010-06-18T06:29:29.665Z\",\n        \"disabledRequestId\": \"string\",\n        \"disabledBy\": \"string\"\n      },\n      {\n        \"serviceProfileId\": \"string\",\n        \"status\": \"DISABLED\",\n        \"type\": \"ACTIVITY\",\n        \"workflowName\": \"string\",\n        \"workflowId\": \"string\",\n        \"enabledAt\": \"1999-07-09T20:16:30.819Z\",\n        \"enabledRequestId\": \"string\",\n        \"enabledBy\": \"string\",\n        \"disabledAt\": \"1948-12-06T05:38:23.979Z\",\n        \"disabledRequestId\": \"string\",\n        \"disabledBy\": \"string\"\n      }\n    ],\n    \"state\": \"ACTIVE\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3abb303e-d1ca-4bd4-98ad-d1054d56f914",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "individuals",
+                    ":entityId",
+                    "serviceprofiles",
+                    ":serviceName"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entityId",
+                      "description": "(Required) Unique FrankieOne identifier for an entity"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "serviceName",
+                      "description": "(Required) The unique name of the service profile"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "api_key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Your API key provided by FrankieOne",
+                    "key": "api_key",
+                    "value": "245c765b124a098d09ef8765...."
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Your Customer ID provided by FrankieOne",
+                    "key": "X-Frankie-CustomerID",
+                    "value": "12345678-1234-1234-1234-123456789012"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Your Customer Child ID provided by FrankieOne",
+                    "key": "X-Frankie-CustomerChildID",
+                    "value": "87654321-4321-4321-4321-210987654321"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Open string that can be used to define the \"channel\" the request comes in from. It can potentially be used in routing and risk calculations upon request. Default values that can be used are:  api portal smartui Any alphanumeric string is supported though. Anything over 64 characters will be truncated.",
+                    "key": "X-Frankie-Channel",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Username provided by API caller",
+                    "key": "X-Frankie-Username",
+                    "value": "fred.flintstone@frankieone.com"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"serviceProfile\": {\n    \"assignee\": \"Ryan Gosling\",\n    \"reviewer\": \"Ryan Trahan\",\n    \"currentWorkflowName\": \"<string>\",\n    \"state\": \"<string>\"\n  },\n  \"comment\": {\n    \"text\": \"Update after speaking to customer over the phone directly.\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorCode\": \"API-0400,\",\n  \"errorMsg\": \"Multiple Errors: See Issues list\",\n  \"details\": [\n    {\n      \"issue\": \"entityId in path must be of type uuid: \\\"test\\\"\",\n      \"issueLocation\": \"VALIDATE-entityId\"\n    }\n  ],\n  \"requestId\": \"01HM5XJ7VASZ3EJMB1VQGTBFJ4\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3bbd2afc-19d0-4f9c-a59d-4041fb19c110",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "individuals",
+                    ":entityId",
+                    "serviceprofiles",
+                    ":serviceName"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entityId",
+                      "description": "(Required) Unique FrankieOne identifier for an entity"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "serviceName",
+                      "description": "(Required) The unique name of the service profile"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "api_key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Your API key provided by FrankieOne",
+                    "key": "api_key",
+                    "value": "245c765b124a098d09ef8765...."
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Your Customer ID provided by FrankieOne",
+                    "key": "X-Frankie-CustomerID",
+                    "value": "12345678-1234-1234-1234-123456789012"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Your Customer Child ID provided by FrankieOne",
+                    "key": "X-Frankie-CustomerChildID",
+                    "value": "87654321-4321-4321-4321-210987654321"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Open string that can be used to define the \"channel\" the request comes in from. It can potentially be used in routing and risk calculations upon request. Default values that can be used are:  api portal smartui Any alphanumeric string is supported though. Anything over 64 characters will be truncated.",
+                    "key": "X-Frankie-Channel",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Username provided by API caller",
+                    "key": "X-Frankie-Username",
+                    "value": "fred.flintstone@frankieone.com"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"serviceProfile\": {\n    \"assignee\": \"Ryan Gosling\",\n    \"reviewer\": \"Ryan Trahan\",\n    \"currentWorkflowName\": \"<string>\",\n    \"state\": \"<string>\"\n  },\n  \"comment\": {\n    \"text\": \"Update after speaking to customer over the phone directly.\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorCode\": \"AUTH-0002,\",\n  \"errorMsg\": \"Unauthorized\",\n  \"details\": [\n    {\n      \"issue\": \"Invalid Authentication provided. Access denied.\",\n      \"issueLocation\": \"request\"\n    }\n  ],\n  \"requestId\": \"00000000S6MNG7624K2TDXT1E3\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3e7df1a8-a6e9-4caf-8a70-82cf819b36aa",
+              "name": "Forbidden request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "individuals",
+                    ":entityId",
+                    "serviceprofiles",
+                    ":serviceName"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entityId",
+                      "description": "(Required) Unique FrankieOne identifier for an entity"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "serviceName",
+                      "description": "(Required) The unique name of the service profile"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "api_key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Your API key provided by FrankieOne",
+                    "key": "api_key",
+                    "value": "245c765b124a098d09ef8765...."
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Your Customer ID provided by FrankieOne",
+                    "key": "X-Frankie-CustomerID",
+                    "value": "12345678-1234-1234-1234-123456789012"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Your Customer Child ID provided by FrankieOne",
+                    "key": "X-Frankie-CustomerChildID",
+                    "value": "87654321-4321-4321-4321-210987654321"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Open string that can be used to define the \"channel\" the request comes in from. It can potentially be used in routing and risk calculations upon request. Default values that can be used are:  api portal smartui Any alphanumeric string is supported though. Anything over 64 characters will be truncated.",
+                    "key": "X-Frankie-Channel",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Username provided by API caller",
+                    "key": "X-Frankie-Username",
+                    "value": "fred.flintstone@frankieone.com"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"serviceProfile\": {\n    \"assignee\": \"Ryan Gosling\",\n    \"reviewer\": \"Ryan Trahan\",\n    \"currentWorkflowName\": \"<string>\",\n    \"state\": \"<string>\"\n  },\n  \"comment\": {\n    \"text\": \"Update after speaking to customer over the phone directly.\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorCode\": \"string\",\n  \"errorMsg\": \"string\",\n  \"details\": [\n    {\n      \"issue\": \"string\",\n      \"issueLocation\": \"string\",\n      \"issueType\": \"string\"\n    },\n    {\n      \"issue\": \"string\",\n      \"issueLocation\": \"string\",\n      \"issueType\": \"string\"\n    }\n  ],\n  \"requestId\": \"01HN9XHZN6MGXM9JXG50K59Q85\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "eb242314-31fb-4491-b83b-9b98912897ee",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "individuals",
+                    ":entityId",
+                    "serviceprofiles",
+                    ":serviceName"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entityId",
+                      "description": "(Required) Unique FrankieOne identifier for an entity"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "serviceName",
+                      "description": "(Required) The unique name of the service profile"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "api_key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Your API key provided by FrankieOne",
+                    "key": "api_key",
+                    "value": "245c765b124a098d09ef8765...."
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Your Customer ID provided by FrankieOne",
+                    "key": "X-Frankie-CustomerID",
+                    "value": "12345678-1234-1234-1234-123456789012"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Your Customer Child ID provided by FrankieOne",
+                    "key": "X-Frankie-CustomerChildID",
+                    "value": "87654321-4321-4321-4321-210987654321"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Open string that can be used to define the \"channel\" the request comes in from. It can potentially be used in routing and risk calculations upon request. Default values that can be used are:  api portal smartui Any alphanumeric string is supported though. Anything over 64 characters will be truncated.",
+                    "key": "X-Frankie-Channel",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Username provided by API caller",
+                    "key": "X-Frankie-Username",
+                    "value": "fred.flintstone@frankieone.com"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"serviceProfile\": {\n    \"assignee\": \"Ryan Gosling\",\n    \"reviewer\": \"Ryan Trahan\",\n    \"currentWorkflowName\": \"<string>\",\n    \"state\": \"<string>\"\n  },\n  \"comment\": {\n    \"text\": \"Update after speaking to customer over the phone directly.\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorCode\": \"string\",\n  \"errorMsg\": \"string\",\n  \"details\": [\n    {\n      \"issue\": \"string\",\n      \"issueLocation\": \"string\",\n      \"issueType\": \"string\"\n    },\n    {\n      \"issue\": \"string\",\n      \"issueLocation\": \"string\",\n      \"issueType\": \"string\"\n    }\n  ],\n  \"requestId\": \"01HN9XHZN6MGXM9JXG50K59Q85\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "72125e7f-86bb-4acc-812b-b29a1f612298",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "individuals",
+                    ":entityId",
+                    "serviceprofiles",
+                    ":serviceName"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entityId",
+                      "description": "(Required) Unique FrankieOne identifier for an entity"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "serviceName",
+                      "description": "(Required) The unique name of the service profile"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "api_key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Your API key provided by FrankieOne",
+                    "key": "api_key",
+                    "value": "245c765b124a098d09ef8765...."
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Your Customer ID provided by FrankieOne",
+                    "key": "X-Frankie-CustomerID",
+                    "value": "12345678-1234-1234-1234-123456789012"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Your Customer Child ID provided by FrankieOne",
+                    "key": "X-Frankie-CustomerChildID",
+                    "value": "87654321-4321-4321-4321-210987654321"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Open string that can be used to define the \"channel\" the request comes in from. It can potentially be used in routing and risk calculations upon request. Default values that can be used are:  api portal smartui Any alphanumeric string is supported though. Anything over 64 characters will be truncated.",
+                    "key": "X-Frankie-Channel",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Username provided by API caller",
+                    "key": "X-Frankie-Username",
+                    "value": "fred.flintstone@frankieone.com"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"serviceProfile\": {\n    \"assignee\": \"Ryan Gosling\",\n    \"reviewer\": \"Ryan Trahan\",\n    \"currentWorkflowName\": \"<string>\",\n    \"state\": \"<string>\"\n  },\n  \"comment\": {\n    \"text\": \"Update after speaking to customer over the phone directly.\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorCode\": \"string\",\n  \"errorMsg\": \"string\",\n  \"details\": [\n    {\n      \"issue\": \"string\",\n      \"issueLocation\": \"string\",\n      \"issueType\": \"string\"\n    },\n    {\n      \"issue\": \"string\",\n      \"issueLocation\": \"string\",\n      \"issueType\": \"string\"\n    }\n  ],\n  \"requestId\": \"01HN9XHZN6MGXM9JXG50K59Q85\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1ff4cc10-40a4-4faf-a3d2-7d4ec8ab9cd3",
+              "name": "Bad Gateway",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "individuals",
+                    ":entityId",
+                    "serviceprofiles",
+                    ":serviceName"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entityId",
+                      "description": "(Required) Unique FrankieOne identifier for an entity"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "serviceName",
+                      "description": "(Required) The unique name of the service profile"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "api_key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Your API key provided by FrankieOne",
+                    "key": "api_key",
+                    "value": "245c765b124a098d09ef8765...."
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Your Customer ID provided by FrankieOne",
+                    "key": "X-Frankie-CustomerID",
+                    "value": "12345678-1234-1234-1234-123456789012"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Your Customer Child ID provided by FrankieOne",
+                    "key": "X-Frankie-CustomerChildID",
+                    "value": "87654321-4321-4321-4321-210987654321"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Open string that can be used to define the \"channel\" the request comes in from. It can potentially be used in routing and risk calculations upon request. Default values that can be used are:  api portal smartui Any alphanumeric string is supported though. Anything over 64 characters will be truncated.",
+                    "key": "X-Frankie-Channel",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Username provided by API caller",
+                    "key": "X-Frankie-Username",
+                    "value": "fred.flintstone@frankieone.com"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"serviceProfile\": {\n    \"assignee\": \"Ryan Gosling\",\n    \"reviewer\": \"Ryan Trahan\",\n    \"currentWorkflowName\": \"<string>\",\n    \"state\": \"<string>\"\n  },\n  \"comment\": {\n    \"text\": \"Update after speaking to customer over the phone directly.\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Gateway",
+              "code": 502,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorCode\": \"string\",\n  \"errorMsg\": \"string\",\n  \"details\": [\n    {\n      \"issue\": \"string\",\n      \"issueLocation\": \"string\",\n      \"issueType\": \"string\"\n    },\n    {\n      \"issue\": \"string\",\n      \"issueLocation\": \"string\",\n      \"issueType\": \"string\"\n    }\n  ],\n  \"requestId\": \"01HN9XHZN6MGXM9JXG50K59Q85\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f85eabff-f9c2-4b85-a2b6-c935630c6756",
+              "name": "Service Unavailable",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "individuals",
+                    ":entityId",
+                    "serviceprofiles",
+                    ":serviceName"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entityId",
+                      "description": "(Required) Unique FrankieOne identifier for an entity"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "serviceName",
+                      "description": "(Required) The unique name of the service profile"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "api_key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Your API key provided by FrankieOne",
+                    "key": "api_key",
+                    "value": "245c765b124a098d09ef8765...."
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Your Customer ID provided by FrankieOne",
+                    "key": "X-Frankie-CustomerID",
+                    "value": "12345678-1234-1234-1234-123456789012"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Your Customer Child ID provided by FrankieOne",
+                    "key": "X-Frankie-CustomerChildID",
+                    "value": "87654321-4321-4321-4321-210987654321"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Open string that can be used to define the \"channel\" the request comes in from. It can potentially be used in routing and risk calculations upon request. Default values that can be used are:  api portal smartui Any alphanumeric string is supported though. Anything over 64 characters will be truncated.",
+                    "key": "X-Frankie-Channel",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Username provided by API caller",
+                    "key": "X-Frankie-Username",
+                    "value": "fred.flintstone@frankieone.com"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"serviceProfile\": {\n    \"assignee\": \"Ryan Gosling\",\n    \"reviewer\": \"Ryan Trahan\",\n    \"currentWorkflowName\": \"<string>\",\n    \"state\": \"<string>\"\n  },\n  \"comment\": {\n    \"text\": \"Update after speaking to customer over the phone directly.\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorCode\": \"string\",\n  \"errorMsg\": \"string\",\n  \"details\": [\n    {\n      \"issue\": \"string\",\n      \"issueLocation\": \"string\",\n      \"issueType\": \"string\"\n    },\n    {\n      \"issue\": \"string\",\n      \"issueLocation\": \"string\",\n      \"issueType\": \"string\"\n    }\n  ],\n  \"requestId\": \"01HN9XHZN6MGXM9JXG50K59Q85\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "69a75289-8db6-4dff-8bb4-e05a523da7db",
+          "name": "Get a service profile for a given individual entity.",
+          "request": {
+            "name": "Get a service profile for a given individual entity.",
+            "description": {
+              "content": "Get a profile for a given individual entity.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v2",
+                "individuals",
+                ":entityId",
+                "serviceprofiles",
+                ":serviceName"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "entityId",
+                  "description": "(Required) Unique FrankieOne identifier for an entity"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "serviceName",
+                  "description": "(Required) The unique name of the service profile"
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) Your API key provided by FrankieOne",
+                "key": "api_key",
+                "value": "<string>"
+              },
+              {
+                "disabled": false,
+                "description": "(Required) Your Customer ID provided by FrankieOne",
+                "key": "X-Frankie-CustomerID",
+                "value": "<string>"
+              },
+              {
+                "disabled": false,
+                "description": "Your Customer Child ID provided by FrankieOne",
+                "key": "X-Frankie-CustomerChildID",
+                "value": "<string>"
+              },
+              {
+                "disabled": false,
+                "description": "Open string that can be used to define the \"channel\" the request comes in from. It can potentially be used in routing and risk calculations upon request. Default values that can be used are:  api portal smartui Any alphanumeric string is supported though. Anything over 64 characters will be truncated.",
+                "key": "X-Frankie-Channel",
+                "value": "<string>"
+              },
+              {
+                "disabled": false,
+                "description": "Username provided by API caller",
+                "key": "X-Frankie-Username",
+                "value": "<string>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "api_key"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "abf930c3-9764-4035-bf2b-d3d9ce7a8049",
+              "name": "Service profile retrieved",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "individuals",
+                    ":entityId",
+                    "serviceprofiles",
+                    ":serviceName"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entityId",
+                      "description": "(Required) Unique FrankieOne identifier for an entity"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "serviceName",
+                      "description": "(Required) The unique name of the service profile"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "api_key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Your API key provided by FrankieOne",
+                    "key": "api_key",
+                    "value": "245c765b124a098d09ef8765...."
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Your Customer ID provided by FrankieOne",
+                    "key": "X-Frankie-CustomerID",
+                    "value": "12345678-1234-1234-1234-123456789012"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Your Customer Child ID provided by FrankieOne",
+                    "key": "X-Frankie-CustomerChildID",
+                    "value": "87654321-4321-4321-4321-210987654321"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Open string that can be used to define the \"channel\" the request comes in from. It can potentially be used in routing and risk calculations upon request. Default values that can be used are:  api portal smartui Any alphanumeric string is supported though. Anything over 64 characters will be truncated.",
+                    "key": "X-Frankie-Channel",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Username provided by API caller",
+                    "key": "X-Frankie-Username",
+                    "value": "fred.flintstone@frankieone.com"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"serviceProfile\": {\n    \"serviceProfileId\": \"55fc5d54-46f7-49c8-bf78-e07ec79c42fd\",\n    \"latestRiskAssessmentId\": \"string\",\n    \"latestWorkflowExecutionId\": \"string\",\n    \"entityId\": \"string\",\n    \"entityName\": \"string\",\n    \"entityType\": \"string\",\n    \"organizationType\": \"SOLE TRADER\",\n    \"country\": \"AUS\",\n    \"schemaVersion\": 2,\n    \"createdAt\": \"2024-01-15T02:18:11.365Z\",\n    \"createdRequestId\": \"01HMR2ERSKCYAVXKS1FKSRT2T4\",\n    \"createdBy\": \"Ryan Reynolds\",\n    \"updatedAt\": \"2024-01-15T02:18:11.365Z\",\n    \"updatedBy\": \"Ryan Reynolds\",\n    \"updatedRequestId\": \"01HMR2ERSKCYAVXKS1FKSRT2T4\",\n    \"assignee\": \"Ryan Gosling\",\n    \"reviewer\": \"Ryan Trahan\",\n    \"currentWorkflowId\": \"string\",\n    \"currentWorkflowName\": \"string\",\n    \"workflowSummaries\": [\n      {\n        \"schemaVersion\": 5701,\n        \"workflowName\": \"string\",\n        \"workflowExecutionId\": \"string\",\n        \"workflowExecutionState\": \"TERMINATED\",\n        \"status\": \"UNCHECKED\",\n        \"statusOverrideAt\": \"1955-03-08T00:51:41.715Z\",\n        \"statusOverrideRequestId\": \"string\",\n        \"statusOverrideBy\": \"string\",\n        \"riskAssessment\": {\n          \"entityId\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"serviceProfileId\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"workflowId\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"workflowExecutionId\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"riskAssessmentId\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"schemaVersion\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"createdAt\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"updatedAt\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"updatedBy\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"updatedRequestId\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"workflowRiskScore\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"workflowRiskLevel\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"riskScore\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"riskLevel\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"isOutdated\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"riskFactors\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"isManual\": false,\n        \"steps\": {\n          \"order\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"passed\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"failed\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"incomplete\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"notApplicable\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"startedAt\": \"1967-12-12T21:55:37.103Z\",\n        \"endedAt\": \"1964-02-27T17:24:16.500Z\",\n        \"issues\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ],\n        \"lifecyclePhase\": \"OTHER\",\n        \"monitoringTypes\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ]\n      },\n      {\n        \"schemaVersion\": 1037,\n        \"workflowName\": \"string\",\n        \"workflowExecutionId\": \"string\",\n        \"workflowExecutionState\": \"ERROR\",\n        \"status\": \"UNCHECKED\",\n        \"statusOverrideAt\": \"1999-06-23T00:25:24.630Z\",\n        \"statusOverrideRequestId\": \"string\",\n        \"statusOverrideBy\": \"string\",\n        \"riskAssessment\": {\n          \"entityId\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"serviceProfileId\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"workflowId\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"workflowExecutionId\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"riskAssessmentId\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"schemaVersion\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"createdAt\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"updatedAt\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"updatedBy\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"updatedRequestId\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"workflowRiskScore\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"workflowRiskLevel\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"riskScore\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"riskLevel\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"isOutdated\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"riskFactors\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"isManual\": false,\n        \"steps\": {\n          \"order\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"passed\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"failed\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"incomplete\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"notApplicable\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"startedAt\": \"1952-03-04T01:49:58.376Z\",\n        \"endedAt\": \"2016-04-09T04:46:40.472Z\",\n        \"issues\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ],\n        \"lifecyclePhase\": \"OTHER\",\n        \"monitoringTypes\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ]\n      }\n    ],\n    \"serviceName\": \"string\",\n    \"customerReference\": \"string\",\n    \"subscriptions\": [\n      {\n        \"serviceProfileId\": \"string\",\n        \"status\": \"ENABLED\",\n        \"type\": \"ACTIVITY\",\n        \"workflowName\": \"string\",\n        \"workflowId\": \"string\",\n        \"enabledAt\": \"1992-06-24T23:19:27.228Z\",\n        \"enabledRequestId\": \"string\",\n        \"enabledBy\": \"string\",\n        \"disabledAt\": \"2023-11-06T21:33:46.633Z\",\n        \"disabledRequestId\": \"string\",\n        \"disabledBy\": \"string\"\n      },\n      {\n        \"serviceProfileId\": \"string\",\n        \"status\": \"DISABLED\",\n        \"type\": \"ACTIVITY\",\n        \"workflowName\": \"string\",\n        \"workflowId\": \"string\",\n        \"enabledAt\": \"1995-10-04T22:33:39.672Z\",\n        \"enabledRequestId\": \"string\",\n        \"enabledBy\": \"string\",\n        \"disabledAt\": \"1962-02-20T00:33:45.714Z\",\n        \"disabledRequestId\": \"string\",\n        \"disabledBy\": \"string\"\n      }\n    ],\n    \"state\": \"INIT\"\n  },\n  \"requestId\": \"01HN9XHZN6MGXM9JXG50K59Q85\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1d9cc0d6-9056-4f57-9a6d-3daa3bd511fe",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "individuals",
+                    ":entityId",
+                    "serviceprofiles",
+                    ":serviceName"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entityId",
+                      "description": "(Required) Unique FrankieOne identifier for an entity"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "serviceName",
+                      "description": "(Required) The unique name of the service profile"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "api_key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Your API key provided by FrankieOne",
+                    "key": "api_key",
+                    "value": "245c765b124a098d09ef8765...."
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Your Customer ID provided by FrankieOne",
+                    "key": "X-Frankie-CustomerID",
+                    "value": "12345678-1234-1234-1234-123456789012"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Your Customer Child ID provided by FrankieOne",
+                    "key": "X-Frankie-CustomerChildID",
+                    "value": "87654321-4321-4321-4321-210987654321"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Open string that can be used to define the \"channel\" the request comes in from. It can potentially be used in routing and risk calculations upon request. Default values that can be used are:  api portal smartui Any alphanumeric string is supported though. Anything over 64 characters will be truncated.",
+                    "key": "X-Frankie-Channel",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Username provided by API caller",
+                    "key": "X-Frankie-Username",
+                    "value": "fred.flintstone@frankieone.com"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorCode\": \"API-0400,\",\n  \"errorMsg\": \"Multiple Errors: See Issues list\",\n  \"details\": [\n    {\n      \"issue\": \"entityId in path must be of type uuid: \\\"test\\\"\",\n      \"issueLocation\": \"VALIDATE-entityId\"\n    }\n  ],\n  \"requestId\": \"01HM5XJ7VASZ3EJMB1VQGTBFJ4\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3ef9ecfc-fe3b-48b0-8f06-79fbf38cbf06",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "individuals",
+                    ":entityId",
+                    "serviceprofiles",
+                    ":serviceName"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entityId",
+                      "description": "(Required) Unique FrankieOne identifier for an entity"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "serviceName",
+                      "description": "(Required) The unique name of the service profile"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "api_key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Your API key provided by FrankieOne",
+                    "key": "api_key",
+                    "value": "245c765b124a098d09ef8765...."
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Your Customer ID provided by FrankieOne",
+                    "key": "X-Frankie-CustomerID",
+                    "value": "12345678-1234-1234-1234-123456789012"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Your Customer Child ID provided by FrankieOne",
+                    "key": "X-Frankie-CustomerChildID",
+                    "value": "87654321-4321-4321-4321-210987654321"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Open string that can be used to define the \"channel\" the request comes in from. It can potentially be used in routing and risk calculations upon request. Default values that can be used are:  api portal smartui Any alphanumeric string is supported though. Anything over 64 characters will be truncated.",
+                    "key": "X-Frankie-Channel",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Username provided by API caller",
+                    "key": "X-Frankie-Username",
+                    "value": "fred.flintstone@frankieone.com"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorCode\": \"AUTH-0002,\",\n  \"errorMsg\": \"Unauthorized\",\n  \"details\": [\n    {\n      \"issue\": \"Invalid Authentication provided. Access denied.\",\n      \"issueLocation\": \"request\"\n    }\n  ],\n  \"requestId\": \"00000000S6MNG7624K2TDXT1E3\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "06cdd0f2-e0f8-479c-bd9d-af0b7106b66f",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "individuals",
+                    ":entityId",
+                    "serviceprofiles",
+                    ":serviceName"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entityId",
+                      "description": "(Required) Unique FrankieOne identifier for an entity"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "serviceName",
+                      "description": "(Required) The unique name of the service profile"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "api_key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Your API key provided by FrankieOne",
+                    "key": "api_key",
+                    "value": "245c765b124a098d09ef8765...."
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Your Customer ID provided by FrankieOne",
+                    "key": "X-Frankie-CustomerID",
+                    "value": "12345678-1234-1234-1234-123456789012"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Your Customer Child ID provided by FrankieOne",
+                    "key": "X-Frankie-CustomerChildID",
+                    "value": "87654321-4321-4321-4321-210987654321"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Open string that can be used to define the \"channel\" the request comes in from. It can potentially be used in routing and risk calculations upon request. Default values that can be used are:  api portal smartui Any alphanumeric string is supported though. Anything over 64 characters will be truncated.",
+                    "key": "X-Frankie-Channel",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Username provided by API caller",
+                    "key": "X-Frankie-Username",
+                    "value": "fred.flintstone@frankieone.com"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorCode\": \"ENT-1010,\",\n  \"errorMsg\": \"Forbidden\",\n  \"details\": [\n    {\n      \"issue\": \"entityId\",\n      \"issueLocation\": \"Cannot retrieve entityId (027d1e3d-95af-f19a-313a-3b869da9ce10)\"\n    }\n  ],\n  \"requestId\": \"01HM5EM2QNNSC9K0PX9VC06HX3\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "da8784ad-42f9-46d5-8b8e-ddf0b318f25f",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "individuals",
+                    ":entityId",
+                    "serviceprofiles",
+                    ":serviceName"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entityId",
+                      "description": "(Required) Unique FrankieOne identifier for an entity"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "serviceName",
+                      "description": "(Required) The unique name of the service profile"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "api_key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Your API key provided by FrankieOne",
+                    "key": "api_key",
+                    "value": "245c765b124a098d09ef8765...."
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Your Customer ID provided by FrankieOne",
+                    "key": "X-Frankie-CustomerID",
+                    "value": "12345678-1234-1234-1234-123456789012"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Your Customer Child ID provided by FrankieOne",
+                    "key": "X-Frankie-CustomerChildID",
+                    "value": "87654321-4321-4321-4321-210987654321"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Open string that can be used to define the \"channel\" the request comes in from. It can potentially be used in routing and risk calculations upon request. Default values that can be used are:  api portal smartui Any alphanumeric string is supported though. Anything over 64 characters will be truncated.",
+                    "key": "X-Frankie-Channel",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Username provided by API caller",
+                    "key": "X-Frankie-Username",
+                    "value": "fred.flintstone@frankieone.com"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorCode\": \"string\",\n  \"errorMsg\": \"string\",\n  \"details\": [\n    {\n      \"issue\": \"string\",\n      \"issueLocation\": \"string\",\n      \"issueType\": \"string\"\n    },\n    {\n      \"issue\": \"string\",\n      \"issueLocation\": \"string\",\n      \"issueType\": \"string\"\n    }\n  ],\n  \"requestId\": \"01HN9XHZN6MGXM9JXG50K59Q85\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "76e00969-b086-4408-ab03-b97bf955a26c",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "individuals",
+                    ":entityId",
+                    "serviceprofiles",
+                    ":serviceName"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entityId",
+                      "description": "(Required) Unique FrankieOne identifier for an entity"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "serviceName",
+                      "description": "(Required) The unique name of the service profile"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "api_key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Your API key provided by FrankieOne",
+                    "key": "api_key",
+                    "value": "245c765b124a098d09ef8765...."
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Your Customer ID provided by FrankieOne",
+                    "key": "X-Frankie-CustomerID",
+                    "value": "12345678-1234-1234-1234-123456789012"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Your Customer Child ID provided by FrankieOne",
+                    "key": "X-Frankie-CustomerChildID",
+                    "value": "87654321-4321-4321-4321-210987654321"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Open string that can be used to define the \"channel\" the request comes in from. It can potentially be used in routing and risk calculations upon request. Default values that can be used are:  api portal smartui Any alphanumeric string is supported though. Anything over 64 characters will be truncated.",
+                    "key": "X-Frankie-Channel",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Username provided by API caller",
+                    "key": "X-Frankie-Username",
+                    "value": "fred.flintstone@frankieone.com"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorCode\": \"string\",\n  \"errorMsg\": \"string\",\n  \"details\": [\n    {\n      \"issue\": \"string\",\n      \"issueLocation\": \"string\",\n      \"issueType\": \"string\"\n    },\n    {\n      \"issue\": \"string\",\n      \"issueLocation\": \"string\",\n      \"issueType\": \"string\"\n    }\n  ],\n  \"requestId\": \"01HN9XHZN6MGXM9JXG50K59Q85\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f9bea5e0-6f23-4201-b06f-674081e6e111",
+              "name": "Bad Gateway",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "individuals",
+                    ":entityId",
+                    "serviceprofiles",
+                    ":serviceName"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entityId",
+                      "description": "(Required) Unique FrankieOne identifier for an entity"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "serviceName",
+                      "description": "(Required) The unique name of the service profile"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "api_key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Your API key provided by FrankieOne",
+                    "key": "api_key",
+                    "value": "245c765b124a098d09ef8765...."
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Your Customer ID provided by FrankieOne",
+                    "key": "X-Frankie-CustomerID",
+                    "value": "12345678-1234-1234-1234-123456789012"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Your Customer Child ID provided by FrankieOne",
+                    "key": "X-Frankie-CustomerChildID",
+                    "value": "87654321-4321-4321-4321-210987654321"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Open string that can be used to define the \"channel\" the request comes in from. It can potentially be used in routing and risk calculations upon request. Default values that can be used are:  api portal smartui Any alphanumeric string is supported though. Anything over 64 characters will be truncated.",
+                    "key": "X-Frankie-Channel",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Username provided by API caller",
+                    "key": "X-Frankie-Username",
+                    "value": "fred.flintstone@frankieone.com"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Gateway",
+              "code": 502,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorCode\": \"string\",\n  \"errorMsg\": \"string\",\n  \"details\": [\n    {\n      \"issue\": \"string\",\n      \"issueLocation\": \"string\",\n      \"issueType\": \"string\"\n    },\n    {\n      \"issue\": \"string\",\n      \"issueLocation\": \"string\",\n      \"issueType\": \"string\"\n    }\n  ],\n  \"requestId\": \"01HN9XHZN6MGXM9JXG50K59Q85\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "61f7ec50-5746-4041-8c82-a785c383de6c",
+              "name": "Service Unavailable",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "individuals",
+                    ":entityId",
+                    "serviceprofiles",
+                    ":serviceName"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entityId",
+                      "description": "(Required) Unique FrankieOne identifier for an entity"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "serviceName",
+                      "description": "(Required) The unique name of the service profile"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "api_key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Your API key provided by FrankieOne",
+                    "key": "api_key",
+                    "value": "245c765b124a098d09ef8765...."
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Your Customer ID provided by FrankieOne",
+                    "key": "X-Frankie-CustomerID",
+                    "value": "12345678-1234-1234-1234-123456789012"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Your Customer Child ID provided by FrankieOne",
+                    "key": "X-Frankie-CustomerChildID",
+                    "value": "87654321-4321-4321-4321-210987654321"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Open string that can be used to define the \"channel\" the request comes in from. It can potentially be used in routing and risk calculations upon request. Default values that can be used are:  api portal smartui Any alphanumeric string is supported though. Anything over 64 characters will be truncated.",
+                    "key": "X-Frankie-Channel",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Username provided by API caller",
+                    "key": "X-Frankie-Username",
+                    "value": "fred.flintstone@frankieone.com"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorCode\": \"string\",\n  \"errorMsg\": \"string\",\n  \"details\": [\n    {\n      \"issue\": \"string\",\n      \"issueLocation\": \"string\",\n      \"issueType\": \"string\"\n    },\n    {\n      \"issue\": \"string\",\n      \"issueLocation\": \"string\",\n      \"issueType\": \"string\"\n    }\n  ],\n  \"requestId\": \"01HN9XHZN6MGXM9JXG50K59Q85\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.uat.frankie.one",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "api_key"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "4a5c55a6-0cbe-41fc-8e49-e78da30e9420",
+    "name": "Core V2 Audit Individual Profiles API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "This is the APIs for V2 Core. It allows you to do common operations, such as read audit entries or get workflow lists.\n\nContact Support:\n Name: FrankieOne\n Email: help@frankieone.com",
+      "type": "text/plain"
+    }
+  }
+}

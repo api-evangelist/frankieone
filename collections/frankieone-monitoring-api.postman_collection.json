@@ -1,0 +1,826 @@
+{
+  "item": [
+    {
+      "id": "37aa3e06-e27e-4b98-898f-7832af2a8e1d",
+      "name": "Monitoring",
+      "description": {
+        "content": "Turn on/off ongoing monitoring for an individual entity",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "be389821-4d26-4eb0-a180-0439e48f2f67",
+          "name": "Turn on/off monitoring for a given entity",
+          "request": {
+            "name": "Turn on/off monitoring for a given entity",
+            "description": {
+              "content": "Toggle monitoring on or off for for a given entity e.g. AML monitoring. Use this endpoint to either:\n- Enable monitoring - System will start monitoring the entity for potential changes.\n- Disable monitoring - System will no longer monitor the entity for new potential matches and will no longer send alerts.\n\nThe endpoint will effectively manage the monitoring status of the entity.\nHaving monitoring status of a type enabled means that the entity is being monitored for that type.\nIf the entity has several services under the entity, the endpoint will manage the subscription status of the entity for each service for the types requested.\nRequest:\nThe request object contains the `entityId` and list of `monitoring` that are about to toggle.\nAlso, the request body contains comment to be added to audit logs\nResponse:\nThe response object contains the `requestId` and the `subscriptions` that associated with the entity.\nThe subscriptions object contains the type of monitoring and the details of the subscriptions.\nThe details of the subscriptions includes:\n  - service name\n  - service profile ID\n  - status of the subscription\n  - the workflows that will be executed by the type for the service profile.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v2",
+                "individuals",
+                ":entityId",
+                "monitor"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "enabled",
+                  "value": "<boolean>",
+                  "description": "(Required) Enable or disable monitoring for the given entity. Set to true to turn monitoring on or set to false to turn monitoring off."
+                },
+                {
+                  "disabled": false,
+                  "key": "monitoringTypes",
+                  "value": "<string>,<string>",
+                  "description": "The type of ongoing monitoring to be enabled/disable for the given entity. Exclude this parameter to set the monitoring status for all types."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "entityId",
+                  "description": "(Required) Unique FrankieOne identifier for an entity"
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) Your API key provided by FrankieOne",
+                "key": "api_key",
+                "value": "<string>"
+              },
+              {
+                "disabled": false,
+                "description": "(Required) Your Customer ID provided by FrankieOne",
+                "key": "X-Frankie-CustomerID",
+                "value": "<string>"
+              },
+              {
+                "disabled": false,
+                "description": "Your Customer Child ID provided by FrankieOne",
+                "key": "X-Frankie-CustomerChildID",
+                "value": "<string>"
+              },
+              {
+                "disabled": false,
+                "description": "Open string that can be used to define the \"channel\" the request comes in from. It can potentially be used in routing and risk calculations upon request. Default values that can be used are:  api portal smartui Any alphanumeric string is supported though. Anything over 64 characters will be truncated.",
+                "key": "X-Frankie-Channel",
+                "value": "<string>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "api_key"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"comment\": {\n    \"text\": \"<string>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "5e110ccd-dc2d-4d5f-b7aa-c78de9887a12",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "individuals",
+                    ":entityId",
+                    "monitor"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "enabled",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "monitoringTypes",
+                      "value": "<string>,<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entityId",
+                      "description": "(Required) Unique FrankieOne identifier for an entity"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "api_key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Your API key provided by FrankieOne",
+                    "key": "api_key",
+                    "value": "245c765b124a098d09ef8765...."
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Your Customer ID provided by FrankieOne",
+                    "key": "X-Frankie-CustomerID",
+                    "value": "12345678-1234-1234-1234-123456789012"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Your Customer Child ID provided by FrankieOne",
+                    "key": "X-Frankie-CustomerChildID",
+                    "value": "87654321-4321-4321-4321-210987654321"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Open string that can be used to define the \"channel\" the request comes in from. It can potentially be used in routing and risk calculations upon request. Default values that can be used are:  api portal smartui Any alphanumeric string is supported though. Anything over 64 characters will be truncated.",
+                    "key": "X-Frankie-Channel",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"comment\": {\n    \"text\": \"Update after speaking to customer over the phone directly.\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"requestId\": \"01HN9XHZN6MGXM9JXG50K59Q85\",\n  \"monitoring\": {\n    \"AML\": {\n      \"subscriptions\": [\n        {\n          \"serviceName\": \"string\",\n          \"serviceProfileId\": \"string\",\n          \"status\": \"DISABLED\",\n          \"enabledAt\": \"1995-01-06T13:02:34.591Z\",\n          \"enabledRequestId\": \"string\",\n          \"enabledBy\": \"string\",\n          \"disabledAt\": \"2018-05-01T23:50:12.229Z\",\n          \"disabledRequestId\": \"string\",\n          \"disabledBy\": \"string\",\n          \"workflows\": [\n            {\n              \"workflowName\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"workflowId\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"lifecyclePhase\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"workflowName\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"workflowId\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"lifecyclePhase\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ]\n        },\n        {\n          \"serviceName\": \"string\",\n          \"serviceProfileId\": \"string\",\n          \"status\": \"DISABLED\",\n          \"enabledAt\": \"1995-03-23T23:58:43.402Z\",\n          \"enabledRequestId\": \"string\",\n          \"enabledBy\": \"string\",\n          \"disabledAt\": \"1970-06-22T19:31:02.115Z\",\n          \"disabledRequestId\": \"string\",\n          \"disabledBy\": \"string\",\n          \"workflows\": [\n            {\n              \"workflowName\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"workflowId\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"lifecyclePhase\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"workflowName\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"workflowId\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"lifecyclePhase\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ]\n        }\n      ],\n      \"providers\": [\n        \"string\",\n        \"string\"\n      ],\n      \"status\": \"ENABLED\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f2a380aa-d2f4-4ae4-84de-9bd80e5d1c00",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "individuals",
+                    ":entityId",
+                    "monitor"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "enabled",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "monitoringTypes",
+                      "value": "<string>,<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entityId",
+                      "description": "(Required) Unique FrankieOne identifier for an entity"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "api_key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Your API key provided by FrankieOne",
+                    "key": "api_key",
+                    "value": "245c765b124a098d09ef8765...."
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Your Customer ID provided by FrankieOne",
+                    "key": "X-Frankie-CustomerID",
+                    "value": "12345678-1234-1234-1234-123456789012"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Your Customer Child ID provided by FrankieOne",
+                    "key": "X-Frankie-CustomerChildID",
+                    "value": "87654321-4321-4321-4321-210987654321"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Open string that can be used to define the \"channel\" the request comes in from. It can potentially be used in routing and risk calculations upon request. Default values that can be used are:  api portal smartui Any alphanumeric string is supported though. Anything over 64 characters will be truncated.",
+                    "key": "X-Frankie-Channel",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"comment\": {\n    \"text\": \"Update after speaking to customer over the phone directly.\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorCode\": \"API-0400,\",\n  \"errorMsg\": \"Multiple Errors: See Issues list\",\n  \"details\": [\n    {\n      \"issue\": \"entityId in path must be of type uuid: \\\"test\\\"\",\n      \"issueLocation\": \"VALIDATE-entityId\"\n    }\n  ],\n  \"requestId\": \"01HM5XJ7VASZ3EJMB1VQGTBFJ4\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "562bb982-946d-473b-be3d-354e4b63e8f6",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "individuals",
+                    ":entityId",
+                    "monitor"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "enabled",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "monitoringTypes",
+                      "value": "<string>,<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entityId",
+                      "description": "(Required) Unique FrankieOne identifier for an entity"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "api_key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Your API key provided by FrankieOne",
+                    "key": "api_key",
+                    "value": "245c765b124a098d09ef8765...."
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Your Customer ID provided by FrankieOne",
+                    "key": "X-Frankie-CustomerID",
+                    "value": "12345678-1234-1234-1234-123456789012"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Your Customer Child ID provided by FrankieOne",
+                    "key": "X-Frankie-CustomerChildID",
+                    "value": "87654321-4321-4321-4321-210987654321"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Open string that can be used to define the \"channel\" the request comes in from. It can potentially be used in routing and risk calculations upon request. Default values that can be used are:  api portal smartui Any alphanumeric string is supported though. Anything over 64 characters will be truncated.",
+                    "key": "X-Frankie-Channel",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"comment\": {\n    \"text\": \"Update after speaking to customer over the phone directly.\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorCode\": \"AUTH-0002,\",\n  \"errorMsg\": \"Unauthorized\",\n  \"details\": [\n    {\n      \"issue\": \"Invalid Authentication provided. Access denied.\",\n      \"issueLocation\": \"request\"\n    }\n  ],\n  \"requestId\": \"00000000S6MNG7624K2TDXT1E3\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "74bb355a-d55f-418c-b502-a5f2a4896ae6",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "individuals",
+                    ":entityId",
+                    "monitor"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "enabled",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "monitoringTypes",
+                      "value": "<string>,<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entityId",
+                      "description": "(Required) Unique FrankieOne identifier for an entity"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "api_key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Your API key provided by FrankieOne",
+                    "key": "api_key",
+                    "value": "245c765b124a098d09ef8765...."
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Your Customer ID provided by FrankieOne",
+                    "key": "X-Frankie-CustomerID",
+                    "value": "12345678-1234-1234-1234-123456789012"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Your Customer Child ID provided by FrankieOne",
+                    "key": "X-Frankie-CustomerChildID",
+                    "value": "87654321-4321-4321-4321-210987654321"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Open string that can be used to define the \"channel\" the request comes in from. It can potentially be used in routing and risk calculations upon request. Default values that can be used are:  api portal smartui Any alphanumeric string is supported though. Anything over 64 characters will be truncated.",
+                    "key": "X-Frankie-Channel",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"comment\": {\n    \"text\": \"Update after speaking to customer over the phone directly.\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorCode\": \"string\",\n  \"errorMsg\": \"string\",\n  \"details\": [\n    {\n      \"issue\": \"string\",\n      \"issueLocation\": \"string\",\n      \"issueType\": \"string\"\n    },\n    {\n      \"issue\": \"string\",\n      \"issueLocation\": \"string\",\n      \"issueType\": \"string\"\n    }\n  ],\n  \"requestId\": \"01HN9XHZN6MGXM9JXG50K59Q85\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7b7e27cd-c74e-4034-b037-3cfdce758420",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "individuals",
+                    ":entityId",
+                    "monitor"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "enabled",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "monitoringTypes",
+                      "value": "<string>,<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entityId",
+                      "description": "(Required) Unique FrankieOne identifier for an entity"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "api_key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Your API key provided by FrankieOne",
+                    "key": "api_key",
+                    "value": "245c765b124a098d09ef8765...."
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Your Customer ID provided by FrankieOne",
+                    "key": "X-Frankie-CustomerID",
+                    "value": "12345678-1234-1234-1234-123456789012"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Your Customer Child ID provided by FrankieOne",
+                    "key": "X-Frankie-CustomerChildID",
+                    "value": "87654321-4321-4321-4321-210987654321"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Open string that can be used to define the \"channel\" the request comes in from. It can potentially be used in routing and risk calculations upon request. Default values that can be used are:  api portal smartui Any alphanumeric string is supported though. Anything over 64 characters will be truncated.",
+                    "key": "X-Frankie-Channel",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"comment\": {\n    \"text\": \"Update after speaking to customer over the phone directly.\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorCode\": \"string\",\n  \"errorMsg\": \"string\",\n  \"details\": [\n    {\n      \"issue\": \"string\",\n      \"issueLocation\": \"string\",\n      \"issueType\": \"string\"\n    },\n    {\n      \"issue\": \"string\",\n      \"issueLocation\": \"string\",\n      \"issueType\": \"string\"\n    }\n  ],\n  \"requestId\": \"01HN9XHZN6MGXM9JXG50K59Q85\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3435f78a-6619-4e81-8424-700482e9e9f7",
+              "name": "Bad Gateway",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "individuals",
+                    ":entityId",
+                    "monitor"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "enabled",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "monitoringTypes",
+                      "value": "<string>,<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entityId",
+                      "description": "(Required) Unique FrankieOne identifier for an entity"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "api_key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Your API key provided by FrankieOne",
+                    "key": "api_key",
+                    "value": "245c765b124a098d09ef8765...."
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Your Customer ID provided by FrankieOne",
+                    "key": "X-Frankie-CustomerID",
+                    "value": "12345678-1234-1234-1234-123456789012"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Your Customer Child ID provided by FrankieOne",
+                    "key": "X-Frankie-CustomerChildID",
+                    "value": "87654321-4321-4321-4321-210987654321"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Open string that can be used to define the \"channel\" the request comes in from. It can potentially be used in routing and risk calculations upon request. Default values that can be used are:  api portal smartui Any alphanumeric string is supported though. Anything over 64 characters will be truncated.",
+                    "key": "X-Frankie-Channel",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"comment\": {\n    \"text\": \"Update after speaking to customer over the phone directly.\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Gateway",
+              "code": 502,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorCode\": \"string\",\n  \"errorMsg\": \"string\",\n  \"details\": [\n    {\n      \"issue\": \"string\",\n      \"issueLocation\": \"string\",\n      \"issueType\": \"string\"\n    },\n    {\n      \"issue\": \"string\",\n      \"issueLocation\": \"string\",\n      \"issueType\": \"string\"\n    }\n  ],\n  \"requestId\": \"01HN9XHZN6MGXM9JXG50K59Q85\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0f30dae0-2dac-4f62-a47d-66dd47881ea1",
+              "name": "Service Unavailable",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "individuals",
+                    ":entityId",
+                    "monitor"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "enabled",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "monitoringTypes",
+                      "value": "<string>,<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "entityId",
+                      "description": "(Required) Unique FrankieOne identifier for an entity"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "api_key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Your API key provided by FrankieOne",
+                    "key": "api_key",
+                    "value": "245c765b124a098d09ef8765...."
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Your Customer ID provided by FrankieOne",
+                    "key": "X-Frankie-CustomerID",
+                    "value": "12345678-1234-1234-1234-123456789012"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Your Customer Child ID provided by FrankieOne",
+                    "key": "X-Frankie-CustomerChildID",
+                    "value": "87654321-4321-4321-4321-210987654321"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Open string that can be used to define the \"channel\" the request comes in from. It can potentially be used in routing and risk calculations upon request. Default values that can be used are:  api portal smartui Any alphanumeric string is supported though. Anything over 64 characters will be truncated.",
+                    "key": "X-Frankie-Channel",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"comment\": {\n    \"text\": \"Update after speaking to customer over the phone directly.\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errorCode\": \"string\",\n  \"errorMsg\": \"string\",\n  \"details\": [\n    {\n      \"issue\": \"string\",\n      \"issueLocation\": \"string\",\n      \"issueType\": \"string\"\n    },\n    {\n      \"issue\": \"string\",\n      \"issueLocation\": \"string\",\n      \"issueType\": \"string\"\n    }\n  ],\n  \"requestId\": \"01HN9XHZN6MGXM9JXG50K59Q85\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.uat.frankie.one",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "api_key"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "62c1c3cb-eb44-4587-8818-39ae33c84f95",
+    "name": "Core V2 Audit Monitoring API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "This is the APIs for V2 Core. It allows you to do common operations, such as read audit entries or get workflow lists.\n\nContact Support:\n Name: FrankieOne\n Email: help@frankieone.com",
+      "type": "text/plain"
+    }
+  }
+}

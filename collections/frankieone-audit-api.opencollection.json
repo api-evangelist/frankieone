@@ -1,0 +1,135 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Core V2 Audit API",
+    "version": "2.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "api_key",
+      "value": "{{api_key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Audit",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List audit events",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.uat.frankie.one/v2/audit",
+            "headers": [
+              {
+                "name": "api_key",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-CustomerChildID",
+                "value": ""
+              },
+              {
+                "name": "X-Frankie-Channel",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "entityId",
+                "value": "",
+                "type": "query",
+                "description": "Entity ID"
+              },
+              {
+                "name": "workflowNames",
+                "value": "KYC Onboarding,Transaction Monitoring",
+                "type": "query",
+                "description": "List of Workflow Names to filter the audit events upon"
+              },
+              {
+                "name": "workflowRiskLevels",
+                "value": "LOW,HIGH",
+                "type": "query",
+                "description": "List of workflow risk levels to filter the audit events upon"
+              },
+              {
+                "name": "sources",
+                "value": "user@username.com,FrankieOne System,Experian Connector",
+                "type": "query",
+                "description": "List of Sources that the audit events will be filtered upon"
+              },
+              {
+                "name": "requestId",
+                "value": "",
+                "type": "query",
+                "description": "Request Identifier to filter the audit events upon"
+              },
+              {
+                "name": "afterTimestamp",
+                "value": "",
+                "type": "query",
+                "description": "Filter the Audit Events after the given filter based on the Event 'timestamp' value"
+              },
+              {
+                "name": "beforeTimestamp",
+                "value": "",
+                "type": "query",
+                "description": "Filter the Audit Events before the given filter based on the Event 'timestamp' value"
+              },
+              {
+                "name": "channels",
+                "value": "",
+                "type": "query",
+                "description": "List of Channels to filter the audit events upon"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Order of the sort fields will be sorted upon"
+              },
+              {
+                "name": "sortFields",
+                "value": "timestamp",
+                "type": "query",
+                "description": "The list of sort fields that will be used in the query, the order of the sort fields will determine the order in which the items are sorted"
+              },
+              {
+                "name": "page",
+                "value": "2",
+                "type": "query",
+                "description": "The page number that you want to retrieve for the list query"
+              },
+              {
+                "name": "limit",
+                "value": "20",
+                "type": "query",
+                "description": "Limit the number of items that will be returned as part of the request"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "api_key",
+              "value": "{{api_key}}",
+              "placement": "header"
+            }
+          },
+          "docs": "List all audit events with filtering."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
