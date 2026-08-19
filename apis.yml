@@ -30,7 +30,7 @@ tags:
   - Fraud
   - Compliance
 url: https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/apis.yml
-specificationVersion: '0.19'
+specificationVersion: '0.23'
 apis:
 - aid: frankieone:frankieone-audit-api
   name: FrankieOne Audit API
