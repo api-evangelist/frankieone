@@ -1,14 +1,17 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Core V2 Audit HostedURL API
-  version: 2.0.0
-  description: This is the APIs for V2 Core. It allows you to do common operations, such as read audit entries or get workflow lists.
+  title: KYC V2 Hosted URL API
+  version: 2.0.1
+  description: This is the APIs for V2 KYC. It allows you to manage individuals, profiles, workflows, results, and documents in the context of Individuals.
   contact:
     name: FrankieOne
     url: https://www.frankieone.com/
     email: help@frankieone.com
 servers:
 - url: https://api.uat.frankie.one
+  description: UAT Environment API Base URL
+- url: https://api.frankie.one
+  description: Production API Base URL
 security:
 - Api-Key: []
 tags:
@@ -17,7 +20,7 @@ tags:
 paths:
   /v2/individuals/hostedurl:
     post:
-      summary: Provide hosted url for a hosted version of onesdk.
+      summary: Provide hosted url for a hosted version of onesdk
       requestBody:
         content:
           application/json:
@@ -93,7 +96,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
       operationId: getHostedUrl
-      description: Hosted OneSDK URL Generation, used to request a hosted OneSDK URL with entity specific token for a customer to use a hosted OneSDK session to do an action. Examples of actions that may be done is to complete their onboarding process or to re-attempt IDV checks.  If sendSMS is true and a phone number is supplied, an SMS will be sent to the phone number with the generated URL.
+      description: Hosted OneSDK URL Generation, used to request a hosted OneSDK URL with entity specific token for a customer to use a hosted OneSDK session to do an action. Examples of actions that may be done is to complete their onboarding process or to re-attempt IDV checks. If sendSMS is true and a phone number is supplied, an SMS will be sent to the phone number with the generated URL.
       parameters:
       - $ref: '#/components/parameters/Api-Key'
       - $ref: '#/components/parameters/X-Frankie-CustomerID'
@@ -106,7 +109,58 @@ paths:
       - jwt:
         - kyc:api
 components:
+  parameters:
+    X-Frankie-CustomerChildID:
+      name: X-Frankie-CustomerChildID
+      in: header
+      required: false
+      schema:
+        type: string
+        example: 87654321-4321-4321-4321-210987654321
+      description: Your Customer Child ID provided by FrankieOne
+    Api-Key:
+      name: api_key
+      in: header
+      schema:
+        type: string
+        example: 245c765b124a098d09ef8765....
+      description: Your API key provided by FrankieOne
+      required: true
+    X-Frankie-Channel:
+      name: X-Frankie-Channel
+      in: header
+      required: false
+      schema:
+        type: string
+      description: 'Open string that can be used to define the "channel" the request comes in from. It can potentially be used in routing and risk calculations upon request. Default values that can be used are:  api portal smartui Any alphanumeric string is supported though. Anything over 64 characters will be truncated.'
+    X-Frankie-CustomerID:
+      name: X-Frankie-CustomerID
+      in: header
+      required: true
+      schema:
+        type: string
+        example: 12345678-1234-1234-1234-123456789012
+      description: Your Customer ID provided by FrankieOne
   schemas:
+    Entity-ID:
+      type: string
+      description: 'Entities are assigned an auto-generated UUID to ensure global uniqueness, represented as entityId. The entityId allows for precise modification when required.
+
+        To modify an entity, set the entityId of the entity you wish to update in an update request.'
+      example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+      readOnly: true
+    Comment:
+      type: object
+      properties:
+        commentId:
+          type: string
+          description: Unique identifier for the comment.
+          example: 55fc5d54-46f7-49c8-bf78-e07ec79cd6e7
+          readOnly: true
+        text:
+          type: string
+          description: The text content of the comment.
+          example: Update after speaking to customer over the phone directly.
     Error-Base:
       type: object
       properties:
@@ -122,18 +176,6 @@ components:
       type: string
       example: 01HN9XHZN6MGXM9JXG50K59Q85
       description: The unique request identifier for the API call made.
-    Issue:
-      type: object
-      properties:
-        issue:
-          type: string
-          description: Description of the issue.
-        issueLocation:
-          type: string
-          description: The location or context where the issue was identified.
-        issueType:
-          type: string
-          description: The type or category of the issue.
     IDV-HostedUrl-Response:
       type: object
       description: Onboarding URL Response, contains the url for onboarding as well as the expiry. Each call to this endpoint will generate a new URL with a new expiry.
@@ -153,6 +195,42 @@ components:
           $ref: '#/components/schemas/Request-ID'
         entityId:
           $ref: '#/components/schemas/Entity-ID'
+    Error:
+      type: object
+      x-examples:
+        '400':
+          requestId: 0123456789ABCDEFGHIJKLMNOP
+          errorCode: API-0400
+          errorMsg: Parsing credentials from "<invalid>" failed, because invalid.
+          httpStatusCode: 400
+        '401':
+          requestId: 0123456789ABCDEFGHIJKLMNOP
+          errorCode: API-0401
+          errorMsg: Unauthenticated due to invalid credentials.
+          httpStatusCode: 401
+        '409':
+          requestId: 0123456789ABCDEFGHIJKLMNOP
+          errorCode: API-0409
+          errorMsg: Conflict.
+          httpStatusCode: 409
+      allOf:
+      - $ref: '#/components/schemas/Error-Base'
+      - type: object
+        properties:
+          requestId:
+            $ref: '#/components/schemas/Request-ID'
+    Issue:
+      type: object
+      properties:
+        issue:
+          type: string
+          description: Description of the issue.
+        issueLocation:
+          type: string
+          description: The location or context where the issue was identified.
+        issueType:
+          type: string
+          description: The type or category of the issue.
     IDV-HostedUrl-Request:
       type: object
       description: Hosted OneSDK URL Request, used to request a hosted OneSDK URL with entity specific token for a customer to use a hosted OneSDK session to do an action. Examples of actions that may be done is to complete their onboarding process or to re-attempt IDV checks.  If sendSMS is true and a phone number is supplied, an SMS will be sent to the phone number with the generated URL.
@@ -196,81 +274,6 @@ components:
           type: string
         comment:
           $ref: '#/components/schemas/Comment'
-    Error:
-      type: object
-      x-examples:
-        '400':
-          requestId: 0123456789ABCDEFGHIJKLMNOP
-          errorCode: API-0400
-          errorMsg: Parsing credentials from "<invalid>" failed, because invalid.
-          httpStatusCode: 400
-        '401':
-          requestId: 0123456789ABCDEFGHIJKLMNOP
-          errorCode: API-0401
-          errorMsg: Unauthenticated due to invalid credentials.
-          httpStatusCode: 401
-        '409':
-          requestId: 0123456789ABCDEFGHIJKLMNOP
-          errorCode: API-0409
-          errorMsg: Conflict.
-          httpStatusCode: 409
-      allOf:
-      - $ref: '#/components/schemas/Error-Base'
-      - type: object
-        properties:
-          requestId:
-            $ref: '#/components/schemas/Request-ID'
-    Comment:
-      type: object
-      properties:
-        commentId:
-          type: string
-          description: Unique identifier for the comment.
-          example: 55fc5d54-46f7-49c8-bf78-e07ec79cd6e7
-          readOnly: true
-        text:
-          type: string
-          description: The text content of the comment.
-          example: Update after speaking to customer over the phone directly.
-    Entity-ID:
-      type: string
-      description: 'Entities are assigned an auto-generated UUID to ensure global uniqueness, represented as entityId. The entityId allows for precise modification when required.
-
-        To modify an entity, set the entityId of the entity you wish to update in an update request.'
-      example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-      readOnly: true
-  parameters:
-    X-Frankie-Channel:
-      name: X-Frankie-Channel
-      in: header
-      required: false
-      schema:
-        type: string
-      description: 'Open string that can be used to define the "channel" the request comes in from. It can potentially be used in routing and risk calculations upon request. Default values that can be used are:  api portal smartui Any alphanumeric string is supported though. Anything over 64 characters will be truncated.'
-    Api-Key:
-      name: api_key
-      in: header
-      schema:
-        type: string
-        example: 245c765b124a098d09ef8765....
-      description: Your API key provided by FrankieOne
-      required: true
-    X-Frankie-CustomerID:
-      name: X-Frankie-CustomerID
-      in: header
-      required: true
-      schema:
-        type: string
-        example: 12345678-1234-1234-1234-123456789012
-      description: Your Customer ID provided by FrankieOne
-    X-Frankie-CustomerChildID:
-      name: X-Frankie-CustomerChildID
-      in: header
-      required: false
-      schema:
-        type: string
-        example: 87654321-4321-4321-4321-210987654321
-      description: Your Customer Child ID provided by FrankieOne
   securitySchemes:
     Api-Key:
       type: apiKey

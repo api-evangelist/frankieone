@@ -1,14 +1,17 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Core V2 Audit Individual Entity Elements API
-  version: 2.0.0
-  description: This is the APIs for V2 Core. It allows you to do common operations, such as read audit entries or get workflow lists.
+  title: KYC V2 Individual Entity Elements API
+  version: 2.0.1
+  description: This is the APIs for V2 KYC. It allows you to manage individuals, profiles, workflows, results, and documents in the context of Individuals.
   contact:
     name: FrankieOne
     url: https://www.frankieone.com/
     email: help@frankieone.com
 servers:
 - url: https://api.uat.frankie.one
+  description: UAT Environment API Base URL
+- url: https://api.frankie.one
+  description: Production API Base URL
 security:
 - Api-Key: []
 tags:
@@ -784,6 +787,30 @@ paths:
         - kyc:api
 components:
   schemas:
+    External-Reference-Information:
+      type: object
+      x-examples:
+        Customer Reference:
+          name: CUSTOMER-REFERENCE
+          value: CUST-00001342
+          description: This is the customer id in the core banking system
+      required:
+      - name
+      - value
+      description: Used to store references and identifying information about an entity that is external to FrankieOne. If you wish to filter or search on customer information relevant to your business, that information should be added as an external reference.
+      properties:
+        name:
+          type: string
+          description: The name of the external reference.
+          example: CUSTOMER-REFERENCE
+        value:
+          type: string
+          description: The value of the external reference.
+          example: CUST-00001342
+        description:
+          type: string
+          description: A summary of what this external reference is and what it is used for.
+          example: This is the customer ID in the core banking system.
     Error-Base:
       type: object
       properties:
@@ -819,18 +846,6 @@ components:
         properties:
           requestId:
             $ref: '#/components/schemas/Request-ID'
-    Issue:
-      type: object
-      properties:
-        issue:
-          type: string
-          description: Description of the issue.
-        issueLocation:
-          type: string
-          description: The location or context where the issue was identified.
-        issueType:
-          type: string
-          description: The type or category of the issue.
     Consent-Type-Param:
       type: string
       enum:
@@ -843,6 +858,13 @@ components:
       - SUPERANNUATION
       description: The type of consent provided by an entity.
       example: UNDER18
+    Entity-ID:
+      type: string
+      description: 'Entities are assigned an auto-generated UUID to ensure global uniqueness, represented as entityId. The entityId allows for precise modification when required.
+
+        To modify an entity, set the entityId of the entity you wish to update in an update request.'
+      example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+      readOnly: true
     Request-ID:
       type: string
       example: 01HN9XHZN6MGXM9JXG50K59Q85
@@ -873,44 +895,53 @@ components:
             example: 93da15f64-5717-4562-b3fc-2c963f6663fe
             readOnly: true
       - $ref: '#/components/schemas/External-Reference-Information'
-    Entity-ID:
-      type: string
-      description: 'Entities are assigned an auto-generated UUID to ensure global uniqueness, represented as entityId. The entityId allows for precise modification when required.
-
-        To modify an entity, set the entityId of the entity you wish to update in an update request.'
-      example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-      readOnly: true
-    External-Reference-Information:
+    Issue:
       type: object
-      x-examples:
-        Customer Reference:
-          name: CUSTOMER-REFERENCE
-          value: CUST-00001342
-          description: This is the customer id in the core banking system
-      required:
-      - name
-      - value
-      description: Used to store references and identifying information about an entity that is external to FrankieOne. If you wish to filter or search on customer information relevant to your business, that information should be added as an external reference.
       properties:
-        name:
+        issue:
           type: string
-          description: The name of the external reference.
-          example: CUSTOMER-REFERENCE
-        value:
+          description: Description of the issue.
+        issueLocation:
           type: string
-          description: The value of the external reference.
-          example: CUST-00001342
-        description:
+          description: The location or context where the issue was identified.
+        issueType:
           type: string
-          description: A summary of what this external reference is and what it is used for.
-          example: This is the customer ID in the core banking system.
+          description: The type or category of the issue.
   parameters:
-    entityId:
-      name: entityId
+    X-Frankie-CustomerID:
+      name: X-Frankie-CustomerID
+      in: header
+      required: true
+      schema:
+        type: string
+        example: 12345678-1234-1234-1234-123456789012
+      description: Your Customer ID provided by FrankieOne
+    X-Frankie-CustomerChildID:
+      name: X-Frankie-CustomerChildID
+      in: header
+      required: false
+      schema:
+        type: string
+        example: 87654321-4321-4321-4321-210987654321
+      description: Your Customer Child ID provided by FrankieOne
+    dateOfBirthId:
+      name: dateOfBirthId
       in: path
       schema:
         type: string
-      description: Unique FrankieOne identifier for an entity
+      required: true
+    phoneNumberId:
+      name: phoneNumberId
+      in: path
+      schema:
+        type: string
+      required: true
+    addressId:
+      name: addressId
+      in: path
+      schema:
+        type: string
+      description: Unique identifier for an address
       required: true
     referenceId:
       name: referenceId
@@ -918,6 +949,19 @@ components:
       schema:
         type: string
       description: Unique external reference identifier
+      required: true
+    consentType:
+      name: consentType
+      x-go-name: ConsentTypeParam
+      in: path
+      schema:
+        $ref: '#/components/schemas/Consent-Type-Param'
+      required: true
+    emailAddressId:
+      name: emailAddressId
+      in: path
+      schema:
+        type: string
       required: true
     X-Frankie-Username:
       name: X-Frankie-Username
@@ -927,33 +971,19 @@ components:
       schema:
         type: string
         example: fred.flintstone@frankieone.com
-    emailAddressId:
-      name: emailAddressId
+    entityId:
+      name: entityId
+      in: path
+      schema:
+        type: string
+      description: Unique FrankieOne identifier for an entity
+      required: true
+    nameId:
+      name: nameId
       in: path
       schema:
         type: string
       required: true
-    consentType:
-      name: consentType
-      x-go-name: ConsentTypeParam
-      in: path
-      schema:
-        $ref: '#/components/schemas/Consent-Type-Param'
-      required: true
-    phoneNumberId:
-      name: phoneNumberId
-      in: path
-      schema:
-        type: string
-      required: true
-    X-Frankie-CustomerChildID:
-      name: X-Frankie-CustomerChildID
-      in: header
-      required: false
-      schema:
-        type: string
-        example: 87654321-4321-4321-4321-210987654321
-      description: Your Customer Child ID provided by FrankieOne
     Api-Key:
       name: api_key
       in: header
@@ -962,19 +992,6 @@ components:
         example: 245c765b124a098d09ef8765....
       description: Your API key provided by FrankieOne
       required: true
-    addressId:
-      name: addressId
-      in: path
-      schema:
-        type: string
-      description: Unique identifier for an address
-      required: true
-    dateOfBirthId:
-      name: dateOfBirthId
-      in: path
-      schema:
-        type: string
-      required: true
     X-Frankie-Channel:
       name: X-Frankie-Channel
       in: header
@@ -982,20 +999,6 @@ components:
       schema:
         type: string
       description: 'Open string that can be used to define the "channel" the request comes in from. It can potentially be used in routing and risk calculations upon request. Default values that can be used are:  api portal smartui Any alphanumeric string is supported though. Anything over 64 characters will be truncated.'
-    nameId:
-      name: nameId
-      in: path
-      schema:
-        type: string
-      required: true
-    X-Frankie-CustomerID:
-      name: X-Frankie-CustomerID
-      in: header
-      required: true
-      schema:
-        type: string
-        example: 12345678-1234-1234-1234-123456789012
-      description: Your Customer ID provided by FrankieOne
   securitySchemes:
     Api-Key:
       type: apiKey

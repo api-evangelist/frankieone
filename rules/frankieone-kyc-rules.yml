@@ -1,10 +1,10 @@
-aid: frankieone:kyc-rules
-name: FrankieOne KYC V2 API Operational Rules
+x-aid: frankieone:kyc-rules
+x-name: FrankieOne KYC V2 API Operational Rules
 description: >-
   Operational rules and constraints for using the FrankieOne KYC V2 API,
   covering authentication, required headers, environment selection, and
   workflow handling.
-modified: '2026-04-28'
+x-modified: '2026-04-28'
 rules:
   - id: api-key-required
     title: API Key Required
