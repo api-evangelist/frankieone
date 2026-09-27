@@ -40,6 +40,13 @@ tags:
   - KYC
   - KYB
   - AML
+  - Fraud Prevention
+  - Compliance
+tags_raw:
+  - Identity Verification
+  - KYC
+  - KYB
+  - AML
   - Fraud
   - Compliance
 url: https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/apis.yml

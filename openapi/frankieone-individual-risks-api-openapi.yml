@@ -137,54 +137,6 @@ paths:
         - kyc:api
 components:
   schemas:
-    Error-Base:
-      type: object
-      properties:
-        errorCode:
-          type: string
-        errorMsg:
-          type: string
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/Issue'
-    Error:
-      type: object
-      x-examples:
-        '400':
-          requestId: 0123456789ABCDEFGHIJKLMNOP
-          errorCode: API-0400
-          errorMsg: Parsing credentials from "<invalid>" failed, because invalid.
-          httpStatusCode: 400
-        '401':
-          requestId: 0123456789ABCDEFGHIJKLMNOP
-          errorCode: API-0401
-          errorMsg: Unauthenticated due to invalid credentials.
-          httpStatusCode: 401
-        '409':
-          requestId: 0123456789ABCDEFGHIJKLMNOP
-          errorCode: API-0409
-          errorMsg: Conflict.
-          httpStatusCode: 409
-      allOf:
-      - $ref: '#/components/schemas/Error-Base'
-      - type: object
-        properties:
-          requestId:
-            $ref: '#/components/schemas/Request-ID'
-    Risk-Factor-ID:
-      type: string
-      description: Unique identifier of the risk factor.
-      readOnly: true
-    Risk-Level:
-      type: string
-      enum:
-      - UNKNOWN
-      - LOW
-      - MEDIUM
-      - HIGH
-      - UNACCEPTABLE
-      description: "The risk level classification:\n  - UNKNOWN: Risk level is not determined.\n  - LOW: Low risk.\n  - MEDIUM: Medium risk.\n  - HIGH: High risk.\n  - UNACCEPTABLE: Risk level is unacceptable.\n"
     Risk-Factor:
       type: object
       properties:
@@ -247,6 +199,48 @@ components:
         createdStepResultId:
           type: string
           description: Identifier of the step result that originally created the risk factor.
+    Error-Base:
+      type: object
+      properties:
+        errorCode:
+          type: string
+        errorMsg:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/Issue'
+    Profile-ID:
+      type: string
+      description: Unique identifier of the Service Profile.
+    Error:
+      type: object
+      x-examples:
+        '400':
+          requestId: 0123456789ABCDEFGHIJKLMNOP
+          errorCode: API-0400
+          errorMsg: Parsing credentials from "<invalid>" failed, because invalid.
+          httpStatusCode: 400
+        '401':
+          requestId: 0123456789ABCDEFGHIJKLMNOP
+          errorCode: API-0401
+          errorMsg: Unauthenticated due to invalid credentials.
+          httpStatusCode: 401
+        '409':
+          requestId: 0123456789ABCDEFGHIJKLMNOP
+          errorCode: API-0409
+          errorMsg: Conflict.
+          httpStatusCode: 409
+      allOf:
+      - $ref: '#/components/schemas/Error-Base'
+      - type: object
+        properties:
+          requestId:
+            $ref: '#/components/schemas/Request-ID'
+    Request-ID:
+      type: string
+      example: 01HN9XHZN6MGXM9JXG50K59Q85
+      description: The unique request identifier for the API call made.
     Risk-Assessment:
       type: object
       required:
@@ -307,34 +301,6 @@ components:
             $ref: '#/components/schemas/Risk-Factor'
           readOnly: true
           description: List of risk factors considered in this assessment.
-    Request-ID:
-      type: string
-      example: 01HN9XHZN6MGXM9JXG50K59Q85
-      description: The unique request identifier for the API call made.
-    Profile-ID:
-      type: string
-      description: Unique identifier of the Service Profile.
-    Comment:
-      type: object
-      properties:
-        commentId:
-          type: string
-          description: Unique identifier for the comment.
-          example: 55fc5d54-46f7-49c8-bf78-e07ec79cd6e7
-          readOnly: true
-        text:
-          type: string
-          description: The text content of the comment.
-          example: Update after speaking to customer over the phone directly.
-    Risk-Factor-Status:
-      type: string
-      enum:
-      - VALID
-      - STALE
-      - OVERRIDDEN
-      - DISCARDED
-      description: "The current status of the risk factor:\n  - VALID: The risk factor is applicable to the entity.\n  - STALE: The risk factor is no longer applicable to the entity. If this status is returned, it means that at the time of risk assessment, the risk factor was valid.\n  - OVERRIDDEN: The risk factor was manually overridden. If present, manualOverrideScore was used for risk score calculation in the risk assessment.\n  - DISCARDED: The risk factor was added during workflow execution but was discarded at a later stage in the same workflow. This factor was not used in the final risk assessment.\n"
-      default: VALID
     Issue:
       type: object
       properties:
@@ -347,19 +313,45 @@ components:
         issueType:
           type: string
           description: The type or category of the issue.
+    Risk-Factor-ID:
+      type: string
+      description: Unique identifier of the risk factor.
+      readOnly: true
+    Comment:
+      type: object
+      properties:
+        commentId:
+          type: string
+          description: Unique identifier for the comment.
+          example: 55fc5d54-46f7-49c8-bf78-e07ec79cd6e7
+          readOnly: true
+        text:
+          type: string
+          description: The text content of the comment.
+          example: Update after speaking to customer over the phone directly.
+    Risk-Level:
+      type: string
+      enum:
+      - UNKNOWN
+      - LOW
+      - MEDIUM
+      - HIGH
+      - UNACCEPTABLE
+      description: "The risk level classification:\n  - UNKNOWN: Risk level is not determined.\n  - LOW: Low risk.\n  - MEDIUM: Medium risk.\n  - HIGH: High risk.\n  - UNACCEPTABLE: Risk level is unacceptable.\n"
+    Risk-Factor-Status:
+      type: string
+      enum:
+      - VALID
+      - STALE
+      - OVERRIDDEN
+      - DISCARDED
+      description: "The current status of the risk factor:\n  - VALID: The risk factor is applicable to the entity.\n  - STALE: The risk factor is no longer applicable to the entity. If this status is returned, it means that at the time of risk assessment, the risk factor was valid.\n  - OVERRIDDEN: The risk factor was manually overridden. If present, manualOverrideScore was used for risk score calculation in the risk assessment.\n  - DISCARDED: The risk factor was added during workflow execution but was discarded at a later stage in the same workflow. This factor was not used in the final risk assessment.\n"
+      default: VALID
     Risk-Assessment-ID:
       type: string
       description: Unique identifier of the risk assessment.
       readOnly: true
   parameters:
-    X-Frankie-CustomerID:
-      name: X-Frankie-CustomerID
-      in: header
-      required: true
-      schema:
-        type: string
-        example: 12345678-1234-1234-1234-123456789012
-      description: Your Customer ID provided by FrankieOne
     X-Frankie-CustomerChildID:
       name: X-Frankie-CustomerChildID
       in: header
@@ -368,27 +360,27 @@ components:
         type: string
         example: 87654321-4321-4321-4321-210987654321
       description: Your Customer Child ID provided by FrankieOne
+    X-Frankie-CustomerID:
+      name: X-Frankie-CustomerID
+      in: header
+      required: true
+      schema:
+        type: string
+        example: 12345678-1234-1234-1234-123456789012
+      description: Your Customer ID provided by FrankieOne
+    X-Frankie-Channel:
+      name: X-Frankie-Channel
+      in: header
+      required: false
+      schema:
+        type: string
+      description: 'Open string that can be used to define the "channel" the request comes in from. It can potentially be used in routing and risk calculations upon request. Default values that can be used are:  api portal smartui Any alphanumeric string is supported though. Anything over 64 characters will be truncated.'
     serviceName:
       name: serviceName
       in: path
       schema:
         type: string
       description: The unique name of the service profile
-      required: true
-    X-Frankie-Username:
-      name: X-Frankie-Username
-      in: header
-      description: Username provided by API caller
-      required: false
-      schema:
-        type: string
-        example: fred.flintstone@frankieone.com
-    entityId:
-      name: entityId
-      in: path
-      schema:
-        type: string
-      description: Unique FrankieOne identifier for an entity
       required: true
     Api-Key:
       name: api_key
@@ -398,13 +390,21 @@ components:
         example: 245c765b124a098d09ef8765....
       description: Your API key provided by FrankieOne
       required: true
-    X-Frankie-Channel:
-      name: X-Frankie-Channel
+    entityId:
+      name: entityId
+      in: path
+      schema:
+        type: string
+      description: Unique FrankieOne identifier for an entity
+      required: true
+    X-Frankie-Username:
+      name: X-Frankie-Username
       in: header
+      description: Username provided by API caller
       required: false
       schema:
         type: string
-      description: 'Open string that can be used to define the "channel" the request comes in from. It can potentially be used in routing and risk calculations upon request. Default values that can be used are:  api portal smartui Any alphanumeric string is supported though. Anything over 64 characters will be truncated.'
+        example: fred.flintstone@frankieone.com
   securitySchemes:
     Api-Key:
       type: apiKey
