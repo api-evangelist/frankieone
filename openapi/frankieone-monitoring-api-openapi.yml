@@ -150,6 +150,35 @@ paths:
         - kyc:api
 components:
   schemas:
+    Comment:
+      type: object
+      properties:
+        commentId:
+          type: string
+          description: Unique identifier for the comment.
+          example: 55fc5d54-46f7-49c8-bf78-e07ec79cd6e7
+          readOnly: true
+        text:
+          type: string
+          description: The text content of the comment.
+          example: Update after speaking to customer over the phone directly.
+    entity_patch_monitoring_response:
+      type: object
+      properties:
+        requestId:
+          $ref: '#/components/schemas/Request-ID'
+        monitoring:
+          $ref: '#/components/schemas/entity_patch_monitoring_subscriptions_response'
+    Monitoring-Type:
+      type: string
+      description: The type of workflow subscription. This determines which types are subscribing to a workflow.
+      allOf:
+      - $ref: '#/components/schemas/Subscription-Type'
+    entity_patch_monitoring_subscriptions_response:
+      type: object
+      properties:
+        AML:
+          $ref: '#/components/schemas/entity_patch_monitoring_subscriptions_aml_response'
     entity_patch_monitoring_subscriptions_details_response:
       type: object
       description: The subscription details for monitoring, this object is returned per monitoring type
@@ -196,6 +225,34 @@ components:
                 description: Unique ID of the workflow.
               lifecyclePhase:
                 $ref: '#/components/schemas/Workflow-LifecyclePhaseEnum'
+    Subscription-Type:
+      type: string
+      description: Specifies the type of service profile subscription. This value determines the category of the service profile subscription.
+      enum:
+      - AML
+      - ACTIVITY
+    Request-ID:
+      type: string
+      example: 01HN9XHZN6MGXM9JXG50K59Q85
+      description: The unique request identifier for the API call made.
+    Issue:
+      type: object
+      properties:
+        issue:
+          type: string
+          description: Description of the issue.
+        issueLocation:
+          type: string
+          description: The location or context where the issue was identified.
+        issueType:
+          type: string
+          description: The type or category of the issue.
+    Subscription-Status:
+      type: string
+      description: "Indicates the current status of the subscription.\n\n  - `ENABLED`: The subscription is active and operational.\n  - `DISABLED`: The subscription is inactive and not operational."
+      enum:
+      - ENABLED
+      - DISABLED
     Error-Base:
       type: object
       properties:
@@ -207,17 +264,23 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Issue'
-    entity_patch_monitoring_subscriptions_response:
+    entity_patch_monitoring_subscriptions_aml_response:
       type: object
+      description: The subscription details for AML monitoring
       properties:
-        AML:
-          $ref: '#/components/schemas/entity_patch_monitoring_subscriptions_aml_response'
-    Subscription-Status:
-      type: string
-      description: "Indicates the current status of the subscription.\n\n  - `ENABLED`: The subscription is active and operational.\n  - `DISABLED`: The subscription is inactive and not operational."
-      enum:
-      - ENABLED
-      - DISABLED
+        subscriptions:
+          type: array
+          description: The list of AML monitoring subscriptions
+          items:
+            $ref: '#/components/schemas/entity_patch_monitoring_subscriptions_details_response'
+        providers:
+          type: array
+          description: The providers that will be affected by the subscription
+          items:
+            type: string
+            description: The provider name
+        status:
+          $ref: '#/components/schemas/Subscription-Status'
     Error:
       type: object
       x-examples:
@@ -242,10 +305,6 @@ components:
         properties:
           requestId:
             $ref: '#/components/schemas/Request-ID'
-    Request-ID:
-      type: string
-      example: 01HN9XHZN6MGXM9JXG50K59Q85
-      description: The unique request identifier for the API call made.
     Workflow-LifecyclePhaseEnum:
       type: string
       description: "Specifies the lifecycle phase of the customer in which this workflow is executed:\n  - ONBOARDING: Workflow is in the onboarding stage.\n  - MONITORING: Workflow is in the monitoring stage.\n  - OTHER: Workflow is in another stage.\n"
@@ -254,74 +313,21 @@ components:
       - MONITORING
       - OTHER
       default: OTHER
-    Monitoring-Type:
-      type: string
-      description: The type of workflow subscription. This determines which types are subscribing to a workflow.
-      allOf:
-      - $ref: '#/components/schemas/Subscription-Type'
-    Issue:
-      type: object
-      properties:
-        issue:
-          type: string
-          description: Description of the issue.
-        issueLocation:
-          type: string
-          description: The location or context where the issue was identified.
-        issueType:
-          type: string
-          description: The type or category of the issue.
-    Subscription-Type:
-      type: string
-      description: Specifies the type of service profile subscription. This value determines the category of the service profile subscription.
-      enum:
-      - AML
-      - ACTIVITY
-    entity_patch_monitoring_subscriptions_aml_response:
-      type: object
-      description: The subscription details for AML monitoring
-      properties:
-        subscriptions:
-          type: array
-          description: The list of AML monitoring subscriptions
-          items:
-            $ref: '#/components/schemas/entity_patch_monitoring_subscriptions_details_response'
-        providers:
-          type: array
-          description: The providers that will be affected by the subscription
-          items:
-            type: string
-            description: The provider name
-        status:
-          $ref: '#/components/schemas/Subscription-Status'
-    entity_patch_monitoring_response:
-      type: object
-      properties:
-        requestId:
-          $ref: '#/components/schemas/Request-ID'
-        monitoring:
-          $ref: '#/components/schemas/entity_patch_monitoring_subscriptions_response'
-    Comment:
-      type: object
-      properties:
-        commentId:
-          type: string
-          description: Unique identifier for the comment.
-          example: 55fc5d54-46f7-49c8-bf78-e07ec79cd6e7
-          readOnly: true
-        text:
-          type: string
-          description: The text content of the comment.
-          example: Update after speaking to customer over the phone directly.
   parameters:
-    X-Frankie-CustomerChildID:
-      name: X-Frankie-CustomerChildID
+    X-Frankie-Channel:
+      name: X-Frankie-Channel
       in: header
       required: false
       schema:
         type: string
-        example: 87654321-4321-4321-4321-210987654321
-      description: Your Customer Child ID provided by FrankieOne
+      description: 'Open string that can be used to define the "channel" the request comes in from. It can potentially be used in routing and risk calculations upon request. Default values that can be used are:  api portal smartui Any alphanumeric string is supported though. Anything over 64 characters will be truncated.'
+    entityId:
+      name: entityId
+      in: path
+      schema:
+        type: string
+      description: Unique FrankieOne identifier for an entity
+      required: true
     X-Frankie-CustomerID:
       name: X-Frankie-CustomerID
       in: header
@@ -330,19 +336,20 @@ components:
         type: string
         example: 12345678-1234-1234-1234-123456789012
       description: Your Customer ID provided by FrankieOne
-    X-Frankie-Channel:
-      name: X-Frankie-Channel
-      in: header
-      required: false
-      schema:
-        type: string
-      description: 'Open string that can be used to define the "channel" the request comes in from. It can potentially be used in routing and risk calculations upon request. Default values that can be used are:  api portal smartui Any alphanumeric string is supported though. Anything over 64 characters will be truncated.'
     toggle-monitoring:
       in: query
       name: enabled
       schema:
         type: boolean
       description: Enable or disable monitoring for the given entity. Set to true to turn monitoring on or set to false to turn monitoring off.
+      required: true
+    Api-Key:
+      name: api_key
+      in: header
+      schema:
+        type: string
+        example: 245c765b124a098d09ef8765....
+      description: Your API key provided by FrankieOne
       required: true
     monitoring-types:
       in: query
@@ -354,21 +361,14 @@ components:
         items:
           $ref: '#/components/schemas/Monitoring-Type'
       description: The type of ongoing monitoring to be enabled/disable for the given entity. Exclude this parameter to set the monitoring status for all types.
-    Api-Key:
-      name: api_key
+    X-Frankie-CustomerChildID:
+      name: X-Frankie-CustomerChildID
       in: header
+      required: false
       schema:
         type: string
-        example: 245c765b124a098d09ef8765....
-      description: Your API key provided by FrankieOne
-      required: true
-    entityId:
-      name: entityId
-      in: path
-      schema:
-        type: string
-      description: Unique FrankieOne identifier for an entity
-      required: true
+        example: 87654321-4321-4321-4321-210987654321
+      description: Your Customer Child ID provided by FrankieOne
   securitySchemes:
     Api-Key:
       type: apiKey

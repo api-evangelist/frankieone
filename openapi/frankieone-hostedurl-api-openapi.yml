@@ -109,39 +109,43 @@ paths:
       - jwt:
         - kyc:api
 components:
-  parameters:
-    X-Frankie-CustomerID:
-      name: X-Frankie-CustomerID
-      in: header
-      required: true
-      schema:
-        type: string
-        example: 12345678-1234-1234-1234-123456789012
-      description: Your Customer ID provided by FrankieOne
-    Api-Key:
-      name: api_key
-      in: header
-      schema:
-        type: string
-        example: 245c765b124a098d09ef8765....
-      description: Your API key provided by FrankieOne
-      required: true
-    X-Frankie-Channel:
-      name: X-Frankie-Channel
-      in: header
-      required: false
-      schema:
-        type: string
-      description: 'Open string that can be used to define the "channel" the request comes in from. It can potentially be used in routing and risk calculations upon request. Default values that can be used are:  api portal smartui Any alphanumeric string is supported though. Anything over 64 characters will be truncated.'
-    X-Frankie-CustomerChildID:
-      name: X-Frankie-CustomerChildID
-      in: header
-      required: false
-      schema:
-        type: string
-        example: 87654321-4321-4321-4321-210987654321
-      description: Your Customer Child ID provided by FrankieOne
   schemas:
+    Error:
+      type: object
+      x-examples:
+        '400':
+          requestId: 0123456789ABCDEFGHIJKLMNOP
+          errorCode: API-0400
+          errorMsg: Parsing credentials from "<invalid>" failed, because invalid.
+          httpStatusCode: 400
+        '401':
+          requestId: 0123456789ABCDEFGHIJKLMNOP
+          errorCode: API-0401
+          errorMsg: Unauthenticated due to invalid credentials.
+          httpStatusCode: 401
+        '409':
+          requestId: 0123456789ABCDEFGHIJKLMNOP
+          errorCode: API-0409
+          errorMsg: Conflict.
+          httpStatusCode: 409
+      allOf:
+      - $ref: '#/components/schemas/Error-Base'
+      - type: object
+        properties:
+          requestId:
+            $ref: '#/components/schemas/Request-ID'
+    Comment:
+      type: object
+      properties:
+        commentId:
+          type: string
+          description: Unique identifier for the comment.
+          example: 55fc5d54-46f7-49c8-bf78-e07ec79cd6e7
+          readOnly: true
+        text:
+          type: string
+          description: The text content of the comment.
+          example: Update after speaking to customer over the phone directly.
     IDV-HostedUrl-Request:
       type: object
       description: Hosted OneSDK URL Request, used to request a hosted OneSDK URL with entity specific token for a customer to use a hosted OneSDK session to do an action. Examples of actions that may be done is to complete their onboarding process or to re-attempt IDV checks.  If sendSMS is true and a phone number is supplied, an SMS will be sent to the phone number with the generated URL.
@@ -185,17 +189,6 @@ components:
           type: string
         comment:
           $ref: '#/components/schemas/Comment'
-    Error-Base:
-      type: object
-      properties:
-        errorCode:
-          type: string
-        errorMsg:
-          type: string
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/Issue'
     Issue:
       type: object
       properties:
@@ -208,42 +201,17 @@ components:
         issueType:
           type: string
           description: The type or category of the issue.
-    Error:
-      type: object
-      x-examples:
-        '400':
-          requestId: 0123456789ABCDEFGHIJKLMNOP
-          errorCode: API-0400
-          errorMsg: Parsing credentials from "<invalid>" failed, because invalid.
-          httpStatusCode: 400
-        '401':
-          requestId: 0123456789ABCDEFGHIJKLMNOP
-          errorCode: API-0401
-          errorMsg: Unauthenticated due to invalid credentials.
-          httpStatusCode: 401
-        '409':
-          requestId: 0123456789ABCDEFGHIJKLMNOP
-          errorCode: API-0409
-          errorMsg: Conflict.
-          httpStatusCode: 409
-      allOf:
-      - $ref: '#/components/schemas/Error-Base'
-      - type: object
-        properties:
-          requestId:
-            $ref: '#/components/schemas/Request-ID'
-    Comment:
+    Error-Base:
       type: object
       properties:
-        commentId:
+        errorCode:
           type: string
-          description: Unique identifier for the comment.
-          example: 55fc5d54-46f7-49c8-bf78-e07ec79cd6e7
-          readOnly: true
-        text:
+        errorMsg:
           type: string
-          description: The text content of the comment.
-          example: Update after speaking to customer over the phone directly.
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/Issue'
     Request-ID:
       type: string
       example: 01HN9XHZN6MGXM9JXG50K59Q85
@@ -274,6 +242,38 @@ components:
           $ref: '#/components/schemas/Request-ID'
         entityId:
           $ref: '#/components/schemas/Entity-ID'
+  parameters:
+    X-Frankie-Channel:
+      name: X-Frankie-Channel
+      in: header
+      required: false
+      schema:
+        type: string
+      description: 'Open string that can be used to define the "channel" the request comes in from. It can potentially be used in routing and risk calculations upon request. Default values that can be used are:  api portal smartui Any alphanumeric string is supported though. Anything over 64 characters will be truncated.'
+    X-Frankie-CustomerChildID:
+      name: X-Frankie-CustomerChildID
+      in: header
+      required: false
+      schema:
+        type: string
+        example: 87654321-4321-4321-4321-210987654321
+      description: Your Customer Child ID provided by FrankieOne
+    Api-Key:
+      name: api_key
+      in: header
+      schema:
+        type: string
+        example: 245c765b124a098d09ef8765....
+      description: Your API key provided by FrankieOne
+      required: true
+    X-Frankie-CustomerID:
+      name: X-Frankie-CustomerID
+      in: header
+      required: true
+      schema:
+        type: string
+        example: 12345678-1234-1234-1234-123456789012
+      description: Your Customer ID provided by FrankieOne
   securitySchemes:
     Api-Key:
       type: apiKey
