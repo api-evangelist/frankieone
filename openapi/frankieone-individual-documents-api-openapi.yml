@@ -597,26 +597,88 @@ paths:
       - jwt:
         - kyc:api
 components:
+  parameters:
+    attachmentId:
+      name: attachmentId
+      in: path
+      schema:
+        type: string
+      required: true
+    levelNoIdQuery:
+      name: level
+      in: query
+      schema:
+        type: string
+        default: meta
+        enum:
+        - meta
+        - base64
+      description: "Determines what level of detail to return in the response\n - meta: Return all metadata only, no links or base64 data\n - base64: Return all metadata and images as base64"
+    documentId:
+      name: documentId
+      in: path
+      schema:
+        type: string
+      description: Unique identifier for a document
+      required: true
+    levelQuery:
+      name: level
+      in: query
+      schema:
+        type: string
+        default: meta
+        enum:
+        - id
+        - meta
+        - base64
+      description: "Determines what level of detail to return in the response\n - id: Return just an id\n - meta: Return all metadata only, no links or base64 data\n - base64: Return all metadata and data in base64 format"
+    X-Frankie-CustomerChildID:
+      name: X-Frankie-CustomerChildID
+      in: header
+      required: false
+      schema:
+        type: string
+        example: 87654321-4321-4321-4321-210987654321
+      description: Your Customer Child ID provided by FrankieOne
+    X-Frankie-Channel:
+      name: X-Frankie-Channel
+      in: header
+      required: false
+      schema:
+        type: string
+      description: 'Open string that can be used to define the "channel" the request comes in from. It can potentially be used in routing and risk calculations upon request. Default values that can be used are:  api portal smartui Any alphanumeric string is supported though. Anything over 64 characters will be truncated.'
+    X-Frankie-CustomerID:
+      name: X-Frankie-CustomerID
+      in: header
+      required: true
+      schema:
+        type: string
+        example: 12345678-1234-1234-1234-123456789012
+      description: Your Customer ID provided by FrankieOne
+    entityId:
+      name: entityId
+      in: path
+      schema:
+        type: string
+      description: Unique FrankieOne identifier for an entity
+      required: true
+    X-Frankie-Username:
+      name: X-Frankie-Username
+      in: header
+      description: Username provided by API caller
+      required: false
+      schema:
+        type: string
+        example: fred.flintstone@frankieone.com
+    Api-Key:
+      name: api_key
+      in: header
+      schema:
+        type: string
+        example: 245c765b124a098d09ef8765....
+      description: Your API key provided by FrankieOne
+      required: true
   schemas:
-    Document-Supplementary-Data:
-      type: object
-      description: Supplementary information relevant to a specific document or report type.
-      oneOf:
-      - $ref: '#/components/schemas/Document-Supplementary-Data-National-Health-ID'
-      - $ref: '#/components/schemas/Document-Supplementary-Data-Birth-Certificate'
-      - $ref: '#/components/schemas/Document-Supplementary-Data-National-ID'
-      - $ref: '#/components/schemas/Document-Supplementary-Data-Citizenship'
-      - $ref: '#/components/schemas/Document-Supplementary-Data-Passport'
-      - $ref: '#/components/schemas/Document-Supplementary-Data-Marriage-Certificate'
-      discriminator:
-        propertyName: type
-        mapping:
-          NATIONAL_HEALTH_ID: '#/components/schemas/Document-Supplementary-Data-National-Health-ID'
-          BIRTH_CERT: '#/components/schemas/Document-Supplementary-Data-Birth-Certificate'
-          NATIONAL_ID: '#/components/schemas/Document-Supplementary-Data-National-ID'
-          CITIZENSHIP: '#/components/schemas/Document-Supplementary-Data-Citizenship'
-          PASSPORT: '#/components/schemas/Document-Supplementary-Data-Passport'
-          MARRIAGE_CERT: '#/components/schemas/Document-Supplementary-Data-Marriage-Certificate'
     Comment:
       type: object
       properties:
@@ -629,173 +691,117 @@ components:
           type: string
           description: The text content of the comment.
           example: Update after speaking to customer over the phone directly.
-    Document-Attachment-Side:
-      type: string
-      enum:
-      - FRONT
-      - BACK
-      description: Indicates whether the attachment is the front or back side of a document.
-    Date:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/Date-Base'
-      - type: object
-        properties:
-          normalized:
-            type: string
-            format: date
-            description: Full date in ISO 8601 format ("YYYY-MM-DD"). This is a read-only field.
-            example: '1990-03-31'
-            readOnly: true
-    Document-Supplementary-Data-Birth-Certificate:
-      type: object
-      description: Supplementary information relevant to a birth certificate.
-      allOf:
-      - $ref: '#/components/schemas/Document-Supplementary-Data-Base'
-      - type: object
-        description: Supplementary information relevant to a birth certificate.
-        properties:
-          registrationDate:
-            type: string
-            description: The date the birth was registered.
-            example: '2000'
-          registrationDistrict:
-            type: string
-            description: The district where the birth was registered.
-            example: Sydney
-          dateOfPrint:
-            type: string
-            description: The date the birth certificate was printed.
-            example: '2000'
-          givenName:
-            type: string
-            description: The given name as printed on the certificate.
-          otherNames:
-            type: string
-            description: Other name(s) as printed on the certificate.
-          familyName:
-            type: string
-            description: The family name as printed on the certificate.
-    Entity-Documents:
-      type: object
-      properties:
-        REPORT:
-          type: array
-          items:
-            $ref: '#/components/schemas/Document-Information'
-        SUPPORTING:
-          type: array
-          items:
-            $ref: '#/components/schemas/Document-Information'
-        IDENTITY:
-          type: array
-          items:
-            $ref: '#/components/schemas/Document-Information'
-        OTHER:
-          type: array
-          items:
-            $ref: '#/components/schemas/Document-Information'
-    individuals_entity_document_response:
-      type: object
-      required:
-      - requestId
-      properties:
-        entity:
-          $ref: '#/components/schemas/Entity-ID'
-        document:
-          $ref: '#/components/schemas/Document-Information'
-        requestId:
-          $ref: '#/components/schemas/Request-ID'
     Document-Attachment-Type:
       type: string
       description: "General types of valid document attachments.\n  - \"PHOTO\": Any photo.\n  - \"VIDEO\": Any video.\n  - \"AUDIO\": Any audio.\n  - \"PDF\": PDF or PS file (may contain text, images, or both).\n  - \"DOC\": Word document, RTF, etc.\n  - \"ZIP\": Any compressed file(s)."
-    Attribute:
-      type: object
-      required:
-      - type
-      - value
-      properties:
-        type:
-          description: The attribute type.
-          type: string
-          maxLength: 64
-        value:
-          description: The value assigned to the attribute.
-          type: string
-    Document-Supplementary-Data-Marriage-Certificate:
-      type: object
-      description: Supplementary information relevant to a marriage certificate.
-      allOf:
-      - $ref: '#/components/schemas/Document-Supplementary-Data-Base'
-      - type: object
-        description: Supplementary information relevant to a marriage certificate.
-        properties:
-          partner1GivenName:
-            type: string
-            description: The given name of partner 1.
-            example: Harry
-          partner1FamilyName:
-            type: string
-            description: The family name of partner 1.
-            example: Versailles
-          partner1OtherName:
-            type: string
-            description: The other name of partner 1.
-            example: S.
-          partner2GivenName:
-            type: string
-            description: The given name of partner 2.
-            example: Harry
-          partner2FamilyName:
-            type: string
-            description: The family name of partner 2.
-            example: Versailles
-          partner2OtherName:
-            type: string
-            description: The other name of partner 2.
-            example: S.
-          registrationDate:
-            type: string
-            description: The date the marriage was registered.
-            example: '2023'
-          marriageDate:
-            type: string
-            description: The date the marriage was held.
-            example: '2023-10-01'
-          dateOfPrint:
-            type: string
-            description: The date the birth certificate was printed.
-            example: '2023-10-01'
-    Document-Supplementary-Data-National-Health-ID:
-      type: object
-      description: Supplementary information relevant to a national health id.
-      allOf:
-      - $ref: '#/components/schemas/Document-Supplementary-Data-Base'
-      - type: object
-        properties:
-          reference:
-            type: string
-            description: The individual reference number used to identify the position of the applicant's name on the health card. Required for Australian Medicare cards (this is the number to the left of the name on the card).
-            example: '1'
-          nameOnCardLine1:
-            type: string
-            description: The individual's name as it appears on the card.
-          nameOnCardLine2:
-            type: string
-            description: If the individual's name spans more than one line, this is the part of the name that appears on line 2.
-          nameOnCardLine3:
-            type: string
-            description: If the individual's name spans more than two lines, this is the part of the name that appears on line 3.
-          nameOnCardLine4:
-            type: string
-            description: If the individual's name spans more than three lines, this is the part of the name that appears on line 4.
-          middleNameOnCard:
-            type: string
-            description: The individual's middle name or initial as it appears on the card.
     Request-ID:
       type: string
       example: 01HN9XHZN6MGXM9JXG50K59Q85
       description: The unique request identifier for the API call made.
+    Date-Type:
+      type: string
+      default: GREGORIAN
+      enum:
+      - BUDDHIST
+      - DISCORDIAN
+      - GREGORIAN
+      - HEBREW
+      - ISLAMIC
+      - JULIAN
+      - LUNAR
+      - MESO_AMERICAN
+      - PERSIAN
+      - OTHER
+      description: The calendar system used for the date, e.g., BUDDHIST, DISCORDIAN, GREGORIAN, HEBREW, ISLAMIC, JULIAN, LUNAR, MESO_AMERICAN, PERSIAN, or OTHER.
+    Document-Supplementary-Data-National-ID:
+      type: object
+      description: Supplementary information relevant to a national ID.
+      allOf:
+      - $ref: '#/components/schemas/Document-Supplementary-Data-Base'
+      - type: object
+        properties:
+          homeCountryFullName:
+            type: string
+            description: The original full name from the individual's home country national ID.
+            example: 张伟明
+          paternalFamilyName:
+            type: string
+            description: The individual's family name inherited from the father's side.
+            example: MENDOZA
+          maternalFamilyName:
+            type: string
+            description: The individual's family name inherited from the mother's side.
+            example: GARCIA
+    Document-Supplementary-Data-Citizenship:
+      type: object
+      description: Supplementary information relevant to a citizenship certificate.
+      allOf:
+      - $ref: '#/components/schemas/Document-Supplementary-Data-Base'
+      - type: object
+        description: Supplementary information relevant to a citizenship certificate.
+        properties:
+          acquisitionDate:
+            type: string
+            description: The date citizenship was acquired.
+            example: 2000/01/01
+          primaryCountry:
+            type: string
+            description: The primary country of citizenship, represented by its three-letter ISO 3166-1 alpha-3 code.
+            example: USA
+          secondaryCountry:
+            type: string
+            description: The secondary country of citizenship, if applicable, represented by its three-letter ISO 3166-1 alpha-3 code.
+            example: CAN
+    Issue:
+      type: object
+      properties:
+        issue:
+          type: string
+          description: Description of the issue.
+        issueLocation:
+          type: string
+          description: The location or context where the issue was identified.
+        issueType:
+          type: string
+          description: The type or category of the issue.
+    Custom-Attributes:
+      type: object
+      additionalProperties:
+        $ref: '#/components/schemas/Attribute'
+    Error-Base:
+      type: object
+      properties:
+        errorCode:
+          type: string
+        errorMsg:
+          type: string
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/Issue'
+    Date-Base:
+      type: object
+      properties:
+        year:
+          type: string
+          description: Year in "YYYY" format.
+          example: '1990'
+        month:
+          type: string
+          description: Month in "MM" format.
+          example: '03'
+        day:
+          type: string
+          description: Day in "DD" format.
+          example: '27'
+        unstructured:
+          type: string
+          description: 'Raw date format without normalization or standardization to the Gregorian calendar.
+
+            This can be used to provide non-Gregorian dates (e.g., Islamic dates).'
+          example: 12 Rajab 1445 AH
+        type:
+          $ref: '#/components/schemas/Date-Type'
     Document-Type:
       type: string
       enum:
@@ -843,40 +849,229 @@ components:
       - AVIATION_SECURITY_ID
       - MARITIME_SECURITY_ID
       description: "Valid document ID types.\n\n  - \"OTHER\": Generic document type. Unspecified.\n  - \"DRIVERS_LICENSE\": Driver's license.\n  - \"PASSPORT\": Passport.\n  - \"VISA\": Visa document (not Visa payment card).\n  - \"IMMIGRATION\": Immigration card.\n  - \"NATIONAL_ID\": Any national ID card.\n  - \"TAX_ID\": Any national tax identifier.\n  - \"NATIONAL_HEALTH_ID\": Any national health program ID card (e.g., Medicare, NHS).\n  - \"CONCESSION\": State-issued concession card.\n  - \"HEALTH_CONCESSION\": State-issued health-specific concession card.\n  - \"PENSION\": State-issued pension ID.\n  - \"MILITARY_ID\": Military ID.\n  - \"BIRTH_CERT\": Birth certificate.\n  - \"CITIZENSHIP\": Citizenship certificate.\n  - \"MARRIAGE_CERT\": Marriage certificate.\n  - \"DEATH_CERT\": Death certificate.\n  - \"NAME_CHANGE\": Name change confirmation.\n  - \"UTILITY_BILL\": Regulated utility bill, such as electricity, gas, etc.\n  - \"BANK_STATEMENT\": Bank/card statement.\n  - \"BANK_ACCOUNT\": Bank account.\n  - \"INTENT_PROOF\": Proof of intent, generally a photo/video or a scanned letter.\n  - \"ATTESTATION\": Document of attestation (e.g., Statutory Declaration).\n\n  NOTE: These cannot be used as a supporting document:\n  - \"SELF_IMAGE\": A \"selfie\" used for comparisons.\n  - \"DEVICE\": Device ID.\n  - \"VEHICLE_REGISTRATION\": Vehicle registration number.\n  - \"PROOF_OF_ADDRESS\": Any document that provides proof of address.\n  - \"HOUSE_REGISTRATION\": House registration document.\n  - \"YELLOW_HOUSE_REGISTRATION\": Yellow House Registration Thor Ror 13.\n  - \"WORK_PERMIT\": Work permit.\n  - \"EMPLOYMENT_CERTIFICATE\": Certificate of employment.\n  - \"NOTARY_PUBLIC_ID\": Notary Public Identification.\n\n  Business-related documentation:\n\n  - \"EXTERNAL_ADMIN\": Details of appointed administrator.\n  - \"CHARGES\": Details of any charges laid against a company or director.\n  - \"PRE_ASIC\": Any documents that are Pre-ASIC.\n  - \"ANNUAL_RETURN\": Details of a company's annual return.\n  - \"REPORT\": Frankie-generated report.\n  - \"TRUST_DEED\": Corporate trust deed.\n  - \"PARTNERSHIP_AGREEMENT\": Partnership agreement documents.\n  - \"ADMIN_CHANGE\": Change of administrator.\n  - \"COMPANY_REPORT\": Registry-filed company reports.\n\n  Special document types:\n\n  - \"CHECK_RESULTS\": Special document type for specifying results of checks completed other than through Frankie.\n  - \"AVIATION_SECURITY_ID\": Aviation Security Identification Card.\n  - \"MARITIME_SECURITY_ID\": Maritime Security Identification Card."
-    Date-Type:
+    Document-Attachment-Side:
       type: string
-      default: GREGORIAN
       enum:
-      - BUDDHIST
-      - DISCORDIAN
-      - GREGORIAN
-      - HEBREW
-      - ISLAMIC
-      - JULIAN
-      - LUNAR
-      - MESO_AMERICAN
-      - PERSIAN
-      - OTHER
-      description: The calendar system used for the date, e.g., BUDDHIST, DISCORDIAN, GREGORIAN, HEBREW, ISLAMIC, JULIAN, LUNAR, MESO_AMERICAN, PERSIAN, or OTHER.
-    Document-ID:
+      - FRONT
+      - BACK
+      description: Indicates whether the attachment is the front or back side of a document.
+    Document-Supplementary-Data:
+      type: object
+      description: Supplementary information relevant to a specific document or report type.
+      oneOf:
+      - $ref: '#/components/schemas/Document-Supplementary-Data-National-Health-ID'
+      - $ref: '#/components/schemas/Document-Supplementary-Data-Birth-Certificate'
+      - $ref: '#/components/schemas/Document-Supplementary-Data-National-ID'
+      - $ref: '#/components/schemas/Document-Supplementary-Data-Citizenship'
+      - $ref: '#/components/schemas/Document-Supplementary-Data-Passport'
+      - $ref: '#/components/schemas/Document-Supplementary-Data-Marriage-Certificate'
+      discriminator:
+        propertyName: type
+        mapping:
+          NATIONAL_HEALTH_ID: '#/components/schemas/Document-Supplementary-Data-National-Health-ID'
+          BIRTH_CERT: '#/components/schemas/Document-Supplementary-Data-Birth-Certificate'
+          NATIONAL_ID: '#/components/schemas/Document-Supplementary-Data-National-ID'
+          CITIZENSHIP: '#/components/schemas/Document-Supplementary-Data-Citizenship'
+          PASSPORT: '#/components/schemas/Document-Supplementary-Data-Passport'
+          MARRIAGE_CERT: '#/components/schemas/Document-Supplementary-Data-Marriage-Certificate'
+    Error:
+      type: object
+      x-examples:
+        '400':
+          requestId: 0123456789ABCDEFGHIJKLMNOP
+          errorCode: API-0400
+          errorMsg: Parsing credentials from "<invalid>" failed, because invalid.
+          httpStatusCode: 400
+        '401':
+          requestId: 0123456789ABCDEFGHIJKLMNOP
+          errorCode: API-0401
+          errorMsg: Unauthenticated due to invalid credentials.
+          httpStatusCode: 401
+        '409':
+          requestId: 0123456789ABCDEFGHIJKLMNOP
+          errorCode: API-0409
+          errorMsg: Conflict.
+          httpStatusCode: 409
+      allOf:
+      - $ref: '#/components/schemas/Error-Base'
+      - type: object
+        properties:
+          requestId:
+            $ref: '#/components/schemas/Request-ID'
+    Data-URI-Base64:
+      description: A Base64-encoded string or URI representing the data.
+      oneOf:
+      - type: object
+        readOnly: true
+        required:
+        - uri
+        properties:
+          uri:
+            type: string
+            description: URI identifying the resource location.
+            example: https://s3.amazonaws.com/dev/41963bc5feff322020137de233c3be0fac6/croppedFrontID/38d54232-b840-431d-b248-152345fe214.jpg
+      - type: object
+        required:
+        - base64
+        properties:
+          base64:
+            type: string
+            description: Base64-encoded string of the raw attachment data.
+            example: ZG9jdW1lbnQgaW1hZ2UgZ29lcyBoZXJl
+    individuals_entity_document_response:
+      type: object
+      required:
+      - requestId
+      properties:
+        entity:
+          $ref: '#/components/schemas/Entity-ID'
+        document:
+          $ref: '#/components/schemas/Document-Information'
+        requestId:
+          $ref: '#/components/schemas/Request-ID'
+    Document-Supplementary-Data-Passport:
+      type: object
+      description: Supplementary information relevant to a national health id.
+      allOf:
+      - $ref: '#/components/schemas/Document-Supplementary-Data-Base'
+      - type: object
+        properties:
+          homeCountryFullName:
+            type: string
+            description: The original name from the home country of passport.
+            example: 张伟明
+    Document-Supplementary-Data-Base:
+      type: object
+      description: Supplementary data associated with a document.
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          description: The document type that defines the type of supplementary data returned.
+          enum:
+          - NATIONAL_HEALTH_ID
+          - BIRTH_CERT
+          - NATIONAL_ID
+          - CITIZENSHIP
+          - PASSPORT
+          - MARRIAGE_CERT
+    Document-Attachment-Retrieval-Status:
       type: string
-      format: uuid
-      description: 'As documents are added to an entity, they are assigned a unique identifier to assist with modification and reference.
-
-        To modify a document, include the documentId in an update request.'
-      example: 92de15f64-5717-4562-b3fc-2c963f6665a7
-    Issue:
+      readOnly: true
+      enum:
+      - NORMAL
+      - EXCLUDED
+      - FAILED
+      description: "The reason why the data in a response is missing.\n\n- \"NORMAL\": The data was retrieved and is included. If it is empty, then\n  it was never provided or was provided empty.\n\n- \"EXCLUDED\": The retrieval request was not for 'full' data, or the object\n  has been deleted, so the data is not included.\n\n- \"FAILED\": The data could not be retrieved from the secure document\n  store.\n\nThe retrievalStatus enum will not usually be set in a request. If an\nattachment in a response has a 'FAILED' retrieval state, then\nthat object should not be sent back in a future update. It should\neither be omitted or the original data should be resent if it is available\nfrom another source. However, it is safe to send the object in an update\nwith the state received in a response. Any state other than 'NORMAL' (or\n'') will cause the blank data to be ignored, but other fields in the\nobject will be updated if needed."
+    Document-Class:
+      type: string
+      enum:
+      - OTHER
+      - IDENTITY
+      - SUPPORTING
+      - REPORT
+      description: The classification of the document, indicating how it should be used or interpreted.
+      example: IDENTITY
+    Date:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/Date-Base'
+      - type: object
+        properties:
+          normalized:
+            type: string
+            format: date
+            description: Full date in ISO 8601 format ("YYYY-MM-DD"). This is a read-only field.
+            example: '1990-03-31'
+            readOnly: true
+    Document-Supplementary-Data-National-Health-ID:
+      type: object
+      description: Supplementary information relevant to a national health id.
+      allOf:
+      - $ref: '#/components/schemas/Document-Supplementary-Data-Base'
+      - type: object
+        properties:
+          reference:
+            type: string
+            description: The individual reference number used to identify the position of the applicant's name on the health card. Required for Australian Medicare cards (this is the number to the left of the name on the card).
+            example: '1'
+          nameOnCardLine1:
+            type: string
+            description: The individual's name as it appears on the card.
+          nameOnCardLine2:
+            type: string
+            description: If the individual's name spans more than one line, this is the part of the name that appears on line 2.
+          nameOnCardLine3:
+            type: string
+            description: If the individual's name spans more than two lines, this is the part of the name that appears on line 3.
+          nameOnCardLine4:
+            type: string
+            description: If the individual's name spans more than three lines, this is the part of the name that appears on line 4.
+          middleNameOnCard:
+            type: string
+            description: The individual's middle name or initial as it appears on the card.
+    Entity-Documents:
       type: object
       properties:
-        issue:
+        REPORT:
+          type: array
+          items:
+            $ref: '#/components/schemas/Document-Information'
+        SUPPORTING:
+          type: array
+          items:
+            $ref: '#/components/schemas/Document-Information'
+        IDENTITY:
+          type: array
+          items:
+            $ref: '#/components/schemas/Document-Information'
+        OTHER:
+          type: array
+          items:
+            $ref: '#/components/schemas/Document-Information'
+    Document-Supplementary-Data-Birth-Certificate:
+      type: object
+      description: Supplementary information relevant to a birth certificate.
+      allOf:
+      - $ref: '#/components/schemas/Document-Supplementary-Data-Base'
+      - type: object
+        description: Supplementary information relevant to a birth certificate.
+        properties:
+          registrationDate:
+            type: string
+            description: The date the birth was registered.
+            example: '2000'
+          registrationDistrict:
+            type: string
+            description: The district where the birth was registered.
+            example: Sydney
+          dateOfPrint:
+            type: string
+            description: The date the birth certificate was printed.
+            example: '2000'
+          givenName:
+            type: string
+            description: The given name as printed on the certificate.
+          otherNames:
+            type: string
+            description: Other name(s) as printed on the certificate.
+          familyName:
+            type: string
+            description: The family name as printed on the certificate.
+    Attribute:
+      type: object
+      required:
+      - type
+      - value
+      properties:
+        type:
+          description: The attribute type.
           type: string
-          description: Description of the issue.
-        issueLocation:
+          maxLength: 64
+        value:
+          description: The value assigned to the attribute.
           type: string
-          description: The location or context where the issue was identified.
-        issueType:
-          type: string
-          description: The type or category of the issue.
     Document-Information:
       type: object
       required:
@@ -953,49 +1148,68 @@ components:
             Attachments can be uploaded in a single call or in multiple calls. To upload attachments over multiple calls, include the documentId in the request.'
           items:
             $ref: '#/components/schemas/Document-Attachment'
-    Document-Supplementary-Data-Citizenship:
+    Document-ID:
+      type: string
+      format: uuid
+      description: 'As documents are added to an entity, they are assigned a unique identifier to assist with modification and reference.
+
+        To modify a document, include the documentId in an update request.'
+      example: 92de15f64-5717-4562-b3fc-2c963f6665a7
+    Entity-ID:
+      type: string
+      description: 'Entities are assigned an auto-generated UUID to ensure global uniqueness, represented as entityId. The entityId allows for precise modification when required.
+
+        To modify an entity, set the entityId of the entity you wish to update in an update request.'
+      example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+      readOnly: true
+    Document-Supplementary-Data-Marriage-Certificate:
       type: object
-      description: Supplementary information relevant to a citizenship certificate.
+      description: Supplementary information relevant to a marriage certificate.
       allOf:
       - $ref: '#/components/schemas/Document-Supplementary-Data-Base'
       - type: object
-        description: Supplementary information relevant to a citizenship certificate.
+        description: Supplementary information relevant to a marriage certificate.
         properties:
-          acquisitionDate:
+          partner1GivenName:
             type: string
-            description: The date citizenship was acquired.
-            example: 2000/01/01
-          primaryCountry:
+            description: The given name of partner 1.
+            example: Harry
+          partner1FamilyName:
             type: string
-            description: The primary country of citizenship, represented by its three-letter ISO 3166-1 alpha-3 code.
-            example: USA
-          secondaryCountry:
+            description: The family name of partner 1.
+            example: Versailles
+          partner1OtherName:
             type: string
-            description: The secondary country of citizenship, if applicable, represented by its three-letter ISO 3166-1 alpha-3 code.
-            example: CAN
-    Document-Attachment-Retrieval-Status:
-      type: string
-      readOnly: true
-      enum:
-      - NORMAL
-      - EXCLUDED
-      - FAILED
-      description: "The reason why the data in a response is missing.\n\n- \"NORMAL\": The data was retrieved and is included. If it is empty, then\n  it was never provided or was provided empty.\n\n- \"EXCLUDED\": The retrieval request was not for 'full' data, or the object\n  has been deleted, so the data is not included.\n\n- \"FAILED\": The data could not be retrieved from the secure document\n  store.\n\nThe retrievalStatus enum will not usually be set in a request. If an\nattachment in a response has a 'FAILED' retrieval state, then\nthat object should not be sent back in a future update. It should\neither be omitted or the original data should be resent if it is available\nfrom another source. However, it is safe to send the object in an update\nwith the state received in a response. Any state other than 'NORMAL' (or\n'') will cause the blank data to be ignored, but other fields in the\nobject will be updated if needed."
+            description: The other name of partner 1.
+            example: S.
+          partner2GivenName:
+            type: string
+            description: The given name of partner 2.
+            example: Harry
+          partner2FamilyName:
+            type: string
+            description: The family name of partner 2.
+            example: Versailles
+          partner2OtherName:
+            type: string
+            description: The other name of partner 2.
+            example: S.
+          registrationDate:
+            type: string
+            description: The date the marriage was registered.
+            example: '2023'
+          marriageDate:
+            type: string
+            description: The date the marriage was held.
+            example: '2023-10-01'
+          dateOfPrint:
+            type: string
+            description: The date the birth certificate was printed.
+            example: '2023-10-01'
     Document-Attachment-ID:
       type: string
       format: uuid
       description: When a document attachment is created or uploaded, it is assigned an attachmentId. This identifier will appear in a successful response or accepted response. It can be referenced in subsequent calls if you are uploading additional or updated data.
-    Error-Base:
-      type: object
-      properties:
-        errorCode:
-          type: string
-        errorMsg:
-          type: string
-        details:
-          type: array
-          items:
-            $ref: '#/components/schemas/Issue'
     Document-Attachment:
       type: object
       required:
@@ -1041,220 +1255,6 @@ components:
           format: date-time
         retrievalStatus:
           $ref: '#/components/schemas/Document-Attachment-Retrieval-Status'
-    Entity-ID:
-      type: string
-      description: 'Entities are assigned an auto-generated UUID to ensure global uniqueness, represented as entityId. The entityId allows for precise modification when required.
-
-        To modify an entity, set the entityId of the entity you wish to update in an update request.'
-      example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-      readOnly: true
-    Date-Base:
-      type: object
-      properties:
-        year:
-          type: string
-          description: Year in "YYYY" format.
-          example: '1990'
-        month:
-          type: string
-          description: Month in "MM" format.
-          example: '03'
-        day:
-          type: string
-          description: Day in "DD" format.
-          example: '27'
-        unstructured:
-          type: string
-          description: 'Raw date format without normalization or standardization to the Gregorian calendar.
-
-            This can be used to provide non-Gregorian dates (e.g., Islamic dates).'
-          example: 12 Rajab 1445 AH
-        type:
-          $ref: '#/components/schemas/Date-Type'
-    Error:
-      type: object
-      x-examples:
-        '400':
-          requestId: 0123456789ABCDEFGHIJKLMNOP
-          errorCode: API-0400
-          errorMsg: Parsing credentials from "<invalid>" failed, because invalid.
-          httpStatusCode: 400
-        '401':
-          requestId: 0123456789ABCDEFGHIJKLMNOP
-          errorCode: API-0401
-          errorMsg: Unauthenticated due to invalid credentials.
-          httpStatusCode: 401
-        '409':
-          requestId: 0123456789ABCDEFGHIJKLMNOP
-          errorCode: API-0409
-          errorMsg: Conflict.
-          httpStatusCode: 409
-      allOf:
-      - $ref: '#/components/schemas/Error-Base'
-      - type: object
-        properties:
-          requestId:
-            $ref: '#/components/schemas/Request-ID'
-    Document-Supplementary-Data-National-ID:
-      type: object
-      description: Supplementary information relevant to a national ID.
-      allOf:
-      - $ref: '#/components/schemas/Document-Supplementary-Data-Base'
-      - type: object
-        properties:
-          homeCountryFullName:
-            type: string
-            description: The original full name from the individual's home country national ID.
-            example: 张伟明
-          paternalFamilyName:
-            type: string
-            description: The individual's family name inherited from the father's side.
-            example: MENDOZA
-          maternalFamilyName:
-            type: string
-            description: The individual's family name inherited from the mother's side.
-            example: GARCIA
-    Document-Class:
-      type: string
-      enum:
-      - OTHER
-      - IDENTITY
-      - SUPPORTING
-      - REPORT
-      description: The classification of the document, indicating how it should be used or interpreted.
-      example: IDENTITY
-    Custom-Attributes:
-      type: object
-      additionalProperties:
-        $ref: '#/components/schemas/Attribute'
-    Data-URI-Base64:
-      description: A Base64-encoded string or URI representing the data.
-      oneOf:
-      - type: object
-        readOnly: true
-        required:
-        - uri
-        properties:
-          uri:
-            type: string
-            description: URI identifying the resource location.
-            example: https://s3.amazonaws.com/dev/41963bc5feff322020137de233c3be0fac6/croppedFrontID/38d54232-b840-431d-b248-152345fe214.jpg
-      - type: object
-        required:
-        - base64
-        properties:
-          base64:
-            type: string
-            description: Base64-encoded string of the raw attachment data.
-            example: ZG9jdW1lbnQgaW1hZ2UgZ29lcyBoZXJl
-    Document-Supplementary-Data-Base:
-      type: object
-      description: Supplementary data associated with a document.
-      required:
-      - type
-      properties:
-        type:
-          type: string
-          description: The document type that defines the type of supplementary data returned.
-          enum:
-          - NATIONAL_HEALTH_ID
-          - BIRTH_CERT
-          - NATIONAL_ID
-          - CITIZENSHIP
-          - PASSPORT
-          - MARRIAGE_CERT
-    Document-Supplementary-Data-Passport:
-      type: object
-      description: Supplementary information relevant to a national health id.
-      allOf:
-      - $ref: '#/components/schemas/Document-Supplementary-Data-Base'
-      - type: object
-        properties:
-          homeCountryFullName:
-            type: string
-            description: The original name from the home country of passport.
-            example: 张伟明
-  parameters:
-    attachmentId:
-      name: attachmentId
-      in: path
-      schema:
-        type: string
-      required: true
-    X-Frankie-Channel:
-      name: X-Frankie-Channel
-      in: header
-      required: false
-      schema:
-        type: string
-      description: 'Open string that can be used to define the "channel" the request comes in from. It can potentially be used in routing and risk calculations upon request. Default values that can be used are:  api portal smartui Any alphanumeric string is supported though. Anything over 64 characters will be truncated.'
-    entityId:
-      name: entityId
-      in: path
-      schema:
-        type: string
-      description: Unique FrankieOne identifier for an entity
-      required: true
-    X-Frankie-CustomerID:
-      name: X-Frankie-CustomerID
-      in: header
-      required: true
-      schema:
-        type: string
-        example: 12345678-1234-1234-1234-123456789012
-      description: Your Customer ID provided by FrankieOne
-    levelQuery:
-      name: level
-      in: query
-      schema:
-        type: string
-        default: meta
-        enum:
-        - id
-        - meta
-        - base64
-      description: "Determines what level of detail to return in the response\n - id: Return just an id\n - meta: Return all metadata only, no links or base64 data\n - base64: Return all metadata and data in base64 format"
-    levelNoIdQuery:
-      name: level
-      in: query
-      schema:
-        type: string
-        default: meta
-        enum:
-        - meta
-        - base64
-      description: "Determines what level of detail to return in the response\n - meta: Return all metadata only, no links or base64 data\n - base64: Return all metadata and images as base64"
-    Api-Key:
-      name: api_key
-      in: header
-      schema:
-        type: string
-        example: 245c765b124a098d09ef8765....
-      description: Your API key provided by FrankieOne
-      required: true
-    X-Frankie-CustomerChildID:
-      name: X-Frankie-CustomerChildID
-      in: header
-      required: false
-      schema:
-        type: string
-        example: 87654321-4321-4321-4321-210987654321
-      description: Your Customer Child ID provided by FrankieOne
-    documentId:
-      name: documentId
-      in: path
-      schema:
-        type: string
-      description: Unique identifier for a document
-      required: true
-    X-Frankie-Username:
-      name: X-Frankie-Username
-      in: header
-      description: Username provided by API caller
-      required: false
-      schema:
-        type: string
-        example: fred.flintstone@frankieone.com
   securitySchemes:
     Api-Key:
       type: apiKey

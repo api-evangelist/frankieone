@@ -786,99 +786,33 @@ paths:
       - jwt:
         - kyc:api
 components:
-  parameters:
-    X-Frankie-Channel:
-      name: X-Frankie-Channel
-      in: header
-      required: false
-      schema:
-        type: string
-      description: 'Open string that can be used to define the "channel" the request comes in from. It can potentially be used in routing and risk calculations upon request. Default values that can be used are:  api portal smartui Any alphanumeric string is supported though. Anything over 64 characters will be truncated.'
-    entityId:
-      name: entityId
-      in: path
-      schema:
-        type: string
-      description: Unique FrankieOne identifier for an entity
-      required: true
-    phoneNumberId:
-      name: phoneNumberId
-      in: path
-      schema:
-        type: string
-      required: true
-    nameId:
-      name: nameId
-      in: path
-      schema:
-        type: string
-      required: true
-    X-Frankie-CustomerID:
-      name: X-Frankie-CustomerID
-      in: header
-      required: true
-      schema:
-        type: string
-        example: 12345678-1234-1234-1234-123456789012
-      description: Your Customer ID provided by FrankieOne
-    referenceId:
-      name: referenceId
-      in: path
-      schema:
-        type: string
-      description: Unique external reference identifier
-      required: true
-    dateOfBirthId:
-      name: dateOfBirthId
-      in: path
-      schema:
-        type: string
-      required: true
-    Api-Key:
-      name: api_key
-      in: header
-      schema:
-        type: string
-        example: 245c765b124a098d09ef8765....
-      description: Your API key provided by FrankieOne
-      required: true
-    X-Frankie-CustomerChildID:
-      name: X-Frankie-CustomerChildID
-      in: header
-      required: false
-      schema:
-        type: string
-        example: 87654321-4321-4321-4321-210987654321
-      description: Your Customer Child ID provided by FrankieOne
-    consentType:
-      name: consentType
-      x-go-name: ConsentTypeParam
-      in: path
-      schema:
-        $ref: '#/components/schemas/Consent-Type-Param'
-      required: true
-    addressId:
-      name: addressId
-      in: path
-      schema:
-        type: string
-      description: Unique identifier for an address
-      required: true
-    emailAddressId:
-      name: emailAddressId
-      in: path
-      schema:
-        type: string
-      required: true
-    X-Frankie-Username:
-      name: X-Frankie-Username
-      in: header
-      description: Username provided by API caller
-      required: false
-      schema:
-        type: string
-        example: fred.flintstone@frankieone.com
   schemas:
+    External-Reference:
+      type: object
+      description: Reference information used to identify the individual in systems external to FrankieOne.
+      allOf:
+      - type: object
+        properties:
+          referenceId:
+            type: string
+            description: 'As external references are added to an entity, they are assigned a unique identifier to assist with modification and reference.
+
+              To modify an external reference, include the referenceId in an update request for the individual.'
+            example: 24de15f64-5717-4562-b3fc-2c963f66e23e
+            readOnly: true
+          type:
+            type: string
+            enum:
+            - SYSTEM
+            - CUSTOMER
+            - OTHER
+            default: CUSTOMER
+          sourceId:
+            type: string
+            description: The source from which specific information was sourced. This is a link to an informationSource object in the informationSources map.
+            example: 93da15f64-5717-4562-b3fc-2c963f6663fe
+            readOnly: true
+      - $ref: '#/components/schemas/External-Reference-Information'
     Request-ID:
       type: string
       example: 01HN9XHZN6MGXM9JXG50K59Q85
@@ -895,6 +829,18 @@ components:
         issueType:
           type: string
           description: The type or category of the issue.
+    Consent-Type-Param:
+      type: string
+      enum:
+      - GENERAL
+      - DOCS
+      - CREDITHEADER
+      - UNDER18
+      - PAYROLL
+      - INSURANCE
+      - SUPERANNUATION
+      description: The type of consent provided by an entity.
+      example: UNDER18
     Error-Base:
       type: object
       properties:
@@ -906,6 +852,30 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Issue'
+    Error:
+      type: object
+      x-examples:
+        '400':
+          requestId: 0123456789ABCDEFGHIJKLMNOP
+          errorCode: API-0400
+          errorMsg: Parsing credentials from "<invalid>" failed, because invalid.
+          httpStatusCode: 400
+        '401':
+          requestId: 0123456789ABCDEFGHIJKLMNOP
+          errorCode: API-0401
+          errorMsg: Unauthenticated due to invalid credentials.
+          httpStatusCode: 401
+        '409':
+          requestId: 0123456789ABCDEFGHIJKLMNOP
+          errorCode: API-0409
+          errorMsg: Conflict.
+          httpStatusCode: 409
+      allOf:
+      - $ref: '#/components/schemas/Error-Base'
+      - type: object
+        properties:
+          requestId:
+            $ref: '#/components/schemas/Request-ID'
     External-Reference-Information:
       type: object
       x-examples:
@@ -937,68 +907,98 @@ components:
         To modify an entity, set the entityId of the entity you wish to update in an update request.'
       example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
       readOnly: true
-    External-Reference:
-      type: object
-      description: Reference information used to identify the individual in systems external to FrankieOne.
-      allOf:
-      - type: object
-        properties:
-          referenceId:
-            type: string
-            description: 'As external references are added to an entity, they are assigned a unique identifier to assist with modification and reference.
-
-              To modify an external reference, include the referenceId in an update request for the individual.'
-            example: 24de15f64-5717-4562-b3fc-2c963f66e23e
-            readOnly: true
-          type:
-            type: string
-            enum:
-            - SYSTEM
-            - CUSTOMER
-            - OTHER
-            default: CUSTOMER
-          sourceId:
-            type: string
-            description: The source from which specific information was sourced. This is a link to an informationSource object in the informationSources map.
-            example: 93da15f64-5717-4562-b3fc-2c963f6663fe
-            readOnly: true
-      - $ref: '#/components/schemas/External-Reference-Information'
-    Consent-Type-Param:
-      type: string
-      enum:
-      - GENERAL
-      - DOCS
-      - CREDITHEADER
-      - UNDER18
-      - PAYROLL
-      - INSURANCE
-      - SUPERANNUATION
-      description: The type of consent provided by an entity.
-      example: UNDER18
-    Error:
-      type: object
-      x-examples:
-        '400':
-          requestId: 0123456789ABCDEFGHIJKLMNOP
-          errorCode: API-0400
-          errorMsg: Parsing credentials from "<invalid>" failed, because invalid.
-          httpStatusCode: 400
-        '401':
-          requestId: 0123456789ABCDEFGHIJKLMNOP
-          errorCode: API-0401
-          errorMsg: Unauthenticated due to invalid credentials.
-          httpStatusCode: 401
-        '409':
-          requestId: 0123456789ABCDEFGHIJKLMNOP
-          errorCode: API-0409
-          errorMsg: Conflict.
-          httpStatusCode: 409
-      allOf:
-      - $ref: '#/components/schemas/Error-Base'
-      - type: object
-        properties:
-          requestId:
-            $ref: '#/components/schemas/Request-ID'
+  parameters:
+    addressId:
+      name: addressId
+      in: path
+      schema:
+        type: string
+      description: Unique identifier for an address
+      required: true
+    nameId:
+      name: nameId
+      in: path
+      schema:
+        type: string
+      required: true
+    X-Frankie-CustomerChildID:
+      name: X-Frankie-CustomerChildID
+      in: header
+      required: false
+      schema:
+        type: string
+        example: 87654321-4321-4321-4321-210987654321
+      description: Your Customer Child ID provided by FrankieOne
+    referenceId:
+      name: referenceId
+      in: path
+      schema:
+        type: string
+      description: Unique external reference identifier
+      required: true
+    emailAddressId:
+      name: emailAddressId
+      in: path
+      schema:
+        type: string
+      required: true
+    consentType:
+      name: consentType
+      x-go-name: ConsentTypeParam
+      in: path
+      schema:
+        $ref: '#/components/schemas/Consent-Type-Param'
+      required: true
+    X-Frankie-Channel:
+      name: X-Frankie-Channel
+      in: header
+      required: false
+      schema:
+        type: string
+      description: 'Open string that can be used to define the "channel" the request comes in from. It can potentially be used in routing and risk calculations upon request. Default values that can be used are:  api portal smartui Any alphanumeric string is supported though. Anything over 64 characters will be truncated.'
+    X-Frankie-CustomerID:
+      name: X-Frankie-CustomerID
+      in: header
+      required: true
+      schema:
+        type: string
+        example: 12345678-1234-1234-1234-123456789012
+      description: Your Customer ID provided by FrankieOne
+    entityId:
+      name: entityId
+      in: path
+      schema:
+        type: string
+      description: Unique FrankieOne identifier for an entity
+      required: true
+    dateOfBirthId:
+      name: dateOfBirthId
+      in: path
+      schema:
+        type: string
+      required: true
+    X-Frankie-Username:
+      name: X-Frankie-Username
+      in: header
+      description: Username provided by API caller
+      required: false
+      schema:
+        type: string
+        example: fred.flintstone@frankieone.com
+    phoneNumberId:
+      name: phoneNumberId
+      in: path
+      schema:
+        type: string
+      required: true
+    Api-Key:
+      name: api_key
+      in: header
+      schema:
+        type: string
+        example: 245c765b124a098d09ef8765....
+      description: Your API key provided by FrankieOne
+      required: true
   securitySchemes:
     Api-Key:
       type: apiKey
