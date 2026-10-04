@@ -35,6 +35,10 @@ access: 3rd-Party
 created: '2025-02-08'
 modified: '2026-05-19'
 position: Consuming
+x-docs-platform: mintlify
+x-docs-platform-confidence: medium
+x-docs-platform-checked: 2026-10-03
+x-docs-hosting: vercel
 tags:
   - Identity Verification
   - KYC
@@ -391,6 +395,9 @@ apis:
     url: >-
       https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/rules/frankieone-core-rules.yml
 common:
+  - type: CapabilityMap
+    url: capabilities/frankieone-capability-edges.yml
+    name: FrankieOne Business Capability Map
   - type: AgenticAccess
     url: agentic-access/frankieone-agentic-access.yml
   - type: TrustCenter
