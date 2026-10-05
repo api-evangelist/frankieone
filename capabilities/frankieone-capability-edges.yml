@@ -1,0 +1,36 @@
+slug: frankieone
+provider: FrankieOne
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Software & Technology
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 2
+edges:
+- tag: Individual Results
+  spec_file: frankieone-individual-results-api-openapi.yml
+  capability_id: BC-130.10
+  capability_id_l1: BC-130
+  capability_name: Regulatory Compliance Management
+  confidence: 0.8
+  evidence: POST /v2/individuals/{entityId}/results/mkyc  manualKYC  Approve Manual KYC for an individual;
+    PATCH /v2/individuals/{entityId}/results/aml  updateAML  Update the status of AML process results
+  reason: Operations adjudicate KYC, AML, matchlist and fraud screening outcomes for an individual — squarely
+    regulatory (AML/KYC) compliance processing.
+- tag: IDV
+  spec_file: frankieone-idv-api-openapi.yml
+  capability_id: BC-130.10
+  capability_id_l1: BC-130
+  capability_name: Regulatory Compliance Management
+  confidence: 0.7
+  evidence: POST /v2/individuals/{entityId}/actions/idv/ocr  processIDVOCR  Submit an identity document
+    photo for ocr processing.
+  reason: Document OCR plus biometric processing of individuals is KYC identity verification, performed
+    to satisfy AML/KYC regulatory obligations — regulatory compliance management is the closest honest
+    fit in this frame.
