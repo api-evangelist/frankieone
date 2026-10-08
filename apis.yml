@@ -395,6 +395,12 @@ apis:
     url: >-
       https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/rules/frankieone-core-rules.yml
 common:
+  - type: Plans
+    url: plans/frankieone-plans-pricing.yml
+  - type: RateLimits
+    url: rate-limits/frankieone-rate-limits.yml
+  - type: FinOps
+    url: finops/frankieone-finops.yml
   - type: CapabilityMap
     url: capabilities/frankieone-capability-edges.yml
     name: FrankieOne Business Capability Map
