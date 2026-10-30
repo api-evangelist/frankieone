@@ -1,4 +1,4 @@
-# FrankieOne (frankieone)
+# FrankieOne
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -66,92 +66,149 @@
 
 FrankieOne is an identity verification, compliance, and fraud prevention platform connecting applications to hundreds of global data sources through a single API for KYC, KYB, document IDV, ongoing monitoring, and matchlist management.
 
-**APIs.json:** [https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/apis.yml](https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/apis.yml)
+**Areas:** Identity Verification · KYC · KYB · AML · Fraud Prevention · Compliance
 
-## Scope
+## FrankieOne on APIs.io
 
-- **Type:** Index
-- **Position:** Consumer
-- **Access:** 3rd-Party
+Everything profiled for FrankieOne is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/frankieone/](https://apis.io/providers/frankieone/)** — or go straight to one of the APIs or properties below.
 
-## Tags
+### APIs (13)
 
-- Identity Verification
-- KYC
-- KYB
-- AML
-- Fraud
-- Compliance
+- [FrankieOne Audit API](https://apis.io/apis/frankieone/frankieone-audit-api/) — Manage audit entries
+- [FrankieOne HostedURL API](https://apis.io/apis/frankieone/frankieone-hostedurl-api/) — Manage hosted URLs for an individual
+- [FrankieOne IDV API](https://apis.io/apis/frankieone/frankieone-idv-api/) — Get a token and/or upload documents to initiate an IDV process
+- [FrankieOne Individual Documents API](https://apis.io/apis/frankieone/frankieone-individual-documents-api/) — Manage documents for individuals
+- [FrankieOne Individual Entities API](https://apis.io/apis/frankieone/frankieone-individual-entities-api/) — Manage individual entity records
+- [FrankieOne Individual Entity Elements API](https://apis.io/apis/frankieone/frankieone-individual-entity-elements-api/) — Manage individual entity record elements
+- [FrankieOne Individual Profiles API](https://apis.io/apis/frankieone/frankieone-individual-profiles-api/) — Manage individual profiles
+- [FrankieOne Individual Results API](https://apis.io/apis/frankieone/frankieone-individual-results-api/) — Manage results for individuals
+- [FrankieOne Individual Risks API](https://apis.io/apis/frankieone/frankieone-individual-risks-api/) — Manage risks associated with an individual
+- [FrankieOne Individual Workflows API](https://apis.io/apis/frankieone/frankieone-individual-workflows-api/) — The Individual Workflows API from FrankieOne — 5 operation(s) for individual workflows.
+- [FrankieOne Matchlists API](https://apis.io/apis/frankieone/frankieone-matchlists-api/) — The Matchlists API from FrankieOne — 6 operation(s) for matchlists.
+- [FrankieOne Monitoring API](https://apis.io/apis/frankieone/frankieone-monitoring-api/) — Turn on/off ongoing monitoring for an individual entity
+- [FrankieOne Search API](https://apis.io/apis/frankieone/frankieone-search-api/) — The Search API from FrankieOne — 1 operation(s) for search.
 
-## Timestamps
+### Published properties
 
-- **Created:** 2025-02-08
-- **Modified:** 2026-05-19
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
 
-## APIs
+#### Agentic access (1)
 
-### FrankieOne KYC V2 API
+Which operations an agent can call, which act, and which need a human in the loop.
 
-KYC V2 API for managing individuals, profiles, workflows, results, and documents. Supports identity verification, AML screening, IDV, fraud checks, duplicate detection, matchlist matching, and ongoing monitoring.
+- [Frankieone Agentic Access](https://apis.io/agentic-access/frankieone/frankieone-agentic-access/)
 
-- **Human URL:** [https://docs.frankieone.com/v1.14.1/docs/welcome-to-frankie](https://docs.frankieone.com/v1.14.1/docs/welcome-to-frankie)
-- **Base URL:** `https://api.frankie.one`
+#### Collections (15)
 
-#### Tags
+Postman and Open Collection request collections.
 
-- Identity Verification
-- KYC
-- AML
-- IDV
-- Documents
-- Workflows
+- [Core V2 API](https://apis.io/collections/frankieone/open-core-v2/)
+- [Core V2 Audit API](https://apis.io/collections/frankieone/open-frankieone-audit-api/)
+- [Core V2 Audit HostedURL API](https://apis.io/collections/frankieone/open-frankieone-hostedurl-api/)
+- [Core V2 Audit IDV API](https://apis.io/collections/frankieone/open-frankieone-idv-api/)
+- [Core V2 Audit Individual Documents API](https://apis.io/collections/frankieone/open-frankieone-individual-documents-api/)
+- [Core V2 Audit Individual Entities API](https://apis.io/collections/frankieone/open-frankieone-individual-entities-api/)
+- [Core V2 Audit Individual Entity Elements API](https://apis.io/collections/frankieone/open-frankieone-individual-entity-elements-api/)
+- [Core V2 Audit Individual Profiles API](https://apis.io/collections/frankieone/open-frankieone-individual-profiles-api/)
+- [Core V2 Audit Individual Results API](https://apis.io/collections/frankieone/open-frankieone-individual-results-api/)
+- [Core V2 Audit Individual Risks API](https://apis.io/collections/frankieone/open-frankieone-individual-risks-api/)
+- [Core V2 Audit Individual Workflows API](https://apis.io/collections/frankieone/open-frankieone-individual-workflows-api/)
+- [Core V2 Audit Matchlists API](https://apis.io/collections/frankieone/open-frankieone-matchlists-api/)
+- [Core V2 Audit Monitoring API](https://apis.io/collections/frankieone/open-frankieone-monitoring-api/)
+- [Core V2 Audit Search API](https://apis.io/collections/frankieone/open-frankieone-search-api/)
+- [KYC V2 API](https://apis.io/collections/frankieone/open-kyc-v2/)
 
-#### Properties
+#### Governance rules (2)
 
-- [Documentation](https://docs.frankieone.com/v1.14.1/docs/welcome-to-frankie)
-- [OpenAPI](https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/openapi/kyc-v2-openapi.json) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Capabilities](https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/capabilities/frankieone-kyc-capabilities.yml)
-- [Rules](https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/rules/frankieone-kyc-rules.yml)
-- [Postman Collection](collections/core-v2.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/core-v2.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
-- [Postman Collection](collections/kyc-v2.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/kyc-v2.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+Spectral rulesets for the provider's contracts.
 
-### FrankieOne Core V2 API
+- [FrankieOne — core rules](https://apis.io/rules/frankieone/frankieone-core-rules/)
+- [FrankieOne — kyc rules](https://apis.io/rules/frankieone/frankieone-kyc-rules/)
 
-Core V2 API for platform-level operations including audit retrieval, workflow discovery, background request status, and matchlist management.
+#### Security (3)
 
-- **Human URL:** [https://docs.frankieone.com/](https://docs.frankieone.com/)
-- **Base URL:** `https://api.frankie.one`
+Authentication, trust centre, and vulnerability disclosure.
 
-#### Tags
+- [Frankieone Authentication](https://apis.io/security/frankieone/frankieone-authentication/)
+- [Frankieone Domain Security](https://apis.io/security/frankieone/frankieone-domain-security/)
+- [Frankieone Trust Center](https://apis.io/security/frankieone/frankieone-trust-center/)
 
-- Audit
-- Workflows
-- Matchlists
-- Compliance
+#### Plans and pricing (1)
 
-#### Properties
+Published plans, tiers and prices.
 
-- [Documentation](https://docs.frankieone.com/)
-- [OpenAPI](https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/openapi/core-v2-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Capabilities](https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/capabilities/frankieone-core-capabilities.yml)
-- [Rules](https://raw.githubusercontent.com/api-evangelist/frankieone/refs/heads/main/rules/frankieone-core-rules.yml)
-- [Postman Collection](collections/core-v2.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/core-v2.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
-- [Postman Collection](collections/kyc-v2.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/kyc-v2.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+- [Frankieone Plans Pricing](https://apis.io/plans/frankieone/frankieone-plans-pricing/)
 
-## Common Properties
+#### Rate limits (1)
 
-- [GitHub Organization](https://github.com/FrankieFinancial)
-- [LinkedIn](https://www.linkedin.com/company/frankieone)
+Published request limits.
+
+- [Frankieone Rate Limits](https://apis.io/rate-limits/frankieone/frankieone-rate-limits/)
+
+#### FinOps (1)
+
+What the API costs to run, by operation.
+
+- [Frankieone Finops](https://apis.io/finops/frankieone/frankieone-finops/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
 - [Website](https://www.frankieone.com/)
 - [Documentation](https://docs.frankieone.com/)
-- [Sign Up](https://www.frankieone.com/contact-us)
-- [L L Ms Txt](https://docs.frankieone.com/llms.txt)
+- [Blog](https://frankieone.com/frankieone-blog/rss.xml)
+- [GitHub](https://github.com/FrankieFinancial)
 
-## Maintainers
+## API Evangelist rating
 
-**FN:** Kin Lane
-**Email:** kin@apievangelist.com
+**Kin Score 31.1** — thin · rubric 0.24.0 · scored 2026-10-17
+
+| Facet | Score |
+|---|---|
+| Discoverability | 73.2 |
+| Contract quality | 57.0 |
+| Contract governance | 0.0 |
+| Operational transparency | 10.5 |
+| Developer ergonomics | 14.3 |
+| Access clarity | 28.9 |
+
+**Agent readiness 28.7** — agent-ready
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | — |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | verified |
+| OpenAPI Examples | verified |
+| Rate Limit Signal | derived (partial credit) |
+| Event Surface Described | — |
+| Agent Skills | — |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+
+**Regulatory alignment 16.7** — Horizontal (data, software, accessibility, platform)
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/frankieone/](https://apis.io/providers/frankieone/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for FrankieOne: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/frankieone/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
